@@ -1,7 +1,11 @@
 from django.contrib import admin
-
-# Register your models here.
+from django import forms
 from .models import CityProject, CityProjectVote
 
-admin.site.register(CityProject)
+class DescriptionModelAdmin(admin.ModelAdmin):
+    def get_form(self, request, obj = None, **kwargs):
+        kwargs['widgets'] = {'description': forms.Textarea}
+        return super().get_form(request, obj, **kwargs)
+
+admin.site.register(CityProject, DescriptionModelAdmin)
 admin.site.register(CityProjectVote)
