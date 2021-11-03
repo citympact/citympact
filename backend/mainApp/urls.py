@@ -8,4 +8,5 @@ urlpatterns = [
     path('', views.ProjectListView.as_view(), name='index'),
     path('project/add', views.addNewProject, name='addNewProject'),
     path('project/<int:project_id>', views.detail, name='detail'),
+    path('project/vote', views.VoteProject.as_view(), name='voteProject'),
 ]
