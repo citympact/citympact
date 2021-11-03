@@ -1,5 +1,7 @@
+{% extends "mainApp/base.html" %}
 
 
+{% block content %}
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
@@ -15,20 +17,26 @@
     </div>
   </div>
 </div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Que penses-tu de ces projets?</h1>
+            {% if last_projects %}
+                <ul>
+                {% for project in last_projects %}
+                    <li><a href="/project/{{ project.id }}">{{ project.title }}</a> (ou <a href="{% url 'mainApp:detail' project.id %}">auto lien</a>)</li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No projects from the city are available.</p>
+            {% endif %}
 
-{% extends "mainApp/base.html" %}
+            <p>Wanna <a href="{% url "mainApp:addNewProject" %}">add a new project</a>?</p>
+        </div>
+    </div>
+</div>
 
-{% block content %}
-{% if last_projects %}
-    <ul>
-    {% for project in last_projects %}
-        <li><a href="/project/{{ project.id }}">{{ project.title }}</a> (ou <a href="{% url 'mainApp:detail' project.id %}">auto lien</a>)</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No projects from the city are available.</p>
-{% endif %}
 
-<p>Wanna <a href="{% url "mainApp:addNewProject" %}">add a new project</a>?</p>
+
 
 {% endblock %}
