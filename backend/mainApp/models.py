@@ -17,7 +17,7 @@ class CityProject(models.Model):
         """
         super(CityProject, self).save(*args, **kwargs)
         img = Image.open(self.image.path)
-        img.thumbnail(IMG_THUMBNAIL_SIZE)
+        img.thumbnail(settings.IMG_THUMBNAIL_SIZE)
         chunks = self.image.path.split(".")
         chunks[-2] += "_"+("x".join(
             [str(x) for x in settings.IMG_THUMBNAIL_SIZE]
