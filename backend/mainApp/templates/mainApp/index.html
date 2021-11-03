@@ -17,16 +17,21 @@
     </div>
   </div>
 </div>
-<div class="container">
+<div class="container pt-5">
     <div class="row">
         <div class="col-sm-12">
-            <h1>Que penses-tu de ces projets?</h1>
+            <h1 class="pt-3 pb-2">Que penses-tu de ces projets?</h1>
             {% if last_projects %}
-                <ul>
-                {% for project in last_projects %}
-                    <li><a href="{% url 'mainApp:detail' project.id %}"><img src="{{ project.image.url|thumbnailize }}" alt="{{ project.title }}" alt="" /></a></li>
-                {% endfor %}
-                </ul>
+                <div class="row row-slider">
+                    {% for project in last_projects %}
+                        <div>
+                            <a href="{% url 'mainApp:detail' project.id %}"><img src="{{ project.image.url|thumbnailize }}" alt="{{ project.title }}" alt="" class="sliderThumbnail"/></a>
+                            <h2><a href="{% url 'mainApp:detail' project.id %}">{{ project.title }}</a> <a href="#">+</a> <a href="#">-</a></h2>
+                            <p>{{ project.description }}</p>
+                            <p><a href="#">En savoir plus</a></p>
+                        </div>
+                    {% endfor %}
+                </div>
             {% else %}
                 <p>Il n'y a pas encore de projets.</p>
             {% endif %}

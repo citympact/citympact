@@ -4,3 +4,25 @@ body {
 #searchInput {
     width: 100%;
 }
+.row-slider {
+    position: relative;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+.row-slider>div {
+    position: relative;
+    width: 33%;
+    float: left;
+    margin-right: 5%
+}
+
+.sliderThumbnail {
+    width: 100%;
+    height: auto;
+    border: 1px solid black;
+}
+.row-slider a {
+    text-decoration: none;
+    color: inherit;
+}
