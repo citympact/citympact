@@ -1,5 +1,5 @@
 {% extends "mainApp/base.html" %}
-
+{% load extras_tags %}
 
 {% block content %}
 <div class="container">
@@ -24,11 +24,11 @@
             {% if last_projects %}
                 <ul>
                 {% for project in last_projects %}
-                    <li><a href="/project/{{ project.id }}">{{ project.title }}</a> (ou <a href="{% url 'mainApp:detail' project.id %}">auto lien</a>)</li>
+                    <li><a href="{% url 'mainApp:detail' project.id %}"><img src="{{ project.image.url|thumbnailize }}" alt="{{ project.title }}" alt="" /></a></li>
                 {% endfor %}
                 </ul>
             {% else %}
-                <p>No projects from the city are available.</p>
+                <p>Il n'y a pas encore de projets.</p>
             {% endif %}
 
             <p>Wanna <a href="{% url "mainApp:addNewProject" %}">add a new project</a>?</p>
