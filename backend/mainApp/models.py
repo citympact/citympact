@@ -41,11 +41,6 @@ class CityProjectVote(models.Model):
         ]
 
     def __str__(self):
-        return "%d (%s)" % (self.vote, self.comment)
-
-
-class CityProjectVote3(models.Model):
-    vote = models.IntegerField(default=0)
-    comment = models.CharField(max_length=1500)
-    def __str__(self):
-        return self.title
+        return ("blank vote" if self.vote==0 else \
+            "up vote" if self.vote>0 else "down vote")\
+            + " (%s)" % self.session.session_key
