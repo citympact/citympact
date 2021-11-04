@@ -12,9 +12,22 @@ def index(request):
     # based "authentication".
     if not request.session.session_key:
         request.session.save()
+    session = Session.objects.get(pk=request.session.session_key)
 
+    projects = CityProject.objects.all();
+    # Fetching the vote (integers) of the user for each project:
+    votes = [ \
+        ["", ""] if (v is None or v.vote==0) \
+        else \
+            ["", "active-vote"] if v.vote>0 else ["active-vote",""] \
+        for v in
+            [p.cityprojectvote_set.all().filter(session=session).first() \
+                for p in projects\
+            ] \
+    ]
+    print("votes =", votes)
     context = {
-        'last_projects': CityProject.objects.all(),
+        'projects_votes': list(zip(projects, votes)),
     }
     return render(request, 'mainApp/index.html', context)
 
@@ -40,8 +53,9 @@ class VoteProject(generic.View):
         """
         session = Session.objects.get(pk=request.session.session_key)
         if session == None or \
-        not "project_id" in request.POST or \
-        not "vote" in request.POST:
+            not "project_id" in request.POST or \
+            not "vote" in request.POST\
+        :
             return JsonResponse({"result": "refused"});
 
 
