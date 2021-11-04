@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.sessions.models import Session
 from django.conf import settings
 from PIL import Image
 
@@ -29,5 +30,22 @@ class CityProjectVote(models.Model):
     project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
     vote = models.IntegerField(default=0)
     comment = models.CharField(max_length=1500)
+    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                name='unique_vote_per_session',
+                fields=['project', "session"],
+            )
+        ]
+
     def __str__(self):
         return "%d (%s)" % (self.vote, self.comment)
+
+
+class CityProjectVote3(models.Model):
+    vote = models.IntegerField(default=0)
+    comment = models.CharField(max_length=1500)
+    def __str__(self):
+        return self.title

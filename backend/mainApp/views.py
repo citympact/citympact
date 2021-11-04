@@ -1,11 +1,18 @@
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.contrib.sessions.backends.db import SessionStore
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+from django.db.utils import IntegrityError
 from .models import *
 
 
 def index(request):
+    # FixMe: implement a propper user login feature and not only a session id
+    # based "authentication".
+    if not request.session.session_key:
+        request.session.save()
+
     context = {
         'last_projects': CityProject.objects.all(),
     }
@@ -23,26 +30,34 @@ def addNewProject(request):
     return render(request, "mainApp/new.html", {})
 
 
-class ProjectListView(generic.ListView):
-    context_object_name = "last_projects"
-    template_name = "mainApp/index.html"
-
-    def get_queryset(self):
-        return CityProject.objects.all()
-
 class VoteProject(generic.View):
     def post(self, request):
-        if "project_id" in request.POST and "vote" in request.POST:
-            project_id = int(request.POST["project_id"])
-            vote = int(request.POST["vote"])
-            if not "voted_projects" in request.session:
-                request.session["voted_projects"] = []
-            if not project_id in request.session["voted_projects"]:
-                project = CityProject.objects.get(pk=project_id)
-                vote = CityProjectVote(project=project, vote=vote)
-                vote.save()
-                request.session["voted_projects"].append(project_id)
+        """
+        Posting a vote should be unique per user. Hence session are used here to
+        store a dict of previously voted project ids. This is a quick solution
+        as long as no better user handling is implemented.
+        Todo: register each vote with user id.
+        """
+        session = Session.objects.get(pk=request.session.session_key)
+        if session == None or \
+        not "project_id" in request.POST or \
+        not "vote" in request.POST:
+            return JsonResponse({"result": "refused"});
+
+
+        project_id = int(request.POST["project_id"])
+        vote = int(request.POST["vote"])
+
+        project = CityProject.objects.get(pk=project_id)
+        vote_object, new_vote = CityProjectVote.objects.get_or_create(
+            project=project,
+            session=session
+        )
+        vote_object.vote = vote
+        vote_object.save()
+
         return JsonResponse({
             "result": "OK",
             "project_id":project_id,
-            "vote":vote});
+            "new_vote": new_vote,
+            "vote":vote_object.vote});
