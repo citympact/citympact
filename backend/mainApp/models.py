@@ -5,6 +5,7 @@ from PIL import Image
 
 class CityProject(models.Model):
     title = models.CharField(max_length=200)
+    summary = models.CharField(max_length=500)
     description = models.CharField(max_length=1500)
     image = models.ImageField()
     def __str__(self):
@@ -44,3 +45,15 @@ class CityProjectVote(models.Model):
         return ("blank vote" if self.vote==0 else \
             "up vote" if self.vote>0 else "down vote")\
             + " (%s)" % self.session.session_key
+
+
+class Petition(models.Model):
+    title = models.CharField(max_length=200)
+    summary = models.CharField(max_length=500)
+    description = models.CharField(max_length=1500)
+    image = models.ImageField()
+    #"author":
+    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
+    
+    def __str__(self):
+        return self.title
