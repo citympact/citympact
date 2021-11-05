@@ -33,3 +33,16 @@ a.upvote,a.downvote {
     background-color: lightblue;
     border: 1px solid grey;
 }
+
+.rating-stars {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+.rating-stars>span.vote-star:hover,
+.rating-stars>span.vote-star:hover~span.vote-star {
+    background-color: orange;
+}
+
+.star-activated {
+    background-color: yellow;
+}

@@ -20,4 +20,24 @@ $(document).ready(function() {
 
         });
     });
+    $("span.vote-star").click(function() {
+        let clickedElement = $(this);
+        let petition_id = $(this).parents("div").first().data("petition-id");
+        let vote = 5-$(this).data("vote-val");
+        console.log("voting "+vote+" stars for petiti id="+petition_id);
+        $.post("petition/vote",  {
+            petition_id: petition_id,
+            vote: vote,
+            csrfmiddlewaretoken: $("#vote_csrf_token").val(),
+        },
+        function(response) {
+            clickedElement.parent().children().each(function(i, e) {
+                if(5-i<=response.vote) {
+                    $(e).addClass("star-activated")
+                } else {
+                    $(e).removeClass("star-activated")
+                }
+            });
+        });
+    });
 });

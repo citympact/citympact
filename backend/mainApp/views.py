@@ -25,9 +25,20 @@ def index(request):
                 for p in projects\
             ] \
     ]
-    print("votes =", votes)
+
+    petitions = Petition.objects.all();
+    star_range_and_class = [
+        list(enumerate(["" for x in range(p.vote, 5)]+["star-activated" for x in range(p.vote)])) for p in
+         [p.petitionvote_set.all().filter(session=session).first() \
+            for p in petitions\
+        ]
+    ]
+    print("v=", list(zip(petitions, star_range_and_class)))
+
     context = {
         'projects_votes': list(zip(projects, votes)),
+        "petitions": list(zip(petitions, star_range_and_class)),
+        "star_range": list(range(5))
     }
     return render(request, 'mainApp/index.html', context)
 
@@ -73,5 +84,36 @@ class VoteProject(generic.View):
         return JsonResponse({
             "result": "OK",
             "project_id":project_id,
+            "new_vote": new_vote,
+            "vote":vote_object.vote});
+
+class VotePetition(generic.View):
+    def post(self, request):
+        """
+        Posting a 5-star based vote for a given petition
+        (read the comment of the class above for more details)
+        """
+        session = Session.objects.get(pk=request.session.session_key)
+        if session == None or \
+            not "petition_id" in request.POST or \
+            not "vote" in request.POST\
+        :
+            return JsonResponse({"result": "refused"});
+
+
+        petition_id = int(request.POST["petition_id"])
+        vote = int(request.POST["vote"])
+
+        petition = Petition.objects.get(pk=petition_id)
+        vote_object, new_vote = PetitionVote.objects.get_or_create(
+            petition=petition,
+            session=session
+        )
+        vote_object.vote = vote
+        vote_object.save()
+
+        return JsonResponse({
+            "result": "OK",
+            "petition_id":petition_id,
             "new_vote": new_vote,
             "vote":vote_object.vote});
