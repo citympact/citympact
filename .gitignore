@@ -131,3 +131,6 @@ dmypy.json
 
 # Uploaded media folder
 backend/media/*
+
+# Test binaries (like chromebrowser):
+tests/binaries/*
