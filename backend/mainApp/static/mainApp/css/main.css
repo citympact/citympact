@@ -37,6 +37,7 @@ a.upvote,a.downvote {
 .rating-stars {
     direction: rtl;
     unicode-bidi: bidi-override;
+    cursor: pointer;
 }
 .rating-stars>span.vote-star:hover,
 .rating-stars>span.vote-star:hover~span.vote-star {

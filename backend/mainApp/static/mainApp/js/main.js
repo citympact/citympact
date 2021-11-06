@@ -1,7 +1,7 @@
 
 $(document).ready(function() {
     $("a.upvote,a.downvote").click(function() {
-        let project_id = $(this).parents("div").first().data("project-id");
+        let project_id = $(this).parents("div.project-div").first().data("project-id");
         let vote = $(this).hasClass("upvote") ? 1  : -1;
         if($(this).hasClass("active-vote")) {
             vote = 0;
