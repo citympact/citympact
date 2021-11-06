@@ -48,13 +48,13 @@ def index(request):
 def detail(request, project_id):
     return HttpResponse("Detail of project id = %d" % project_id)
 
-def addNewProject(request):
+def addNewPetition(request):
     if("title" in request.POST and "description" in request.POST):
         c = CityProject(title=request.POST["title"],
             description=request.POST["description"])
         c.save()
-        return HttpResponseRedirect(reverse('mainApp:addNewProject', args=()))
-    return render(request, "mainApp/new.html", {})
+        return HttpResponseRedirect(reverse('mainApp:addNewPetition', args=()))
+    return render(request, "mainApp/newPetition.html", {})
 
 
 class VoteProject(generic.View):
