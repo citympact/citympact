@@ -22,3 +22,9 @@ wget https://chromedriver.storage.googleapis.com/92.0.4515.107/chromedriver_linu
 unzip chromedriver_linux64.zip
 rm chromedriver_linux64.zip
 ```
+
+Then the test suite can be run using:
+```
+cd tests
+python3 main.py
+```
