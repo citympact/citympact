@@ -75,7 +75,6 @@ class VoteProject(generic.View):
 
         project_id = int(request.POST["project_id"])
         vote = int(request.POST["vote"])
-
         project = CityProject.objects.get(pk=project_id)
         vote_object, new_vote = CityProjectVote.objects.get_or_create(
             project=project,

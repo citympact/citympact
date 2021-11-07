@@ -78,11 +78,31 @@ class TestStringMethods(unittest.TestCase):
         first_project_stars = self.browser.find_elements(
             By.CSS_SELECTOR, ".petition:first-child .rating-stars>.vote-star")
 
-        for star in first_project_stars:
+        for i, star in enumerate(first_project_stars):
             self.scrollToElement(star)
-            star.click()
+            try:
+                star.click()
+                WebDriverWait(self.browser, 2.5).until(lambda browser:
+                    "star-activated" in star.get_attribute("class")
+                )
+            except TimeoutException as e:
+                self.fail("The voted star did not switch to active");
             # To do assert impact of the click on the frontend behaviour
 
+        # Finally storing the definitive vote and refreshing the page to assert
+        # that the vote is correctly displayed:
+        finalStarIndex = 4
+        star = first_project_stars[finalStarIndex]
+        star.click();
+        WebDriverWait(self.browser, 2.5).until(lambda browser:
+            "star-activated" in star.get_attribute("class")
+        )
+        self.browser.refresh();
+
+        first_project_stars = self.browser.find_elements(
+            By.CSS_SELECTOR, ".petition:first-child .rating-stars>.vote-star")
+        self.assertIn("star-activated", first_project_stars[finalStarIndex]\
+            .get_attribute("class"))
 
 
     def tearDown(self):
