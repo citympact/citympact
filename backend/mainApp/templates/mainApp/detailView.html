@@ -1,0 +1,18 @@
+{% extends "mainApp/base.html" %}
+{% load extras_tags %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{ title }}</h1>
+            {% if image %}
+                <img src="{{ image.url|thumbnailize }}" alt="{{ title }}" alt="" class="sliderThumbnail"/>
+            {% endif %}
+            <p>{{ description }}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

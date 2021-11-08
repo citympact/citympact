@@ -121,6 +121,21 @@ class AddNewPetition(generic.View):
     def get(self, request):
         return render(request, "mainApp/newPetition.html", {})
 
+class SearchView(generic.View):
+    def post(self, request):
+        """
+        This function searches the petitions and projects given a provided text
+        input from the search bar.
+        """
+        return JsonResponse({
+            "result": "ok",
+            "suggestions": [
+                {"url":"1.html", "title": "Foo bar"},
+                {"url":"1.html", "title": "Foo bar"},
+                {"url":"1.html", "title": "Foo bar"},
+                ]
+            });
+
 class VoteProject(generic.View):
     def post(self, request):
         """

@@ -20,6 +20,26 @@ $(document).ready(function() {
 
         });
     });
+    $("#search-input").on('input', function() {
+        suggestionsUl = $(this).parent().find(".suggestions-dropdown").first().find("ul")
+        console.log("suggestionsUl =", suggestionsUl)
+        $.post("search",  {
+            content: $(this).val(),
+            csrfmiddlewaretoken: $("#vote_csrf_token").val(),
+        },
+        function(response){
+            if(response.result == "ok") {
+                suggestionsUl.empty();
+                console.log("response.suggestions =", response.suggestions)
+                $.each(response.suggestions, function(i, elt) {
+                    console.log("elt", elt)
+                    suggestionsUl.append("<li><a href=\"" + elt.url + "\">"
+                        + elt.title + "</a></li>");
+                });
+            }
+        });
+
+    });
     $("a.vote-star").click(function() {
         let clickedElement = $(this);
         let petition_id = $(this).parents("div").first().data("petition-id");
