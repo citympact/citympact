@@ -39,8 +39,8 @@ a.upvote,a.downvote {
     unicode-bidi: bidi-override;
     cursor: pointer;
 }
-.rating-stars>span.vote-star:hover,
-.rating-stars>span.vote-star:hover~span.vote-star {
+.rating-stars>a.vote-star:hover,
+.rating-stars>a.vote-star:hover~a.vote-star {
     background-color: orange;
 }
 
