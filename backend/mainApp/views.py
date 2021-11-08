@@ -71,8 +71,19 @@ def index(request):
     }
     return render(request, 'mainApp/index.html', context)
 
-def detail(request, project_id):
+def projectDetail(request, project_id):
     return HttpResponse("Detail of project id = %d" % project_id)
+
+def petitionDetail(request, project_id):
+    petition = Petition.objects.get(pk=project_id)
+    print("petition=", petition)
+    context = {
+        "title": petition.title,
+        "description": petition.description,
+        "image": petition.image,
+    }
+    print(context)
+    return render(request, 'mainApp/detailView.html', context)
 
 class AddNewPetition(generic.View):
     def post(self, request):

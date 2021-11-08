@@ -9,6 +9,12 @@
 </head>
 
 <body>
+    {% if message %}
+        <div class="alert alert-{{ message.severity }}" role="alert">
+        {{ message.content }}
+        </div>
+    {% endif %}
+
     {% block content %}{% endblock %}
     <script src="{% static 'mainApp/js/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'mainApp/js/bootstrap.min.js' %}"></script>
