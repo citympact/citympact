@@ -3,6 +3,11 @@
 
 {% block content %}
 
+{% if message %}
+    <div class="alert alert-{{ message.severity }}" role="alert">
+    {{ message.content }}
+    </div>
+{% endif %}
 <input type="hidden" id="vote_csrf_token" value="{{ csrf_token }}" />
 <div class="container">
   <div class="row">
@@ -56,8 +61,9 @@
                 <div class="row row-slider">
                     {% for petition, star_range_and_class in petitions %}
                         <div data-petition-id="{{ petition.pk }}" class="petition">
-                            <a href="{% url 'mainApp:detail' petition.id %}"><img src="{{ petition.image.url|thumbnailize }}" alt="{{ petition.title }}" alt="" class="sliderThumbnail"/></a>
-
+                            {% if petition.image %}
+                                <a href="{% url 'mainApp:detail' petition.id %}"><img src="{{ petition.image.url|thumbnailize }}" alt="{{ petition.title }}" alt="" class="sliderThumbnail"/></a>
+                            {% endif %}
                             <h2><a href="{% url 'mainApp:detail' petition.id %}">{{ petition.title }}</a>
                             </h2>
                             <span class="rating-stars">

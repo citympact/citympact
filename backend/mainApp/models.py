@@ -28,7 +28,8 @@ class CityProject(models.Model):
         thumbnail.
         """
         super(CityProject, self).save(*args, **kwargs)
-        createThumbnail(self.image.path)
+        if self.image is not None:
+            createThumbnail(self.image.path)
 
 
 class CityProjectVote(models.Model):
@@ -55,7 +56,7 @@ class Petition(models.Model):
     title = models.CharField(max_length=200)
     summary = models.CharField(max_length=500)
     description = models.CharField(max_length=1500)
-    image = models.ImageField()
+    image = models.ImageField(blank=True, null=True)
     #"author":
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
 
@@ -68,7 +69,8 @@ class Petition(models.Model):
         thumbnail.
         """
         super(Petition, self).save(*args, **kwargs)
-        createThumbnail(self.image.path)
+        if self.image and hasattr(self.image, 'path'):
+            createThumbnail(self.image.path)
 
 
 class PetitionVote(models.Model):

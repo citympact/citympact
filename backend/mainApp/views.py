@@ -6,7 +6,17 @@ from django.views import generic
 from django.db.utils import IntegrityError
 from .models import *
 
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.lsa import LsaSummarizer
+from sumy.nlp.stemmers import Stemmer
+from sumy.utils import get_stop_words
 
+
+LANGUAGE = "french"
+SUMMARY_SENTENCES_COUNT = 3
+MESSAGE_SEVERITIES = ["primary", "secondary", "success", "danger", "warning",
+    "info", "light", "dark"]
 def index(request):
     # FixMe: implement a propper user login feature and not only a session id
     # based "authentication".
@@ -36,26 +46,69 @@ def index(request):
             for p in petitions\
         ]
     ]
-    print("v=", list(zip(petitions, star_range_and_class)))
+
+    # Retrieving the last message, if any, and resetting since it will be
+    # displayed by the HTML template:
+    message = None
+    if "message" in request.session:
+        message = {
+            "content": request.session["message"],
+            "severity": MESSAGE_SEVERITIES[0]
+        }
+
+        if "severity" in request.session:
+            if request.session["severity"] in MESSAGE_SEVERITIES:
+                message["severity"] = request.session["severity"]
+            del request.session["severity"]
+
+        del request.session["message"]
 
     context = {
         'projects_votes': list(zip(projects, votes)),
         "petitions": list(zip(petitions, star_range_and_class)),
-        "star_range": list(range(5))
+        "star_range": list(range(5)),
+        "message" : message,
     }
     return render(request, 'mainApp/index.html', context)
 
 def detail(request, project_id):
     return HttpResponse("Detail of project id = %d" % project_id)
 
-def addNewPetition(request):
-    if("title" in request.POST and "description" in request.POST):
-        c = CityProject(title=request.POST["title"],
-            description=request.POST["description"])
-        c.save()
-        return HttpResponseRedirect(reverse('mainApp:addNewPetition', args=()))
-    return render(request, "mainApp/newPetition.html", {})
+class AddNewPetition(generic.View):
+    def post(self, request):
+        session = Session.objects.get(pk=request.session.session_key)
+        if "title" in request.POST and \
+            "description" in request.POST and \
+            "image" in request.FILES and \
+            session is not None:
 
+            # Computing the summary:
+            parser = PlaintextParser.from_string(request.POST["description"],
+                Tokenizer(LANGUAGE))
+            stemmer = Stemmer(LANGUAGE)
+            summarizer = LsaSummarizer(stemmer)
+            summarizer.stop_words = get_stop_words(LANGUAGE)
+            summary = " ".join([str(x) for x in summarizer(parser.document,
+                SUMMARY_SENTENCES_COUNT)])
+
+            petition = Petition(title=request.POST["title"],
+                description=request.POST["description"],
+                summary=summary,
+                session=session,
+                image=request.FILES["image"]
+            )
+            petition.save()
+            request.session["message"] = "Nouvelle pétition ajoutée."
+        else:
+            print("request.POST =", request.POST)
+            print("request.FILES =", request.FILES)
+            request.session["message"] = "Impossible d'enregistrer votre petition."
+            request.session["severity"] = "danger"
+
+        return HttpResponseRedirect(reverse('mainApp:index', args=()))
+
+    def get(self, request):
+        return render(request, "mainApp/newPetition.html", {})
 
 class VoteProject(generic.View):
     def post(self, request):
