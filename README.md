@@ -3,6 +3,8 @@ Impact project
 
 ## How to start the server
 ```
+cd backend
+pip3 install -r requirements.txt
 python3 manage.py runserver
 ```
 
@@ -26,5 +28,6 @@ rm chromedriver_linux64.zip
 Then the test suite can be run using:
 ```
 cd tests
+pip3 install -r requirements.txt
 python3 main.py
 ```
