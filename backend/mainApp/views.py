@@ -71,18 +71,18 @@ def index(request):
     }
     return render(request, 'mainApp/index.html', context)
 
+def _contextifyDetail(databaseObject):
+    return {
+            "title": databaseObject.title,
+            "description": databaseObject.description,
+            "image": databaseObject.image,
+        }
 def projectDetail(request, project_id):
-    return HttpResponse("Detail of project id = %d" % project_id)
+    context = _contextifyDetail(CityProject.objects.get(pk=project_id))
+    return render(request, 'mainApp/detailView.html', context)
 
-def petitionDetail(request, project_id):
-    petition = Petition.objects.get(pk=project_id)
-    print("petition=", petition)
-    context = {
-        "title": petition.title,
-        "description": petition.description,
-        "image": petition.image,
-    }
-    print(context)
+def petitionDetail(request, petition_id):
+    context = _contextifyDetail(Petition.objects.get(pk=petition_id))
     return render(request, 'mainApp/detailView.html', context)
 
 class AddNewPetition(generic.View):
