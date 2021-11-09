@@ -8,7 +8,7 @@ pip3 install -r requirements.txt
 python3 manage.py runserver
 ```
 
-# Installing the demo data
+### Installing the demo data
 
 For having a nice demo view, some synthetic data can be added to the database:
 ```
