@@ -97,7 +97,6 @@ $(document).ready(function() {
                     selectedIndex = (selectedIndex +maxSel) % maxSel
                     suggestionsUl.children().removeClass("active-suggestion");
                     suggestionsUl.children().eq(selectedIndex).addClass("active-suggestion")
-                    console.log("selectedIndex = ", selectedIndex, "maxSel =", maxSel)
                     e.preventDefault(); // prevent the default action
                     return true;
                 });

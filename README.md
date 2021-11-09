@@ -8,6 +8,15 @@ pip3 install -r requirements.txt
 python3 manage.py runserver
 ```
 
+# Installing the demo data
+
+For having a nice demo view, some synthetic data can be added to the database:
+```
+cd backend
+./manage.py loaddata demoData.json
+```
+Then you should see the first entries. Note that the images are on purpose not
+version controlled. Please use the admin-site to upload some dummy images.
 
 ## Testing
 Install selenium:
