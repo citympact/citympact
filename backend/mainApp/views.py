@@ -38,8 +38,6 @@ def index(request):
     petitions = Petition.objects.all();
 
 
-    print([x for x in [p.petitionvote_set.all().filter(session=session).first() for p in petitions] if x is not None])
-
     star_range_and_class = [
          list(enumerate([""]*5)) if p is None else list(enumerate(["" for x in range(p.vote, 5)]+["star-activated" for x in range(p.vote)])) for p in
          [p.petitionvote_set.all().filter(session=session).first() \
@@ -127,6 +125,7 @@ class SearchView(generic.View):
         This function searches the petitions and projects given a provided text
         input from the search bar.
         """
+
         return JsonResponse({
             "result": "ok",
             "suggestions": [
