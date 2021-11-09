@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.db.utils import IntegrityError
+from django.db.models import Q
 from .models import *
 
 from sumy.parsers.plaintext import PlaintextParser
@@ -125,14 +126,24 @@ class SearchView(generic.View):
         This function searches the petitions and projects given a provided text
         input from the search bar.
         """
+        if not "content" in request.POST:
+            return JsonResponse({"result": "refused"});
+
+        suggestions = []
+
+        petitions = Petition.objects.filter(Q(title__icontains=request.POST["content"]))
+        suggestions += [{"url": reverse('mainApp:petitionDetail', kwargs={'petition_id': p.id}), "title": p.title+""" <span class="badge bg-success rounded-pill">Petition</span>"""} for p in petitions]
+
+
+        cityProjects = CityProject.objects.filter(Q(title__icontains=request.POST["content"]))
+        suggestions += [{"url": reverse('mainApp:projectDetail', kwargs={'project_id': p.id}), "title": p.title} for p in cityProjects]
+
+        # Sorting and keeping at max 5 items:
+        suggestions = sorted(suggestions, key=lambda x: x["title"])[:min(len(suggestions),5)]
 
         return JsonResponse({
             "result": "ok",
-            "suggestions": [
-                {"url":"1.html", "title": "Foo bar"},
-                {"url":"1.html", "title": "Foo bar"},
-                {"url":"1.html", "title": "Foo bar"},
-                ]
+            "suggestions": suggestions
             });
 
 class VoteProject(generic.View):
