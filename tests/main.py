@@ -29,6 +29,23 @@ class TestStringMethods(unittest.TestCase):
         except:
             self.fail("Unable to find the upvote element to click on.");
 
+    def scrollToElement(self, element):
+        """ Helper function to scroll (and wait on) a given DOM element """
+
+        page_y_offset = self.browser.execute_script("return window.pageYOffset")
+        scroll_offset = element.location["y"] - page_y_offset
+        self.browser.execute_script("window.scrollBy(0, arguments[0]);", scroll_offset)
+
+
+        page_y_offset = self.browser.execute_script("return window.pageYOffset")
+        window_height = self.browser.execute_script("return window.innerHeight")
+        # Waiting that the windows bottom has at least reached the element
+        # y-offset (by substracting the window height of the scrolling offset):
+        WebDriverWait(self.browser, 2.5).until(lambda browser:
+            browser.execute_script("return window.pageYOffset") >= \
+                (scroll_offset - window_height)
+        )
+
     def test_project_votes(self):
         # Testing the upvoting and the downvoting on a project:
         for vote_class in ["upvote", "downvote"]:
@@ -54,22 +71,6 @@ class TestStringMethods(unittest.TestCase):
                 vote_class+" active-vote")
 
 
-    def scrollToElement(self, element):
-        """ Helper function to scroll (and wait on) a given DOM element """
-
-        page_y_offset = self.browser.execute_script("return window.pageYOffset")
-        scroll_offset = element.location["y"] - page_y_offset
-        self.browser.execute_script("window.scrollBy(0, arguments[0]);", scroll_offset)
-
-
-        page_y_offset = self.browser.execute_script("return window.pageYOffset")
-        window_height = self.browser.execute_script("return window.innerHeight")
-        # Waiting that the windows bottom has at least reached the element
-        # y-offset (by substracting the window height of the scrolling offset):
-        WebDriverWait(self.browser, 2.5).until(lambda browser:
-            browser.execute_script("return window.pageYOffset") >= \
-                (scroll_offset - window_height)
-        )
     def test_petition_five_star_vote(self):
         # Testing the 5-star voting on a petition:
         self.browser.get(WEBAPP_URL)
@@ -80,8 +81,8 @@ class TestStringMethods(unittest.TestCase):
 
         for i, star in enumerate(first_project_stars):
             self.scrollToElement(star)
+            star.click()
             try:
-                star.click()
                 WebDriverWait(self.browser, 2.5).until(lambda browser:
                     "star-activated" in star.get_attribute("class")
                 )
@@ -103,6 +104,29 @@ class TestStringMethods(unittest.TestCase):
             By.CSS_SELECTOR, ".petition:first-child .rating-stars>.vote-star")
         self.assertIn("star-activated", first_project_stars[finalStarIndex]\
             .get_attribute("class"))
+
+
+    def test_add_petition(self):
+        self.browser.get(WEBAPP_URL)
+        allAElements = self.browser.find_elements(
+            By.CSS_SELECTOR, "a")
+        a = list(filter(lambda x: x.text.startswith("Lance une pétition"),
+            allAElements))[0]
+
+        self.scrollToElement(a)
+        a.click();
+
+        newPetition = {
+            "title": "New petiton from the test runner",
+            "image": "todo...",
+            "description": "This petition was actually filled by a test run."
+        }
+        titleInput = self.browser.find_elements(By.CSS_SELECTOR,
+            "input[name=title]")[0]
+        print("titleInput =", titleInput)
+        titleInput.send_keys(newPetition["title"])
+
+        time.sleep(5)
 
 
     def tearDown(self):
