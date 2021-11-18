@@ -4,7 +4,8 @@ Impact project
 
 ## Installing the project
 ### Dependencies (and virtual environment)
-Before starting the server, you can create a virtual python environment (venv):
+Optionally, you can create a virtual python environment (venv), before starting
+the server:
 ```
 pip3 install virtualenv
 python3 -m venv .

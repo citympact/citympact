@@ -18,6 +18,7 @@ LANGUAGE = "french"
 SUMMARY_SENTENCES_COUNT = 3
 MESSAGE_SEVERITIES = ["primary", "secondary", "success", "danger", "warning",
     "info", "light", "dark"]
+
 def index(request):
     # FixMe: implement a propper user login feature and not only a session id
     # based "authentication".
@@ -64,7 +65,7 @@ def index(request):
 
     context = {
         'projects_votes': list(zip(projects, votes)),
-        "petitions": list(zip(petitions, star_range_and_class)),
+        "petitions": petitions,
         "star_range": list(range(5)),
         "message" : message,
     }
@@ -132,11 +133,11 @@ class SearchView(generic.View):
         suggestions = []
 
         petitions = Petition.objects.filter(Q(title__icontains=request.POST["content"]))
-        suggestions += [{"url": reverse('mainApp:petitionDetail', kwargs={'petition_id': p.id}), "title": p.title+""" <span class="badge bg-success rounded-pill">Petition</span>"""} for p in petitions]
+        suggestions += [{"url": reverse('mainApp:petitionDetail', kwargs={'petition_id': p.id}), "title": """<span class="badge bg-success rounded-pill">Petition</span> """+p.title} for p in petitions]
 
 
         cityProjects = CityProject.objects.filter(Q(title__icontains=request.POST["content"]))
-        suggestions += [{"url": reverse('mainApp:projectDetail', kwargs={'project_id': p.id}), "title": p.title} for p in cityProjects]
+        suggestions += [{"url": reverse('mainApp:projectDetail', kwargs={'project_id': p.id}), "title": """<span class="badge bg-info rounded-pill">Projet</span> """+p.title} for p in cityProjects]
 
         # Sorting and keeping at max 5 items:
         suggestions = sorted(suggestions, key=lambda x: x["title"])[:min(len(suggestions),5)]
@@ -172,11 +173,19 @@ class VoteProject(generic.View):
         vote_object.vote = vote
         vote_object.save()
 
+        up_votes = len(
+            [v.vote for v in project.cityprojectvote_set.all().filter(vote=-1)])
+        down_votes = len(
+            [v.vote for v in project.cityprojectvote_set.all().filter(vote=1)])
+
         return JsonResponse({
             "result": "OK",
             "project_id":project_id,
             "new_vote": new_vote,
-            "vote":vote_object.vote});
+            "vote":vote_object.vote,
+            "popup_title": "Merci pour votre vote",
+            "popup_content": "Vote actuel: %d positifs, %d négatifs." % (up_votes, down_votes),
+            "hide_popup_next_button": True});
 
 class VotePetition(generic.View):
     def post(self, request):

@@ -1,5 +1,16 @@
 
 $(document).ready(function() {
+    var showPopUpFromResponse = function(response) {
+        let modal = new bootstrap.Modal(document.getElementById("popup"));
+
+        $("#popup_title").html(response.popup_title);
+        $("#popup_content").html(response.popup_content);
+        if(response.hide_popup_next_button) {
+            $("#popup_next_button").hide();
+        }
+
+        modal.show();
+    };
     $("a.upvote,a.downvote").click(function() {
         let project_id = $(this).parents("div.project-div")
             .first().data("project-id");
@@ -19,6 +30,8 @@ $(document).ready(function() {
             if(response.vote!=0) {
                 clickedElement.addClass("active-vote");
             }
+            showPopUpFromResponse(response);
+
 
         });
     });
