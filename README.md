@@ -1,22 +1,49 @@
 # impact
 Impact project
 
-## How to start the server
+
+## Installing the project
+### Dependencies (and virtual environment)
+Before starting the server, you can create a virtual python environment (venv):
+```
+pip3 install virtualenv
+python3 -m venv .
+source bin/activate
+```
+Now you should install the python dependencies:
+```
+pip3 install -r backend/requirements.txt
+```
+
+Finally you should make Django migrations, apply them and run the server:
 ```
 cd backend
-pip3 install -r requirements.txt
+python3 manage.py makemigrations
+python3 manage.py migrate
 python3 manage.py runserver
 ```
+To stop the server, simply use `[CTR] + [C]`. Optionally, deactivate your venv
+(`deactivate`).
 
 ### Installing the demo data
 
 For having a nice demo view, some synthetic data can be added to the database:
 ```
 cd backend
-./manage.py loaddata demoData.json
+python3 manage.py loaddata demoData.json
 ```
 Then you should see the first entries. Note that the images are on purpose not
 version controlled. Please use the admin-site to upload some dummy images.
+
+### Accessing the admin-site
+
+Django provides an admin site to manage your database. You need to create a
+super user:
+```
+cd backend
+python3 manage.py createsuperuser
+```
+Finally, open (and login to) the admin site: `localhost:8080/admin/`.
 
 ## Testing
 Install selenium:

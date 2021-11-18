@@ -134,3 +134,7 @@ backend/media/*
 
 # Test binaries (like chromebrowser):
 tests/binaries/*
+
+# Python venv related files:
+pyvenv.cfg
+bin/
