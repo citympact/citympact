@@ -16,4 +16,6 @@ urlpatterns = [
         name='petitionDetail'),
     path('petition/vote', views.VotePetition.as_view(), name='votePetition'),
     path('petition/add', views.AddNewPetition.as_view(), name='addNewPetition'),
+    path('add_vote_comment', views.AddVoteComment.as_view(),
+        name='addVoteComment'),
 ]

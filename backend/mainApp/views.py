@@ -147,9 +147,27 @@ class SearchView(generic.View):
             "suggestions": suggestions
             });
 
+class AddVoteComment(generic.View):
+    def post(self, request):
+
+        session = Session.objects.get(pk=request.session.session_key)
+        if session == None or \
+            not "id" in request.POST or \
+            not "comment" in request.POST \
+        :
+            return JsonResponse({"result": "refused"});
+
+        vote = CityProjectVote.objects.get(
+            project=request.POST["id"],
+            session=session
+        )
+        vote.comment = request.POST["comment"]
+        vote.save()
+        return JsonResponse({"result": "todo"})
+
 class VoteProject(generic.View):
 
-    def _create_followup_form(self, project_name, vote):
+    def _create_followup_form(self, project_id, project_name, vote):
         if vote > 0:
             title = "Je trouve le projet %s très bien car:" % project_name
         else:
@@ -157,8 +175,11 @@ class VoteProject(generic.View):
 
         return """
             <h5>""" + title + """</h5>
-            <textarea></textarea>
-        """
+            <form>
+            <textarea name="comment"></textarea>
+            <input type="hidden" name="id" value="%d" />
+            </form>
+        """ % project_id
     def post(self, request):
         """
         Posting a vote should be unique per user. Hence session are used here to
@@ -191,8 +212,8 @@ class VoteProject(generic.View):
 
         popup_content = "<h4>Vote actuel:</h4>" \
             + """<p class="pb-5">%d positifs, %d négatifs.</p>""" \
-            % (up_votes, down_votes) \
-            + self._create_followup_form(project.title, vote)
+            % (up_votes, down_votes)
+        popup_content = self._create_followup_form(project.id, project.title, vote)
 
         return JsonResponse({
             "result": "OK",

@@ -39,6 +39,14 @@ $(document).ready(function() {
         });
     });
 
+    $("#popup_next_button").click(function() {
+        data = $("#popup").find("form").eq(0).serializeArray()
+        data.push({name: "csrfmiddlewaretoken", value: $("#vote_csrf_token").val()});
+        $.post("/add_vote_comment", data, function() {
+            alert("To do next step :-)");
+        });
+    });
+
     let suggestionsDiv;
     var selectedIndex = -1;
     $("#search-input").on('input', function() {
