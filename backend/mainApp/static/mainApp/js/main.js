@@ -5,8 +5,11 @@ $(document).ready(function() {
 
         $("#popup_title").html(response.popup_title);
         $("#popup_content").html(response.popup_content);
-        if(response.hide_popup_next_button) {
+        $("#popup_next_button").html(response.popup_next_button_val);
+        if(response.popup_next_button_val.length < 1) {
             $("#popup_next_button").hide();
+        } else {
+            $("#popup_next_button").show();
         }
 
         modal.show();

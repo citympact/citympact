@@ -79,3 +79,8 @@ a.upvote,a.downvote {
     background-color: #0d6efd;
     color: white;
 }
+
+#popup textarea {
+    width: 100%;
+    min-height: 150px;
+}

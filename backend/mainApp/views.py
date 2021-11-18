@@ -148,6 +148,17 @@ class SearchView(generic.View):
             });
 
 class VoteProject(generic.View):
+
+    def _create_followup_form(self, project_name, vote):
+        if vote > 0:
+            title = "Je trouve le projet %s très bien car:" % project_name
+        else:
+            title = "Je n'aime pas le projet %s car:" % project_name
+
+        return """
+            <h5>""" + title + """</h5>
+            <textarea></textarea>
+        """
     def post(self, request):
         """
         Posting a vote should be unique per user. Hence session are used here to
@@ -178,14 +189,19 @@ class VoteProject(generic.View):
         down_votes = len(
             [v.vote for v in project.cityprojectvote_set.all().filter(vote=1)])
 
+        popup_content = "<h4>Vote actuel:</h4>" \
+            + """<p class="pb-5">%d positifs, %d négatifs.</p>""" \
+            % (up_votes, down_votes) \
+            + self._create_followup_form(project.title, vote)
+
         return JsonResponse({
             "result": "OK",
             "project_id":project_id,
             "new_vote": new_vote,
             "vote":vote_object.vote,
             "popup_title": "Merci pour votre vote",
-            "popup_content": "Vote actuel: %d positifs, %d négatifs." % (up_votes, down_votes),
-            "hide_popup_next_button": True});
+            "popup_content": popup_content,
+            "popup_next_button_val": "Commenter"});
 
 class VotePetition(generic.View):
     def post(self, request):
