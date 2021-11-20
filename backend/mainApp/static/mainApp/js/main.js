@@ -1,18 +1,18 @@
 
 $(document).ready(function() {
-    var showPopUpFromResponse = function(response) {
-        let modal = new bootstrap.Modal(document.getElementById("popup"));
+    let modal = new bootstrap.Modal(document.getElementById("popup"));
+    var prepareModal = function(response) {
 
         $("#popup_title").html(response.popup_title);
         $("#popup_content").html(response.popup_content);
         $("#popup_next_button").html(response.popup_next_button_val);
-        if(response.popup_next_button_val.length < 1) {
+        if(response.popup_next_button_val == null ||
+            response.popup_next_button_val.length < 1
+        ) {
             $("#popup_next_button").hide();
         } else {
             $("#popup_next_button").show();
         }
-
-        modal.show();
     };
     $("a.upvote,a.downvote").click(function() {
         let project_id = $(this).parents("div.project-div")
@@ -33,7 +33,8 @@ $(document).ready(function() {
             if(response.vote!=0) {
                 clickedElement.addClass("active-vote");
             }
-            showPopUpFromResponse(response);
+            prepareModal(response);
+            modal.show();
 
 
         });
@@ -42,8 +43,8 @@ $(document).ready(function() {
     $("#popup_next_button").click(function() {
         data = $("#popup").find("form").eq(0).serializeArray()
         data.push({name: "csrfmiddlewaretoken", value: $("#vote_csrf_token").val()});
-        $.post("/add_vote_comment", data, function() {
-            alert("To do next step :-)");
+        $.post("/add_vote_comment", data, function(response) {
+            prepareModal(response);
         });
     });
 

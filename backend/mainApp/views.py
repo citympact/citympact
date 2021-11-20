@@ -148,22 +148,51 @@ class SearchView(generic.View):
             });
 
 class AddVoteComment(generic.View):
+    def _create_stats_div(self, project_id):
+        project = CityProject.objects.get(pk=project_id)
+        up_votes = len(
+            [v.vote for v in project.cityprojectvote_set.all().filter(vote=1)])
+        down_votes = len(
+            [v.vote for v in project.cityprojectvote_set.all().filter(vote=-1)])
+
+        return "<div><h4>Vote actuel:</h4>" \
+            + """<p class="pb-5">%d positifs, %d négatifs.</p></div>""" \
+            % (up_votes, down_votes)
+
+    def _create_share_div(self, project_id):
+        project = CityProject.objects.get(pk=project_id)
+        up_votes = len(
+            [v.vote for v in project.cityprojectvote_set.all().filter(vote=1)])
+        down_votes = len(
+            [v.vote for v in project.cityprojectvote_set.all().filter(vote=-1)])
+
+        return "<div><h4>Partager ce projet:</h4>" \
+            + """<p class="pb-5">Sharing buttons to do...</p></div>"""
+
     def post(self, request):
 
         session = Session.objects.get(pk=request.session.session_key)
         if session == None or \
-            not "id" in request.POST or \
+            not "project_id" in request.POST or \
             not "comment" in request.POST \
         :
             return JsonResponse({"result": "refused"});
 
         vote = CityProjectVote.objects.get(
-            project=request.POST["id"],
+            project=request.POST["project_id"],
             session=session
         )
         vote.comment = request.POST["comment"]
         vote.save()
-        return JsonResponse({"result": "todo"})
+
+        return JsonResponse({
+            "result": "ok",
+            "popup_title": "Merci pour votre vote!",
+            "popup_content":
+                self._create_stats_div(request.POST["project_id"]) \
+                + self._create_share_div(request.POST["project_id"]),
+            "popup_next_button_val": None
+        })
 
 class VoteProject(generic.View):
 
@@ -177,7 +206,7 @@ class VoteProject(generic.View):
             <h5>""" + title + """</h5>
             <form>
             <textarea name="comment"></textarea>
-            <input type="hidden" name="id" value="%d" />
+            <input type="hidden" name="project_id" value="%d" />
             </form>
         """ % project_id
     def post(self, request):
@@ -205,14 +234,6 @@ class VoteProject(generic.View):
         vote_object.vote = vote
         vote_object.save()
 
-        up_votes = len(
-            [v.vote for v in project.cityprojectvote_set.all().filter(vote=-1)])
-        down_votes = len(
-            [v.vote for v in project.cityprojectvote_set.all().filter(vote=1)])
-
-        popup_content = "<h4>Vote actuel:</h4>" \
-            + """<p class="pb-5">%d positifs, %d négatifs.</p>""" \
-            % (up_votes, down_votes)
         popup_content = self._create_followup_form(project.id, project.title, vote)
 
         return JsonResponse({
