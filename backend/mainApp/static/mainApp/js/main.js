@@ -13,8 +13,9 @@ $(document).ready(function() {
         } else {
             $("#popup_next_button").show();
         }
+        console.log("Updated the popup...")
     };
-    $("a.upvote,a.downvote").click(function() {
+    $("a.upvote,a.downvote").click(function(event) {
         let project_id = $(this).parents("div.project-div")
             .first().data("project-id");
         let vote = $(this).hasClass("upvote") ? 1  : -1;
@@ -38,12 +39,18 @@ $(document).ready(function() {
 
 
         });
+        event.preventDefault();
     });
 
     $("#popup_next_button").click(function() {
-        data = $("#popup").find("form").eq(0).serializeArray()
-        data.push({name: "csrfmiddlewaretoken", value: $("#vote_csrf_token").val()});
-        $.post("/add_vote_comment", data, function(response) {
+        popupForm = $("#popup").find("form").eq(0);
+        data = popupForm.serializeArray();
+        data.push({
+            name: "csrfmiddlewaretoken",
+            value: $("#vote_csrf_token").val()
+        });
+
+        $.post(popupForm.attr('action'), data, function(response) {
             prepareModal(response);
         });
     });
@@ -73,10 +80,11 @@ $(document).ready(function() {
                     );
                     // Closing the suggestion div when the user has chosen an
                     // option (i.e. clicked on a proposal):
-                    newLi.click(function() {
+                    newLi.click(function(event) {
                         if(suggestionsDiv !== undefined) {
                             suggestionsDiv.hide();
                         }
+                        event.preventDefault();
                     });
                 });
                 suggestionsUl.append(lastItem);
@@ -136,23 +144,18 @@ $(document).ready(function() {
         }
     });
 
-    $("a.vote-star").click(function() {
+    $("a.sign_petition").click(function(event) {
         let clickedElement = $(this);
         let petition_id = $(this).parents("div").first().data("petition-id");
-        let vote = 5-$(this).data("vote-val");
-        $.post("petition/vote",  {
+
+        $.get("petition/sign",  {
             petition_id: petition_id,
-            vote: vote,
             csrfmiddlewaretoken: $("#vote_csrf_token").val(),
         },
         function(response) {
-            clickedElement.parent().children().each(function(i, e) {
-                if(5-i<=response.vote) {
-                    $(e).addClass("star-activated")
-                } else {
-                    $(e).removeClass("star-activated")
-                }
-            });
+            prepareModal(response);
+            modal.show();
         });
+        event.preventDefault();
     });
 });

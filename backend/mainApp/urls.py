@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('petition/<int:petition_id>', views.petitionDetail, \
         name='petitionDetail'),
-    path('petition/vote', views.VotePetition.as_view(), name='votePetition'),
+    path('petition/sign', views.SignPetition.as_view(), name='signPetition'),
     path('petition/add', views.AddNewPetition.as_view(), name='addNewPetition'),
     path('add_vote_comment', views.AddVoteComment.as_view(),
         name='addVoteComment'),

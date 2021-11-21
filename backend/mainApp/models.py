@@ -73,6 +73,13 @@ class Petition(models.Model):
             createThumbnail(self.image.path)
 
 
+class PetitionSignature(models.Model):
+    petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
+
+
+
+
 class PetitionVote(models.Model):
     petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
     vote = models.IntegerField(default=0)
