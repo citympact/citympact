@@ -9,7 +9,7 @@
                 enctype="multipart/form-data">
 
                 {% csrf_token %}
-                title: <input type="text" name="title" /><br>
+                title: <input type="text" name="title" value="{{ title }}" size="50" /><br>
                 img: <input type="file" name="image" /><br>
                 desc: <textarea name="description" rows="8" cols="80"></textarea><br>
                 <input type="submit" value="Save">

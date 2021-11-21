@@ -121,7 +121,12 @@ class AddNewPetition(generic.View):
         return HttpResponseRedirect(reverse('mainApp:index', args=()))
 
     def get(self, request):
-        return render(request, "mainApp/newPetition.html", {})
+        title = ""
+        if "title" in request.GET:
+            title = request.GET["title"]
+        return render(request, "mainApp/newPetition.html", {
+            "title": title
+        })
 
 class SearchView(generic.View):
     def post(self, request):
@@ -161,7 +166,7 @@ class AddVoteComment(generic.View):
             + """<p class="pb-5">%d positifs, %d négatifs.</p></div>""" \
             % (up_votes, down_votes)
 
-    def _create_share_div(self, base_url, project_id):
+    def _create_share_div(self, base_url, project_id, vote):
         project = CityProject.objects.get(pk=project_id)
         up_votes = len(
             [v.vote for v in project.cityprojectvote_set.all().filter(vote=1)])
@@ -204,8 +209,20 @@ class AddVoteComment(generic.View):
             shareButtons += "<a href=\"%s\" target=\"_blank\">%s</a> " \
                 % (link, name)
 
+        additional_div = ""
+        if vote < 0:
+            petition_title = urllib.parse.quote("Pétition contre le projet ") \
+                + project_title
+            additional_div = """<div><h4>Créer une pétition:</h4>""" \
+                + """<p class="pb-5">Vous n'avez pas aimé ce projet, voulez-vous <a href="%s?title=%s">créer une pétition</a>?</p></div>""" \
+                % (
+                    reverse('mainApp:addNewPetition', args=()),
+                    petition_title
+                )
+
         return "<div><h4>Partager ce projet:</h4>" \
-            + """<p class="pb-5">""" + shareButtons + """</p></div>"""
+            + """<p class="pb-5">""" + shareButtons + """</p></div>""" \
+            + additional_div
 
     def post(self, request):
 
@@ -230,7 +247,11 @@ class AddVoteComment(generic.View):
             "popup_title": "Merci pour votre vote!",
             "popup_content":
                 self._create_stats_div(request.POST["project_id"]) \
-                + self._create_share_div(base_url, request.POST["project_id"]),
+                + self._create_share_div(
+                    base_url,
+                    request.POST["project_id"],
+                    vote.vote
+                ),
             "popup_next_button_val": None
         })
 
