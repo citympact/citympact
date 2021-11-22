@@ -13,7 +13,14 @@ def createThumbnail(imagePath):
     ))
     img.save(".".join(chunks))
 
-class CityProject(models.Model):
+
+class BaseModel(models.Model):
+    create_datetime = models.DateTimeField(auto_now_add=True)
+    update_datetime = models.DateTimeField(auto_now=True)
+    class Meta:
+        abstract = True
+
+class CityProject(BaseModel):
     title = models.CharField(max_length=200)
     summary = models.TextField()
     description = models.TextField()
@@ -32,11 +39,12 @@ class CityProject(models.Model):
             createThumbnail(self.image.path)
 
 
-class CityProjectVote(models.Model):
+class CityProjectVote(BaseModel):
     project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
     vote = models.IntegerField(default=0)
     comment = models.TextField()
-    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
+    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING,
+        null=True, db_constraint=False)
 
     class Meta:
         constraints = [
@@ -52,13 +60,14 @@ class CityProjectVote(models.Model):
             + " (%s)" % self.session.session_key
 
 
-class Petition(models.Model):
+class Petition(BaseModel):
     title = models.CharField(max_length=200)
     summary = models.TextField()
     description = models.TextField()
     image = models.ImageField(blank=True, null=True)
     #"author":
-    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
+    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING,
+        null=True, db_constraint=False)
 
     def __str__(self):
         return self.title
@@ -68,11 +77,11 @@ class Petition(models.Model):
         Quickly overriding the super()-function in order to also save a
         thumbnail.
         """
-        super(Petition, self).save(*args, **kwargs)
+        super(models.Model, self).save(*args, **kwargs)
         if self.image and hasattr(self.image, 'path'):
             createThumbnail(self.image.path)
 
-class RegisteredUser(models.Model):
+class RegisteredUser(BaseModel):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -81,7 +90,12 @@ class RegisteredUser(models.Model):
     birth_year = models.DecimalField(max_digits=4, decimal_places=0)
 
 
+class Visitor(BaseModel):
+    def __str__(self):
+        return "Visitor (%d)" % self.pk
 
-class PetitionSignature(models.Model):
+
+class PetitionSignature(BaseModel):
     petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
+    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING,
+        null=True, db_constraint=False)

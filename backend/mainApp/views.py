@@ -21,49 +21,53 @@ SUMMARY_SENTENCES_COUNT = 3
 MESSAGE_SEVERITIES = ["primary", "secondary", "success", "danger", "warning",
     "info", "light", "dark"]
 
-def index(request):
-    # FixMe: implement a propper user login feature and not only a session id
-    # based "authentication".
-    if not request.session.session_key:
-        request.session.save()
-    session = Session.objects.get(pk=request.session.session_key)
 
-    projects = CityProject.objects.all();
-    # Fetching the vote (integers) of the user for each project:
-    votes = [ \
-        ["", ""] if (v is None or v.vote==0) \
-        else \
-            ["", "active-vote"] if v.vote>0 else ["active-vote",""] \
-        for v in
-            [p.cityprojectvote_set.all().filter(session=session).first() \
-                for p in projects\
-            ] \
-    ]
-    petitions = Petition.objects.all();
 
-    # Retrieving the last message, if any, and resetting since it will be
-    # displayed by the HTML template:
-    message = None
-    if "message" in request.session:
-        message = {
-            "content": request.session["message"],
-            "severity": MESSAGE_SEVERITIES[0]
+
+class IndexView(generic.View):
+    def get(self, request, *args, **kwargs):
+
+
+        if not request.session.session_key:
+            request.session.save()
+        session = Session.objects.get(pk=request.session.session_key)
+
+        projects = CityProject.objects.all();
+        # Fetching the vote (integers) of the user for each project:
+        votes = [ \
+            ["", ""] if (v is None or v.vote==0) \
+            else \
+                ["", "active-vote"] if v.vote>0 else ["active-vote",""] \
+            for v in
+                [p.cityprojectvote_set.all().filter(session=session).first() \
+                    for p in projects\
+                ] \
+        ]
+        petitions = Petition.objects.all();
+
+        # Retrieving the last message, if any, and resetting since it will be
+        # displayed by the HTML template:
+        message = None
+        if "message" in request.session:
+            message = {
+                "content": request.session["message"],
+                "severity": MESSAGE_SEVERITIES[0]
+            }
+
+            if "severity" in request.session:
+                if request.session["severity"] in MESSAGE_SEVERITIES:
+                    message["severity"] = request.session["severity"]
+                del request.session["severity"]
+
+            del request.session["message"]
+
+        context = {
+            'projects_votes': list(zip(projects, votes)),
+            "petitions": petitions,
+            "star_range": list(range(5)),
+            "message" : message,
         }
-
-        if "severity" in request.session:
-            if request.session["severity"] in MESSAGE_SEVERITIES:
-                message["severity"] = request.session["severity"]
-            del request.session["severity"]
-
-        del request.session["message"]
-
-    context = {
-        'projects_votes': list(zip(projects, votes)),
-        "petitions": petitions,
-        "star_range": list(range(5)),
-        "message" : message,
-    }
-    return render(request, 'mainApp/index.html', context)
+        return render(request, 'mainApp/index.html', context)
 
 def _contextifyDetail(databaseObject):
     return {
@@ -71,16 +75,23 @@ def _contextifyDetail(databaseObject):
             "description": databaseObject.description,
             "image": databaseObject.image,
         }
-def projectDetail(request, project_id):
-    context = _contextifyDetail(CityProject.objects.get(pk=project_id))
-    return render(request, 'mainApp/detailView.html', context)
 
-def petitionDetail(request, petition_id):
-    context = _contextifyDetail(Petition.objects.get(pk=petition_id))
-    return render(request, 'mainApp/detailView.html', context)
+class ProjectView(generic.View):
+    def get(self, request, *args, **kwargs):
+
+        context = \
+            _contextifyDetail(CityProject.objects.get(pk=kwargs["project_id"]))
+        return render(request, 'mainApp/detailView.html', context)
+
+class PetitionView(generic.View):
+    def get(self, request, *args, **kwargs):
+
+        context = \
+            _contextifyDetail(Petition.objects.get(pk=kwargs["petition_id"]))
+        return render(request, 'mainApp/detailView.html', context)
 
 class AddNewPetition(generic.View):
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         session = Session.objects.get(pk=request.session.session_key)
         if "title" in request.POST and \
             "description" in request.POST and \
@@ -105,14 +116,12 @@ class AddNewPetition(generic.View):
             petition.save()
             request.session["message"] = "Nouvelle pétition ajoutée."
         else:
-            print("request.POST =", request.POST)
-            print("request.FILES =", request.FILES)
             request.session["message"] = "Impossible d'enregistrer votre petition."
             request.session["severity"] = "danger"
 
         return HttpResponseRedirect(reverse('mainApp:index', args=()))
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         title = ""
         if "title" in request.GET:
             title = request.GET["title"]
@@ -121,11 +130,12 @@ class AddNewPetition(generic.View):
         })
 
 class SearchView(generic.View):
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         """
         This function searches the petitions and projects given a provided text
         input from the search bar.
         """
+
         if not "content" in request.POST:
             return JsonResponse({"result": "refused"});
 
@@ -145,6 +155,8 @@ class SearchView(generic.View):
             "result": "ok",
             "suggestions": suggestions
             });
+
+
 def create_sharing_div(target_url, link_title):
     link_title = urllib.parse.quote(link_title)
     sharePlatforms = {
@@ -194,8 +206,7 @@ class AddVoteComment(generic.View):
             % (up_votes, down_votes)
 
 
-    def post(self, request):
-
+    def post(self, request, *args, **kwargs):
         session = Session.objects.get(pk=request.session.session_key)
         if session == None or \
             not "project_id" in request.POST or \
@@ -259,13 +270,15 @@ class VoteProject(generic.View):
             <input type="hidden" name="vote" value="%d" />
             </form>
         """ % (reverse('mainApp:addVoteComment', args=()), project_id, vote)
-    def post(self, request):
+
+    def post(self, request, *args, **kwargs):
         """
         Posting a vote should be unique per user. Hence session are used here to
         store a dict of previously voted project ids. This is a quick solution
         as long as no better user handling is implemented.
         Todo: register each vote with user id.
         """
+
         session = Session.objects.get(pk=request.session.session_key)
         if session == None or \
             not "project_id" in request.POST or \
@@ -297,7 +310,7 @@ class VoteProject(generic.View):
 
 
 class SignPetition(generic.View):
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         """
         Post a new signature (from the confirmation popup).
         """
@@ -333,7 +346,7 @@ class SignPetition(generic.View):
             "popup_next_button_val": None
             });
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         """
         Return the popup content of a signature confirmation
         """
