@@ -9,6 +9,34 @@
 </head>
 
 <body>
+    <div class="container-fluid mb-5" id="topMenuBar">
+        <div class="container">
+          <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid pt-2 pb-2">
+                <a class="navbar-brand" href="/">Citympact</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="topNavbar">
+                  <ul class="navbar-nav">
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Login</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link disabled" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link disabled" href="#">About</a>
+                    </li>
+                  </ul>
+                </div>
+            </div>
+          </nav>
+        </div>
+      </div>
     {% if message %}
         <div class="alert alert-{{ message.severity }}" role="alert">
         {{ message.content }}
