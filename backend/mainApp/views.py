@@ -41,14 +41,6 @@ def index(request):
     ]
     petitions = Petition.objects.all();
 
-
-    star_range_and_class = [
-         list(enumerate([""]*5)) if p is None else list(enumerate(["" for x in range(p.vote, 5)]+["star-activated" for x in range(p.vote)])) for p in
-         [p.petitionvote_set.all().filter(session=session).first() \
-            for p in petitions\
-        ]
-    ]
-
     # Retrieving the last message, if any, and resetting since it will be
     # displayed by the HTML template:
     message = None
