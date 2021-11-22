@@ -85,22 +85,3 @@ class RegisteredUser(models.Model):
 class PetitionSignature(models.Model):
     petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
-
-
-
-
-class PetitionVote(models.Model):
-    petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
-    vote = models.IntegerField(default=0)
-    comment = models.CharField(max_length=1500)
-    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                name='unique_petition_vote_per_session',
-                fields=['petition', "session"],
-            )
-        ]
-    def __str__(self):
-        return "%s / 5 (%s)" % (self.vote, self.session.session_key)

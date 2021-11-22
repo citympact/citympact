@@ -14,3 +14,6 @@ admin.site.register(CityProject, DescriptionModelAdmin)
 admin.site.register(CityProjectVote)
 
 admin.site.register(Petition)
+admin.site.register(PetitionSignature)
+
+admin.site.register(RegisteredUser)
