@@ -15,8 +15,8 @@ def createThumbnail(imagePath):
 
 class CityProject(models.Model):
     title = models.CharField(max_length=200)
-    summary = models.CharField(max_length=500)
-    description = models.CharField(max_length=1500)
+    summary = models.TextField()
+    description = models.TextField()
     image = models.ImageField()
     def __str__(self):
         return self.title
@@ -35,7 +35,7 @@ class CityProject(models.Model):
 class CityProjectVote(models.Model):
     project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
     vote = models.IntegerField(default=0)
-    comment = models.CharField(max_length=1500)
+    comment = models.TextField()
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
 
     class Meta:
@@ -54,8 +54,8 @@ class CityProjectVote(models.Model):
 
 class Petition(models.Model):
     title = models.CharField(max_length=200)
-    summary = models.CharField(max_length=500)
-    description = models.CharField(max_length=1500)
+    summary = models.TextField()
+    description = models.TextField()
     image = models.ImageField(blank=True, null=True)
     #"author":
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
@@ -71,6 +71,15 @@ class Petition(models.Model):
         super(Petition, self).save(*args, **kwargs)
         if self.image and hasattr(self.image, 'path'):
             createThumbnail(self.image.path)
+
+class RegisteredUser(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    zip_code = models.DecimalField(max_digits=10, decimal_places=0)
+    city = models.CharField(max_length=254)
+    birth_year = models.DecimalField(max_digits=4, decimal_places=0)
+
 
 
 class PetitionSignature(models.Model):
