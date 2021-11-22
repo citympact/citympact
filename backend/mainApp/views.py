@@ -27,10 +27,7 @@ MESSAGE_SEVERITIES = ["primary", "secondary", "success", "danger", "warning",
 class IndexView(generic.View):
     def get(self, request, *args, **kwargs):
 
-
-        if not request.session.session_key:
-            request.session.save()
-        session = Session.objects.get(pk=request.session.session_key)
+        visitor = Visitor.objects.get(pk=request.session["visitor_id"])
 
         projects = CityProject.objects.all();
         # Fetching the vote (integers) of the user for each project:
@@ -39,7 +36,7 @@ class IndexView(generic.View):
             else \
                 ["", "active-vote"] if v.vote>0 else ["active-vote",""] \
             for v in
-                [p.cityprojectvote_set.all().filter(session=session).first() \
+                [p.cityprojectvote_set.all().filter(visitor=visitor).first() \
                     for p in projects\
                 ] \
         ]
@@ -207,8 +204,8 @@ class AddVoteComment(generic.View):
 
 
     def post(self, request, *args, **kwargs):
-        session = Session.objects.get(pk=request.session.session_key)
-        if session == None or \
+        visitor = Visitor.objects.get(pk=request.session["visitor_id"])
+        if visitor == None or \
             not "project_id" in request.POST or \
             not "comment" in request.POST \
         :
@@ -216,7 +213,7 @@ class AddVoteComment(generic.View):
 
         vote = CityProjectVote.objects.get(
             project=request.POST["project_id"],
-            session=session
+            visitor=visitor
         )
         vote.comment = request.POST["comment"]
         vote.save()
@@ -235,8 +232,8 @@ class AddVoteComment(generic.View):
 
         additional_div = ""
         if vote.vote < 0:
-            petition_title = urllib.parse.quote("Pétition contre le projet ") \
-                + project_title
+            petition_title = urllib.parse.quote(
+                "Pétition contre le projet "+project.title)
             additional_div = """<div><h4>Créer une pétition:</h4>""" \
                 + """<p class="pb-5">Vous n'avez pas aimé ce projet, voulez-vous <a href="%s?title=%s">créer une pétition</a>?</p></div>""" \
                 % (
@@ -279,8 +276,8 @@ class VoteProject(generic.View):
         Todo: register each vote with user id.
         """
 
-        session = Session.objects.get(pk=request.session.session_key)
-        if session == None or \
+        visitor = Visitor.objects.get(pk=request.session["visitor_id"])
+        if visitor == None or \
             not "project_id" in request.POST or \
             not "vote" in request.POST\
         :
@@ -292,7 +289,7 @@ class VoteProject(generic.View):
         project = CityProject.objects.get(pk=project_id)
         vote_object, new_vote = CityProjectVote.objects.get_or_create(
             project=project,
-            session=session
+            visitor=visitor
         )
         vote_object.vote = vote
         vote_object.save()

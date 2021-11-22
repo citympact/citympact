@@ -20,6 +20,21 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+
+class Visitor(BaseModel):
+    def __str__(self):
+        return "Visitor (%d)" % self.pk
+
+
+class RegisteredUser(BaseModel):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    zip_code = models.DecimalField(max_digits=10, decimal_places=0)
+    city = models.CharField(max_length=254)
+    birth_year = models.DecimalField(max_digits=4, decimal_places=0)
+    
+
 class CityProject(BaseModel):
     title = models.CharField(max_length=200)
     summary = models.TextField()
@@ -43,21 +58,20 @@ class CityProjectVote(BaseModel):
     project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
     vote = models.IntegerField(default=0)
     comment = models.TextField()
-    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING,
-        null=True, db_constraint=False)
+    visitor = models.ForeignKey(Visitor, on_delete=models.DO_NOTHING)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                name='unique_project_vote_per_session',
-                fields=['project', "session"],
+                name='unique_project_vote_per_visitor',
+                fields=['project', "visitor"],
             )
         ]
 
     def __str__(self):
         return ("blank vote" if self.vote==0 else \
             "up vote" if self.vote>0 else "down vote")\
-            + " (%s)" % self.session.session_key
+            + " (%s)" % self.visitor.pk
 
 
 class Petition(BaseModel):
@@ -81,18 +95,7 @@ class Petition(BaseModel):
         if self.image and hasattr(self.image, 'path'):
             createThumbnail(self.image.path)
 
-class RegisteredUser(BaseModel):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    zip_code = models.DecimalField(max_digits=10, decimal_places=0)
-    city = models.CharField(max_length=254)
-    birth_year = models.DecimalField(max_digits=4, decimal_places=0)
 
-
-class Visitor(BaseModel):
-    def __str__(self):
-        return "Visitor (%d)" % self.pk
 
 
 class PetitionSignature(BaseModel):
