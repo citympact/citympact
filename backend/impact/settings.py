@@ -135,8 +135,8 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY  = '507847...m.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'SEt-6...0j3'"""
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY  = '423757014939-h0ou5h4r1r6mr20o8i14etb349gqnccr.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
 
 AUTHENTICATION_BACKENDS = (
@@ -144,6 +144,5 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.google.GoogleOAuth',
     'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.yahoo.YahooOpenId',
     'django.contrib.auth.backends.ModelBackend',
 )
