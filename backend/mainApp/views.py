@@ -6,6 +6,7 @@ from django.views import generic
 from django.db.utils import IntegrityError
 from django.db.models import Q
 from .models import *
+from .forms import *
 
 import urllib.parse
 
@@ -74,10 +75,24 @@ def _contextifyDetail(databaseObject):
             "description": databaseObject.description,
             "image": databaseObject.image,
         }
+class AccountsProfile(generic.View):
+    def get(self, request, *args, **kwargs):
+
+        user_form = UserForm(instance=request.user)
+        context = {
+            'user_form': user_form,
+            'profile_form': None
+        }
+        return render(request, 'mainApp/account_profile.html', context)
+
+    def post(self, request, *args, **kwargs):
+        user_form = UserForm(request.POST, request.FILES, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            return HttpResponseRedirect(reverse('mainApp:accounts_profile', args=()))
 
 class ProjectView(generic.View):
     def get(self, request, *args, **kwargs):
-
         context = \
             _contextifyDetail(CityProject.objects.get(pk=kwargs["project_id"]))
         return render(request, 'mainApp/detailView.html', context)

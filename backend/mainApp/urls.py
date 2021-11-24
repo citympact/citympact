@@ -1,6 +1,8 @@
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 
+from django.contrib.auth.decorators import login_required
+
 from . import views
 
 
@@ -20,4 +22,6 @@ urlpatterns = [
     path('add_vote_comment', views.AddVoteComment.as_view(),
         name='addVoteComment'),
 
+    path('accounts/profile/', login_required(views.AccountsProfile.as_view()),
+        name='accounts_profile'),
 ]
