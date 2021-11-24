@@ -77,11 +77,16 @@ def _contextifyDetail(databaseObject):
         }
 class AccountsProfile(generic.View):
     def get(self, request, *args, **kwargs):
-
         user_form = UserForm(instance=request.user)
+
+        # Quickly making sure that the associated registered user exists:
+        RegisteredUser  .objects.get_or_create(user=request.user)
+
+        registered_user_form = \
+            RegisteredUserForm(instance=request.user.registereduser)
         context = {
             'user_form': user_form,
-            'profile_form': None
+            'registered_user_form': registered_user_form
         }
         return render(request, 'mainApp/account_profile.html', context)
 

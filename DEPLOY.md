@@ -10,4 +10,4 @@ ALLOWED_HOSTS = ["foo.com"] # add a list of allowed hosts.
 using production credential (Google requires that their credentials are put
 into production mode)
 
-3. Email settings: todo: implement STMP registration 
+3. Email settings: todo: implement STMP registration

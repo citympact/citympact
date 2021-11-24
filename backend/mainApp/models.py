@@ -1,6 +1,8 @@
-from django.db import models
-from django.contrib.sessions.models import Session
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
+from django.db import models
+
 from PIL import Image
 
 
@@ -27,13 +29,14 @@ class Visitor(BaseModel):
 
 
 class RegisteredUser(BaseModel):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    zip_code = models.DecimalField(max_digits=10, decimal_places=0)
-    city = models.CharField(max_length=254)
-    birth_year = models.DecimalField(max_digits=4, decimal_places=0)
-    
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    zip_code = models.DecimalField(max_digits=10, decimal_places=0, null=True)
+    city = models.CharField(max_length=254, null=True)
+    birth_year = models.DecimalField(max_digits=4, decimal_places=0, null=True)
+
+    def __str__(self):
+        return str(self.user)
 
 class CityProject(BaseModel):
     title = models.CharField(max_length=200)

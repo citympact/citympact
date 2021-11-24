@@ -1,0 +1,56 @@
+{% extends "mainApp/base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+                <h1>Résumé de compte</h1>
+                <div class="form-content">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="small mb-1">Username:</label>
+                                        {{ user_form.username }}
+                                    <label class="small mb-1">Email:</label>
+                                        {{ user_form.email }}
+                                </div>
+                                <div class="form-group">
+                                    <a href="{% url 'password_change' %}">Changer le mot de passe</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row pt-5">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="small mb-1">Zip code:</label>
+                                        {{ registered_user_form.zip_code }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="small mb-1">city:</label>
+                                        {{ registered_user_form.city }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="small mb-1">birth_year:</label>
+                                        {{ registered_user_form.birth_year }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <br><br>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="reset" class="btn btn-secondary">Reset</button>
+                    </form>
+                    <div class="form-group">
+                        <a href="{% url 'logout' %}">Log out</a>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
