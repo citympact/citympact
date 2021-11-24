@@ -1,0 +1,13 @@
+{% extends "mainApp/base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>{{ title }}</h1>
+                <p>Vous avez correctement été déconnecté.<br>
+                Voulez-vous <a href="{% url 'index' %}">retourner à la page d'accueil</a>?</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -27,6 +27,8 @@ MESSAGE_SEVERITIES = ["primary", "secondary", "success", "danger", "warning",
 class IndexView(generic.View):
     def get(self, request, *args, **kwargs):
 
+        print("user =", request.user)
+
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
 
         projects = CityProject.objects.all();

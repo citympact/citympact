@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import include, path
+from django.contrib.auth import views as auth_views
 
 from . import views
 
@@ -18,4 +19,5 @@ urlpatterns = [
     path('petition/add', views.AddNewPetition.as_view(), name='addNewPetition'),
     path('add_vote_comment', views.AddVoteComment.as_view(),
         name='addVoteComment'),
+
 ]
