@@ -17,11 +17,16 @@
                                         {{ user_form.email }}
                                 </div>
                                 <div class="form-group">
+                                    <label class="small mb-1">first_name:</label>
+                                        {{ user_form.first_name }}
+                                    <label class="small mb-1">last_name:</label>
+                                        {{ user_form.last_name }}
+                                </div>
+                                <div class="form-group">
                                     <a href="{% url 'password_change' %}">Changer le mot de passe</a>
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-row pt-5">
                             <div class="col-md-5">
                                 <div class="form-group">

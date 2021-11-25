@@ -132,18 +132,40 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+# Google auth related keys:
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY  = '423757014939-h0ou5h4r1r6mr20o8i14etb349gqnccr.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
 
+# Apple auth related keys:
+KEY = "?"
+TEAM = "?"
+CLIENT = "?"
+SECRET = "?"
+
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.open_id.OpenIdAuth',
     'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.google.GoogleOAuth',
+    'social_core.backends.apple.AppleIdAuth',
     'social_core.backends.twitter.TwitterOAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'mainApp.pipeline.save_profile',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+
 
 # Todo: setup SMTP mailing here:
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"

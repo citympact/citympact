@@ -80,7 +80,7 @@ class AccountsProfile(generic.View):
         user_form = UserForm(instance=request.user)
 
         # Quickly making sure that the associated registered user exists:
-        RegisteredUser  .objects.get_or_create(user=request.user)
+        RegisteredUser.objects.get_or_create(user=request.user)
 
         registered_user_form = \
             RegisteredUserForm(instance=request.user.registereduser)
@@ -92,9 +92,16 @@ class AccountsProfile(generic.View):
 
     def post(self, request, *args, **kwargs):
         user_form = UserForm(request.POST, request.FILES, instance=request.user)
+
+
+        registered_user_form = RegisteredUserForm(request.POST, request.FILES, instance=request.user.registereduser)
+
         if user_form.is_valid():
             user_form.save()
-            return HttpResponseRedirect(reverse('mainApp:accounts_profile', args=()))
+        if registered_user_form.is_valid():
+            registered_user_form.save()
+
+        return HttpResponseRedirect(reverse('mainApp:accounts_profile', args=()))
 
 class ProjectView(generic.View):
     def get(self, request, *args, **kwargs):
