@@ -7,8 +7,9 @@ def update_user_data(strategy, details, backend, user=None, *args, **kwargs):
     """
     if not user:
         return
-    
+
     changed = False
+    field_mapping = strategy.setting('USER_FIELD_MAPPING', {}, backend)
     for name, value in details.items():
         name = field_mapping.get(name, name)
         if value is not None and hasattr(user, name):
