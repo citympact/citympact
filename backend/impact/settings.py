@@ -151,18 +151,25 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-
+# We associate the accounty by email (read the risk about temporary account).
+# This guarantees that if the account has been created beforehand, the SSO login
+# won't create a duplicate.
+#
+# The default user-details population strategy is replaced below by a custom
+# pipeline function that updates account fileds only if they had an empty
+# content (see mainApp.pipeline.update_user_data).
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
     'social_core.pipeline.user.create_user',
-    'mainApp.pipeline.save_profile',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
+    #'social_core.pipeline.user.user_details',
+    'mainApp.pipeline.update_user_data'
 )
 
 
