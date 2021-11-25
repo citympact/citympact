@@ -153,8 +153,12 @@ $(document).ready(function() {
             csrfmiddlewaretoken: $("#vote_csrf_token").val(),
         },
         function(response) {
-            prepareModal(response);
-            modal.show();
+            if(response.result == "redirect") {
+                window.location.href = response.url;
+            } else if(response.result == "OK") {
+                prepareModal(response);
+                modal.show();
+            }
         });
         event.preventDefault();
     });

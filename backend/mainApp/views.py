@@ -28,8 +28,6 @@ MESSAGE_SEVERITIES = ["primary", "secondary", "success", "danger", "warning",
 class IndexView(generic.View):
     def get(self, request, *args, **kwargs):
 
-        print("user =", request.user)
-
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
 
         projects = CityProject.objects.all();
@@ -343,7 +341,8 @@ class SignPetition(generic.View):
 
         session = Session.objects.get(pk=request.session.session_key)
         if session == None or \
-            not "petition_id" in request.POST \
+            not "petition_id" in request.POST or \
+            not request.user.is_authenticated \
         :
             return JsonResponse({"result": "refused"});
 
@@ -376,6 +375,12 @@ class SignPetition(generic.View):
         """
         Return the popup content of a signature confirmation
         """
+        if not request.user.is_authenticated:
+            return JsonResponse({
+                "result": "redirect",
+                "url": reverse('login', args=())+"?next="+reverse('mainApp:index', args=())
+            });
+
 
         session = Session.objects.get(pk=request.session.session_key)
         if session == None or \
