@@ -28,7 +28,7 @@ SECRET_KEY = '<TODO CHANGE SECRET KEY>'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "dev.citympact.ch"]
 
 
 # Application definition
