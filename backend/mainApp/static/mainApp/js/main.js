@@ -81,10 +81,13 @@ $(document).ready(function() {
                     // Closing the suggestion div when the user has chosen an
                     // option (i.e. clicked on a proposal):
                     newLi.click(function(event) {
+                        console.log("click..")
                         if(suggestionsDiv !== undefined) {
                             suggestionsDiv.hide();
                         }
+                        window.location.href = newLi.find("a").attr("href");
                         event.preventDefault();
+                        return false;
                     });
                 });
                 suggestionsUl.append(lastItem);
@@ -103,6 +106,7 @@ $(document).ready(function() {
 
 
                 inputElement.unbind("keydown").keydown(function(e) {
+                    updatedSelection = false;
                     switch(e.which) {
                         case 13: // enter
                             if(selectedIndex>=0) {
@@ -115,6 +119,7 @@ $(document).ready(function() {
 
                         case 38: // up
                             selectedIndex--;
+                            updatedSelection = true;
                         break;
 
                         case 39: // right
@@ -122,6 +127,7 @@ $(document).ready(function() {
 
                         case 40: // down
                             selectedIndex++;
+                            updatedSelection = true;
                         break;
 
                         default: return; // exit this handler for other keys
@@ -130,7 +136,10 @@ $(document).ready(function() {
                     selectedIndex = (selectedIndex +maxSel) % maxSel
                     suggestionsUl.children().removeClass("active-suggestion");
                     suggestionsUl.children().eq(selectedIndex).addClass("active-suggestion")
-                    e.preventDefault(); // prevent the default action
+                    if(updatedSelection) {
+                        e.preventDefault(); // prevent the default action
+                        return false;
+                    }
                     return true;
                 });
             }
