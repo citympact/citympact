@@ -15,6 +15,8 @@ from social_core.exceptions import AuthMissingParameter
 
 from pathlib import Path
 
+import os, sys
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -161,9 +163,16 @@ SWISS_ID_CLIENT_SECRET = "?"
 SWISS_ID_ENV = "?"
 
 
-# Google auth related keys:
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY  = '423757014939-h0ou5h4r1r6mr20o8i14etb349gqnccr.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+try:
+    # Google auth related keys:
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ["SOCIAL_AUTH_GOOGLE_OAUTH2_KEY"]
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = \
+            os.environ["SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET"]
+    # End of Google auth related keys:
+except KeyError as e:
+    print("Unable to find the necessary API key in the environment variables.")
+    print("Missing environment variable: %s." % e)
+    sys.exit(-1)
 
 
 # Apple auth related keys:
