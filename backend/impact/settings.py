@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+from social_core.backends.open_id import OpenIdAuth
+from social_core.exceptions import AuthMissingParameter
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -131,6 +134,32 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+class SwissIDOpenId(OpenIdAuth):
+    """SwissID OpenID authentication backend"""
+    name = 'swissid'
+
+    def openid_url(self):
+        """Returns SwissID authentication URL"""
+        for requiredKey in ["SWISS_ID_CLIENT_ID", "SWISS_ID_CLIENT_SECRET",
+            "SWISS_ID_ENV"]:
+            if not self.data.get(requiredKey):
+                raise AuthMissingParameter(self, requiredKey)
+        return "%s/idp/oauth2/authorize?response_type=code&client_id=%s&scope=openid%20profile&redirect_uri=%s&nonce=%s&state=%s&acr_values=loa-1&ui_locales=de" % (
+            self.data["SWISS_ID_ENV"],
+            self.data["SWISS_ID_CLIENT_ID"],
+            "callback_url.html",
+            "NONCE-TODO",
+            "STATE?"
+            )
+
+SWISS_ID_CLIENT_ID = "?"
+SWISS_ID_CLIENT_SECRET = "?"
+SWISS_ID_ENV = "?"
+
 
 # Google auth related keys:
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY  = '423757014939-h0ou5h4r1r6mr20o8i14etb349gqnccr.apps.googleusercontent.com'
