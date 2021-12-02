@@ -7,30 +7,34 @@
                 <h1>Créer un compte</h1>
                 <div class="form-content">
                     {% if new_user_form.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        <p class="mb-0">Le nom d'utilisateur et le mot de passe fourni ne correspondent pas.</p>
-                    </div>
+                        {% for field in new_user_form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ field.label|escape }}: </strong>{{ error|escape }}
+                                </div>
+                           {% endfor %}
+                        {% endfor %}
                     {% endif %}
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-row">
                             <div class="col-md-5">
                                 <div class="form-group">
-                                    <label class="small mb-1">Nom d'utilisateur:</label>
+                                    <label class="small mb-1">{{ new_user_form.username.label }}:</label>
                                         {{ new_user_form.username }}
-                                    <label class="small mb-1">Email:</label>
+                                    <label class="small mb-1">{{ new_user_form.email.label }}:</label>
                                         {{ new_user_form.email }}
                                 </div>
                                 <div class="form-group">
-                                    <label class="small mb-1">Prénom:</label>
+                                    <label class="small mb-1">{{ new_user_form.first_name.label }}:</label>
                                         {{ new_user_form.first_name }}
-                                    <label class="small mb-1">Nom de famille:</label>
+                                    <label class="small mb-1">{{ new_user_form.last_name.label }}:</label>
                                         {{ new_user_form.last_name }}
                                 </div>
                                 <div class="form-group">
-                                    <label class="small mb-1">Mot de passe:</label>
+                                    <label class="small mb-1">{{ new_user_form.password1.label }}:</label>
                                         {{ new_user_form.password1 }}
-                                    <label class="small mb-1">Confirmation:</label>
+                                    <label class="small mb-1">{{ new_user_form.password2.label }}:</label>
                                         {{ new_user_form.password2 }}
                                 </div>
                             </div>

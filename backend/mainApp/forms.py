@@ -1,18 +1,23 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from .models import *
 
 
 class UserForm(forms.ModelForm):
     username = forms.CharField(max_length=100,
-        required=True, widget=forms.TextInput(attrs={"class": "form-control"}))
+        required=True, widget=forms.TextInput(attrs={"class": "form-control"}),
+        label="Nom d'utilisateur")
     email = forms.EmailField(required=True,
-        widget=forms.TextInput(attrs={"class": "form-control"}))
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+        label="E-Mail")
 
     first_name = forms.CharField(max_length=100,
-        required=True, widget=forms.TextInput(attrs={"class": "form-control"}))
+        required=True, widget=forms.TextInput(attrs={"class": "form-control"}),
+        label="Prénom")
     last_name = forms.CharField(max_length=100,
-        required=True, widget=forms.TextInput(attrs={"class": "form-control"}))
+        required=True, widget=forms.TextInput(attrs={"class": "form-control"}),
+        label="Nom de famille")
     class Meta:
         model = User
         fields = ["username", "email", "first_name", "last_name"]
@@ -31,13 +36,20 @@ class RegisteredUserForm(forms.ModelForm):
 
 class NewUserForm(UserForm):
 
-    password1 = forms.CharField(label='mot de passe',
-        widget=forms.PasswordInput(attrs={"class": "form-control"}))
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        label="Mot de passe")
     password2 = forms.CharField(
-        label='Confirmation du mot de passe',
-        widget=forms.PasswordInput(attrs={"class": "form-control"}))
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        label="Confirmation du mot de passe")
 
-
+    def clean_email(self):
+        email = self.cleaned_data['email'].lower()
+        exisitngUser = User.objects.filter(email=email)
+        if exisitngUser.count() > 0:
+            raise ValidationError("Le compte e-mail fourni correspond déjà à " \
+                + "un compte.", "email_exists")
+        return email
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")

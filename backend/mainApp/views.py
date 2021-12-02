@@ -91,6 +91,7 @@ class AccountsCreate(generic.View):
             messages.add_message(request, messages.INFO, 'Compte créé! Un email de confirmation a été envoyé. Merci d\'utiliser le lien dans le mail pour activer votre compte.')
             return HttpResponseRedirect(reverse('mainApp:accounts_profile', args=()))
         else:
+            print(new_user_form.errors)
             context = {
                 'new_user_form': new_user_form,
             }

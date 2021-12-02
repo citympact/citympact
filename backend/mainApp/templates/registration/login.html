@@ -7,11 +7,13 @@
         <div class="col-sm-12">
 
             {% if form.errors %}
-            <div class="alert alert-danger" role="alert">
-                <p class="mb-0">Le nom d'utilisateur et le mot de passe fourni ne correspondent pas.</p>
-            </div>
+                {% for error in form.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+               {% endfor %}
             {% endif %}
-            
+
             {% if messages %}
                   {% for message in messages %}
                   <div class="alert alert-{{ message.tags }} pb-0" role="alert">
