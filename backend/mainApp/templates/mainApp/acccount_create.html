@@ -1,0 +1,50 @@
+{% extends "mainApp/base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+                <h1>Créer un compte</h1>
+                <div class="form-content">
+                    {% if new_user_form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        <p class="mb-0">Le nom d'utilisateur et le mot de passe fourni ne correspondent pas.</p>
+                    </div>
+                    {% endif %}
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="small mb-1">Nom d'utilisateur:</label>
+                                        {{ new_user_form.username }}
+                                    <label class="small mb-1">Email:</label>
+                                        {{ new_user_form.email }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="small mb-1">Prénom:</label>
+                                        {{ new_user_form.first_name }}
+                                    <label class="small mb-1">Nom de famille:</label>
+                                        {{ new_user_form.last_name }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="small mb-1">Mot de passe:</label>
+                                        {{ new_user_form.password1 }}
+                                    <label class="small mb-1">Confirmation:</label>
+                                        {{ new_user_form.password2 }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <br><br>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="reset" class="btn btn-secondary">Reset</button>
+                    </form>
+                </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

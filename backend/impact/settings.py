@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from social_core.backends.open_id import OpenIdAuth
 from social_core.exceptions import AuthMissingParameter
+from django.contrib.messages import constants as message_constants
 
 from pathlib import Path
 
@@ -215,3 +216,11 @@ SOCIAL_AUTH_PIPELINE = (
 # Todo: setup SMTP mailing here:
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
+
+
+# Adapting the message severities to match Bootstrap CSS classes:
+MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
+                message_constants.INFO: 'info',
+                message_constants.SUCCESS: 'success',
+                message_constants.WARNING: 'warning',
+                message_constants.ERROR: 'danger',}

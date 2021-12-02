@@ -11,6 +11,14 @@
                 <p class="mb-0">Le nom d'utilisateur et le mot de passe fourni ne correspondent pas.</p>
             </div>
             {% endif %}
+            
+            {% if messages %}
+                  {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} pb-0" role="alert">
+                      <p>{{ message }}</p>
+                  </div>
+                  {% endfor %}
+              {% endif %}
 
             {% if next %}
                 {% if user.is_authenticated %}
@@ -39,7 +47,7 @@
             </form>
 
             {# Assumes you setup the password_reset view in your URLconf #}
-            <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+            <p><a href="{% url 'mainApp:account_create' %}">Créer un compte</a> <a href="{% url 'password_reset' %}">Mot de passe oublié?</a></p>
         </div>
     </div>
     <div class="row pt-3">

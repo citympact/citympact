@@ -1,4 +1,5 @@
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.contrib import messages
 from django.contrib.sessions.backends.db import SessionStore
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -73,6 +74,27 @@ def _contextifyDetail(databaseObject):
             "description": databaseObject.description,
             "image": databaseObject.image,
         }
+
+class AccountsCreate(generic.View):
+    def get(self, request, *args, **kwargs):
+        new_user_form = NewUserForm()
+
+        context = {
+            'new_user_form': new_user_form,
+        }
+        return render(request, 'mainApp/acccount_create.html', context)
+
+    def post(self, request, *args, **kwargs):
+        new_user_form = NewUserForm(request.POST, request.FILES)
+        if new_user_form.is_valid():
+            new_user_form.save()
+            messages.add_message(request, messages.INFO, 'Compte créé! Un email de confirmation a été envoyé. Merci d\'utiliser le lien dans le mail pour activer votre compte.')
+            return HttpResponseRedirect(reverse('mainApp:accounts_profile', args=()))
+        else:
+            context = {
+                'new_user_form': new_user_form,
+            }
+            return render(request, 'mainApp/acccount_create.html', context)
 class AccountsProfile(generic.View):
     def get(self, request, *args, **kwargs):
         user_form = UserForm(instance=request.user)
