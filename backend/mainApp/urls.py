@@ -24,6 +24,6 @@ urlpatterns = [
 
     path('accounts/create', views.AccountsCreate.as_view(),
         name='account_create'),
-    path('accounts/profile', login_required(views.AccountsProfile.as_view()),
+    path('accounts/profile/', login_required(views.AccountsProfile.as_view()),
         name='accounts_profile'),
 ]
