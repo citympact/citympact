@@ -88,6 +88,7 @@ class AccountsCreate(generic.View):
         new_user_form = NewUserForm(request.POST, request.FILES)
         if new_user_form.is_valid():
             new_user_form.save()
+
             messages.add_message(request, messages.INFO, 'Compte créé! Un email de confirmation a été envoyé. Merci d\'utiliser le lien dans le mail pour activer votre compte.')
             return HttpResponseRedirect(reverse('mainApp:accounts_profile', args=()))
         else:

@@ -86,8 +86,23 @@ class NewUserForm(UserForm):
         user = super(UserForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         user.is_active = False
-        if commit:
-            user.save()
+        user.save()
+
+        link = "activate.html"
+
+        body = "<p>Bonjour %s %s,<br>" % (user.first_name, user.last_name) \
+            + "Merci de <a href=\"%s\">valider votre compte</a></p>" % link \
+            + "<p><small>Si votre navigateur n'affiche pas le liens, " \
+            + "vous pouvez copier le lien suivant dans la barre d'adresse de " \
+            + "votre navigateur WEB:<br>%s</small></p>" % link
+
+        email = EmailMessage(
+            'Confirmation de compte',
+            body,
+            MAIL_FROM_EMAIL,
+            [user.email],
+            [], # No BCC
+            )
         return user
 
     class Meta:

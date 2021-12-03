@@ -170,11 +170,15 @@ try:
     SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = \
             os.environ["SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET"]
     # End of Google auth related keys:
+    
+    # mail related keys:
+    MAIL_DOMAIN_NAME = os.environ["MAIL_DOMAIN_NAME"]
+    MAIL_FROM_EMAIL = os.environ["MAIL_FROM_EMAIL"]
+    # mail related  keys:
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")
     print("Missing environment variable: %s." % e)
     sys.exit(-1)
-
 
 # Apple auth related keys:
 KEY = "?"
