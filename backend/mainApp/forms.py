@@ -43,6 +43,9 @@ class NewUserForm(UserForm):
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
         label="Confirmation du mot de passe")
 
+
+    MIN_PASSWORD_LENGTH = 8
+
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
         exisitngUser = User.objects.filter(email=email)
@@ -50,6 +53,28 @@ class NewUserForm(UserForm):
             raise ValidationError("Le compte e-mail fourni correspond déjà à " \
                 + "un compte.", "email_exists")
         return email
+
+    def clean_password1(self):
+        """
+        Simple validation of the password, to make sure:
+         - the length is greater than 8,
+         - there is at least one digit
+         - there is at least one letter
+        """
+
+        password1 = self.cleaned_data.get("password1")
+        if len(password1) < NewUserForm.MIN_PASSWORD_LENGTH:
+            raise ValidationError("Le mot de passse doit contenir au moins " \
+                + "%d caractères" % NewUserForm.MIN_PASSWORD_LENGTH)
+
+        if not any(c.isdigit() for c in password1):
+            raise ValidationError("Le mot de passe doit contenir au moins " \
+                + "un chiffre.")
+
+        if not any(c.isalpha() for c in password1):
+            raise ValidationError("Le mot de passe doit contenir au moins " \
+                + "une lettre.")
+
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
