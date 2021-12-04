@@ -172,6 +172,8 @@ try:
     # End of Google auth related keys:
 
     # mail related keys:
+    MAIL_DOMAIN_NAME = os.environ["MAIL_DOMAIN_NAME"]
+    MAIL_FROM_EMAIL = os.environ["MAIL_FROM_EMAIL"]
     # mail related  keys:
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")
