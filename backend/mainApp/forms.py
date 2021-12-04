@@ -1,7 +1,12 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.exceptions import ValidationError
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 from .models import *
+
+
 
 
 class UserForm(forms.ModelForm):
@@ -18,6 +23,7 @@ class UserForm(forms.ModelForm):
     last_name = forms.CharField(max_length=100,
         required=True, widget=forms.TextInput(attrs={"class": "form-control"}),
         label="Nom de famille")
+
     class Meta:
         model = User
         fields = ["username", "email", "first_name", "last_name"]
@@ -45,6 +51,14 @@ class NewUserForm(UserForm):
 
 
     MIN_PASSWORD_LENGTH = 8
+
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.site_name = ""
+
+    def set_site_name(self, site_name):
+        self.site_name = site_name
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
@@ -74,6 +88,7 @@ class NewUserForm(UserForm):
         if not any(c.isalpha() for c in password1):
             raise ValidationError("Le mot de passe doit contenir au moins " \
                 + "une lettre.")
+        return password1
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -82,29 +97,51 @@ class NewUserForm(UserForm):
             raise forms.ValidationError("Le mot de passe ne correspond pas à sa confirmation.")
         return password2
 
+
     def save(self, commit=True):
-        user = super(UserForm, self).save(commit=False)
+        user = super(NewUserForm, self).save(commit=False)
+        from pprint import pprint
+        pprint(vars(self))
+        pprint(vars(user))
+
         user.set_password(self.cleaned_data["password1"])
         user.is_active = False
-        user.save()
+#        user.save()
 
-        link = "activate.html"
+        class UserTokenGenerator(PasswordResetTokenGenerator):
+            def _make_hash_value(self, user, timestamp):
+                return str(user.pk) + str(timestamp) + str(user.is_active)
 
-        body = "<p>Bonjour %s %s,<br>" % (user.first_name, user.last_name) \
-            + "Merci de <a href=\"%s\">valider votre compte</a></p>" % link \
+
+        link = "%s/activate/%s" % (self.site_name,
+            UserTokenGenerator().make_token(user))
+
+        body = "<h1>Confirmation de compte</h1><p>Bonjour %s %s,<br>" % (user.first_name, user.last_name) \
+            + "Votre compte a été créé mais vous devez encore le valider.<br>Merci de <a href=\"%s\">valider ici votre compte</a></p>" % link \
             + "<p><small>Si votre navigateur n'affiche pas le liens, " \
             + "vous pouvez copier le lien suivant dans la barre d'adresse de " \
             + "votre navigateur WEB:<br>%s</small></p>" % link
-
+        body = render_to_string("mainApp/email_activate.html", {
+                "name": "%s %s" % (user.first_name, user.last_name),
+                "link": link,
+            })
         email = EmailMessage(
-            'Confirmation de compte',
+            "Confirmation de compte",
             body,
-            MAIL_FROM_EMAIL,
+            "dev@citympact.ch",
             [user.email],
             [], # No BCC
             )
+        email.content_subtype = "html"
+        print("About to send...")
+        email.send()
+        print("email sent to", user.email, user)
+        raise ValidationError("MANUALLY BY PASSED...")
+
+        # Now, save the many-to-many data for the form.
+        self.save_m2m()
         return user
 
     class Meta:
         model = User
-        fields = ["username"]
+        fields = ["username", "email", "first_name", "last_name"]

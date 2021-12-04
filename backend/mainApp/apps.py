@@ -12,5 +12,5 @@ class MainappConfig(AppConfig):
 
 def constant_variables_processor(request):
     return {
-        "APP_NAME": "Imp_ACT platform",
+        "APP_NAME": "Citympact platform",
     }

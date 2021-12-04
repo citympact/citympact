@@ -2,6 +2,8 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.sessions.backends.db import SessionStore
 from django.shortcuts import get_object_or_404, render
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.functional import SimpleLazyObject
 from django.urls import reverse
 from django.views import generic
 from django.db.utils import IntegrityError
@@ -87,6 +89,7 @@ class AccountsCreate(generic.View):
     def post(self, request, *args, **kwargs):
         new_user_form = NewUserForm(request.POST, request.FILES)
         if new_user_form.is_valid():
+            new_user_form.set_site_name(request.scheme + "://" + str(get_current_site(request)))
             new_user_form.save()
 
             messages.add_message(request, messages.INFO, 'Compte créé! Un email de confirmation a été envoyé. Merci d\'utiliser le lien dans le mail pour activer votre compte.')

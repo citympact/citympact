@@ -172,8 +172,11 @@ try:
     # End of Google auth related keys:
 
     # mail related keys:
-    MAIL_DOMAIN_NAME = os.environ["MAIL_DOMAIN_NAME"]
-    MAIL_FROM_EMAIL = os.environ["MAIL_FROM_EMAIL"]
+    for email_key in ["EMAIL_HOST", "EMAIL_PORT", "EMAIL_HOST_USER", "EMAIL_HOST_PASSWORD", "MAIL_DOMAIN_NAME"]:
+        globals()[email_key] = os.environ[email_key]
+    EMAIL_USE_TLS = True
+
+
     # mail related  keys:
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")
@@ -218,7 +221,7 @@ SOCIAL_AUTH_PIPELINE = (
 
 
 # Todo: setup SMTP mailing here:
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
 
 
