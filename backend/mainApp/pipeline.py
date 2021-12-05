@@ -1,3 +1,5 @@
+from .models import *
+
 def update_user_data(strategy, details, backend, user=None, *args, **kwargs):
     """
     Update user details using data from provider. Compared to the default
@@ -5,8 +7,17 @@ def update_user_data(strategy, details, backend, user=None, *args, **kwargs):
     they were already previously inserted
     (i.e. len(field_current_value)>0 implies no update)
     """
+
     if not user:
         return
+
+    registeredUser = RegisteredUser.objects.get(user=user)
+    if registeredUser.registration_provider is None or \
+        len(registeredUser.registration_provider)==0 \
+    :
+        registeredUser.registration_provider = backend.name
+        registeredUser.save()
+
 
     changed = False
     field_mapping = strategy.setting('USER_FIELD_MAPPING', {}, backend)

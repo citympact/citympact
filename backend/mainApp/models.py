@@ -37,12 +37,7 @@ class RegisteredUser(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     MANUALLY_CREATED = "MANUALLY_CREATED"
-    GOOGLE_SSO = "GOOGLE_SSO"
-    REGISTRATION_PROVIDERS = [
-        MANUALLY_CREATED, GOOGLE_SSO,
-    ]
-    registration_provider = models.CharField(max_length=254,
-        choices=enumerate(REGISTRATION_PROVIDERS))
+    registration_provider = models.CharField(max_length=254)
 
     zip_code = models.DecimalField(max_digits=10, decimal_places=0, null=True)
     city = models.CharField(max_length=254, null=True)

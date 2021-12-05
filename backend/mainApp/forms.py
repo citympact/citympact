@@ -111,10 +111,6 @@ class NewUserForm(UserForm):
         user.set_password(self.cleaned_data["password1"])
         user.is_active = False
 
-        user.registration_provider = \
-            RegisteredUser.REGISTRATION_PROVIDERS.index(
-                RegisteredUser.MANUALLY_CREATED
-            )
         user.save()
 
         url = reverse('mainApp:activateAccount',
@@ -153,10 +149,7 @@ class NewUserForm(UserForm):
 
 
         registeredUser = RegisteredUser.objects.get(user=user)
-        registeredUser.registration_provider = \
-            RegisteredUser.REGISTRATION_PROVIDERS.index(
-                RegisteredUser.MANUALLY_CREATED
-            )
+        registeredUser.registration_provider = RegisteredUser.MANUALLY_CREATED
         registeredUser.save()
         return user
 
