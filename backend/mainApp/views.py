@@ -80,10 +80,20 @@ def _contextifyDetail(databaseObject):
 
 class AccountsCreate(generic.View):
     def get(self, request, *args, **kwargs):
-        if "token" in kwargs:
-            
-        new_user_form = NewUserForm()
 
+        # Let's see if the account needs to validated:
+        if "uid" in kwargs and "token" in kwargs:
+            user = User.objects.get(pk=int(kwargs["uid"]))
+            if UserTokenGenerator().check_token(user, kwargs["token"]):
+                # If the token is valid, then the account is activated:
+                user.is_active = True
+                user.save()
+                print("user saved...")
+                messages.add_message(request, messages.INFO, "Compte validé! " \
+                    + "Vous pouvez vous authentifier ci-dessous:")
+            return HttpResponseRedirect(reverse('login', args=()))
+
+        new_user_form = NewUserForm()
         context = {
             'new_user_form': new_user_form,
         }
@@ -93,8 +103,7 @@ class AccountsCreate(generic.View):
         new_user_form = NewUserForm(request.POST, request.FILES)
         if new_user_form.is_valid():
             new_user_form.set_site_name(request.scheme + "://" + str(get_current_site(request)))
-            new_user_form.set_email_sender(settings.EMAIL_HOST_USER,
-                settings.MAIL_FROM_NAME)
+            new_user_form.set_email_sender(settings.DEFAULT_FROM_EMAIL)
             new_user_form.save()
 
             messages.add_message(request, messages.INFO, 'Compte créé! Un email de confirmation a été envoyé. Merci d\'utiliser le lien dans le mail pour activer votre compte.')

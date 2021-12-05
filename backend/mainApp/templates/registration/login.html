@@ -7,11 +7,17 @@
         <div class="col-sm-12">
 
             {% if form.errors %}
-                {% for error in form.errors %}
+                {% if form.non_field_errors %}
                     <div class="alert alert-danger">
-                        <strong>{{ error|escape }}</strong>
+                        <strong>{{ form.non_field_errors }}</strong>
                     </div>
-               {% endfor %}
+                {% else %}
+                    {% for error in form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                   {% endfor %}
+                {% endif %}
             {% endif %}
 
             {% if messages %}

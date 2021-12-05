@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sessions.models import Session
 from django.db import models
 
@@ -14,6 +15,11 @@ def createThumbnail(imagePath):
         [str(x) for x in settings.IMG_THUMBNAIL_SIZE]
     ))
     img.save(".".join(chunks))
+
+
+class UserTokenGenerator(PasswordResetTokenGenerator):
+    def _make_hash_value(self, user, timestamp):
+        return str(user.pk) + str(timestamp) + str(user.is_active)
 
 
 class BaseModel(models.Model):

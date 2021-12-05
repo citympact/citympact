@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -58,14 +57,12 @@ class NewUserForm(UserForm):
         super(UserForm, self).__init__(*args, **kwargs)
         self.site_name = ""
         self.sender_email_address = None
-        self.sender_name = None
 
     def set_site_name(self, site_name):
         self.site_name = site_name
 
-    def set_email_sender(self, sender_email_address, sender_name = None):
+    def set_email_sender(self, sender_email_address):
         self.sender_email_address = sender_email_address
-        self.sender_name = sender_name
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
@@ -112,12 +109,12 @@ class NewUserForm(UserForm):
         user.is_active = False
         user.save()
 
-        class UserTokenGenerator(PasswordResetTokenGenerator):
-            def _make_hash_value(self, user, timestamp):
-                return str(user.pk) + str(timestamp) + str(user.is_active)
 
         url = reverse('mainApp:activateAccount',
-            kwargs = {"token": UserTokenGenerator().make_token(user)})
+            kwargs = {
+                "uid": user.pk,
+                "token": UserTokenGenerator().make_token(user)
+            })
         link = "%s%s" % (self.site_name, url)
 
         body = "<h1>Confirmation de compte</h1><p>Bonjour %s %s,<br>" % (user.first_name, user.last_name) \
@@ -140,9 +137,6 @@ class NewUserForm(UserForm):
             [user.email],
             [], # No BCC
             )
-        if self.sender_name is not None:
-            email.from_email = "%s <%s>" % (self.sender_name,
-                self.sender_email_address)
 
         email.content_subtype = "html"
         email.send()
