@@ -29,10 +29,13 @@ class UserForm(forms.ModelForm):
         fields = ["username", "email", "first_name", "last_name"]
 
 class RegisteredUserForm(forms.ModelForm):
+
     zip_code = forms.DecimalField(max_digits=10, decimal_places=0)
     zip_code.widget.attrs.update({"class": "form-control"})
+
     city = forms.CharField(max_length=254)
     city.widget.attrs.update({"class": "form-control"})
+
     birth_year = forms.DecimalField(max_digits=10, decimal_places=0)
     birth_year.widget.attrs.update({"class": "form-control"})
 
@@ -107,8 +110,12 @@ class NewUserForm(UserForm):
 
         user.set_password(self.cleaned_data["password1"])
         user.is_active = False
-        user.save()
 
+        user.registration_provider = \
+            RegisteredUser.REGISTRATION_PROVIDERS.index(
+                RegisteredUser.MANUALLY_CREATED
+            )
+        user.save()
 
         url = reverse('mainApp:activateAccount',
             kwargs = {
@@ -143,6 +150,14 @@ class NewUserForm(UserForm):
 
         # Now, save the many-to-many data for the form.
         self.save_m2m()
+
+
+        registeredUser = RegisteredUser.objects.get(user=user)
+        registeredUser.registration_provider = \
+            RegisteredUser.REGISTRATION_PROVIDERS.index(
+                RegisteredUser.MANUALLY_CREATED
+            )
+        registeredUser.save()
         return user
 
     class Meta:
