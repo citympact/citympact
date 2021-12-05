@@ -2,6 +2,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.sessions.backends.db import SessionStore
 from django.shortcuts import get_object_or_404, render
+from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.functional import SimpleLazyObject
 from django.urls import reverse
@@ -79,6 +80,8 @@ def _contextifyDetail(databaseObject):
 
 class AccountsCreate(generic.View):
     def get(self, request, *args, **kwargs):
+        if "token" in kwargs:
+            
         new_user_form = NewUserForm()
 
         context = {
@@ -90,12 +93,13 @@ class AccountsCreate(generic.View):
         new_user_form = NewUserForm(request.POST, request.FILES)
         if new_user_form.is_valid():
             new_user_form.set_site_name(request.scheme + "://" + str(get_current_site(request)))
+            new_user_form.set_email_sender(settings.EMAIL_HOST_USER,
+                settings.MAIL_FROM_NAME)
             new_user_form.save()
 
             messages.add_message(request, messages.INFO, 'Compte créé! Un email de confirmation a été envoyé. Merci d\'utiliser le lien dans le mail pour activer votre compte.')
             return HttpResponseRedirect(reverse('mainApp:accounts_profile', args=()))
         else:
-            print(new_user_form.errors)
             context = {
                 'new_user_form': new_user_form,
             }

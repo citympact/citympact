@@ -24,6 +24,8 @@ urlpatterns = [
 
     path('accounts/create', views.AccountsCreate.as_view(),
         name='account_create'),
+    path('activate/<token>', views.AccountsCreate.as_view(),
+        name='activateAccount'),
     path('accounts/profile/', login_required(views.AccountsProfile.as_view()),
         name='accounts_profile'),
 ]

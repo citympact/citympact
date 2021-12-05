@@ -27,7 +27,6 @@ class Visitor(BaseModel):
     def __str__(self):
         return "Visitor (%d)" % self.pk
 
-
 class RegisteredUser(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 

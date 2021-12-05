@@ -4,6 +4,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.urls import reverse
 from .models import *
 
 
@@ -56,9 +57,15 @@ class NewUserForm(UserForm):
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
         self.site_name = ""
+        self.sender_email_address = None
+        self.sender_name = None
 
     def set_site_name(self, site_name):
         self.site_name = site_name
+
+    def set_email_sender(self, sender_email_address, sender_name = None):
+        self.sender_email_address = sender_email_address
+        self.sender_name = sender_name
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
@@ -100,21 +107,18 @@ class NewUserForm(UserForm):
 
     def save(self, commit=True):
         user = super(NewUserForm, self).save(commit=False)
-        from pprint import pprint
-        pprint(vars(self))
-        pprint(vars(user))
 
         user.set_password(self.cleaned_data["password1"])
         user.is_active = False
-#        user.save()
+        user.save()
 
         class UserTokenGenerator(PasswordResetTokenGenerator):
             def _make_hash_value(self, user, timestamp):
                 return str(user.pk) + str(timestamp) + str(user.is_active)
 
-
-        link = "%s/activate/%s" % (self.site_name,
-            UserTokenGenerator().make_token(user))
+        url = reverse('mainApp:activateAccount',
+            kwargs = {"token": UserTokenGenerator().make_token(user)})
+        link = "%s%s" % (self.site_name, url)
 
         body = "<h1>Confirmation de compte</h1><p>Bonjour %s %s,<br>" % (user.first_name, user.last_name) \
             + "Votre compte a été créé mais vous devez encore le valider.<br>Merci de <a href=\"%s\">valider ici votre compte</a></p>" % link \
@@ -125,18 +129,23 @@ class NewUserForm(UserForm):
                 "name": "%s %s" % (user.first_name, user.last_name),
                 "link": link,
             })
+
+        if self.sender_email_address is None:
+            raise Error("No sending email was provided")
+
         email = EmailMessage(
             "Confirmation de compte",
             body,
-            "dev@citympact.ch",
+            self.sender_email_address,
             [user.email],
             [], # No BCC
             )
+        if self.sender_name is not None:
+            email.from_email = "%s <%s>" % (self.sender_name,
+                self.sender_email_address)
+
         email.content_subtype = "html"
-        print("About to send...")
         email.send()
-        print("email sent to", user.email, user)
-        raise ValidationError("MANUALLY BY PASSED...")
 
         # Now, save the many-to-many data for the form.
         self.save_m2m()

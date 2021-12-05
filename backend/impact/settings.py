@@ -172,7 +172,7 @@ try:
     # End of Google auth related keys:
 
     # mail related keys:
-    for email_key in ["EMAIL_HOST", "EMAIL_PORT", "EMAIL_HOST_USER", "EMAIL_HOST_PASSWORD", "MAIL_DOMAIN_NAME"]:
+    for email_key in ["EMAIL_HOST", "EMAIL_PORT", "EMAIL_HOST_USER", "EMAIL_HOST_PASSWORD", "MAIL_FROM_NAME"]:
         globals()[email_key] = os.environ[email_key]
     EMAIL_USE_TLS = True
 
