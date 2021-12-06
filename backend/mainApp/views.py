@@ -117,15 +117,28 @@ class AccountsProfile(generic.View):
     def get(self, request, *args, **kwargs):
         user_form = UserForm(instance=request.user)
 
-        # Quickly making sure that the associated registered user exists:
+        # Disabling the edition of the user account fields:
+        for name, field in user_form.fields.items():
+            field.widget.attrs['readonly'] = True
+
+        # Making sure that the associated registered user exists:
         RegisteredUser.objects.get_or_create(user=request.user)
 
         registered_user_form = \
             RegisteredUserForm(instance=request.user.registereduser)
+
         context = {
             'user_form': user_form,
-            'registered_user_form': registered_user_form
+            'registered_user_form': registered_user_form,
         }
+
+        if request.user.registereduser.registration_provider \
+        == RegisteredUser.MANUALLY_CREATED:
+            context["password_reset"] = True
+        else:
+            context["registration_provider"] = \
+                request.user.registereduser.registration_provider
+
         return render(request, 'mainApp/account_profile.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -134,8 +147,13 @@ class AccountsProfile(generic.View):
 
         registered_user_form = RegisteredUserForm(request.POST, request.FILES, instance=request.user.registereduser)
 
-        if user_form.is_valid():
-            user_form.save()
+        # The user data should not be updated, the fields are set to
+        # read-only in the get() function above. For security we never save
+        # the form values (e.g. the user could temper the disabled form fields
+        # and send a forged HTTP POST request - which is prohibited).
+        #if user_form.is_valid():
+        #    user_form.save()
+
         if registered_user_form.is_valid():
             registered_user_form.save()
 
