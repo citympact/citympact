@@ -17,7 +17,7 @@ $(document).ready(function() {
         popupFormAudited = false;
         let validateFields = function() {
             popupFormAudited = true;
-            $("#popup_content").find("input").each(
+            $("#popup_content").find("input,textarea").each(
                 function(i, elt) {
                     if(
                         ($(this).attr('type') == "checkbox" && !$(this).is(":checked"))
@@ -26,7 +26,7 @@ $(document).ready(function() {
                     }
                 }
             );
-            
+
             if(popupFormAudited) {
                 $("#popup_next_button").removeClass('disabled');
             } else {
@@ -34,7 +34,7 @@ $(document).ready(function() {
             }
         };
 
-        $("#popup_content").find("input").each(function(i, elt) {
+        $("#popup_content").find("input,textarea").each(function(i, elt) {
             $(elt).unbind("input").on("input", function() {
                 validateFields();
             });

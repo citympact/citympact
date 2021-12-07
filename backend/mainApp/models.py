@@ -110,3 +110,6 @@ class Petition(BaseModel):
 class PetitionSignature(BaseModel):
     petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "%s - %s " % (str(self.user), self.petition.title)
