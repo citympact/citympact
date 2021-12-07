@@ -1,0 +1,26 @@
+<p>Êtes-vous sûr de signer la pétition intitulée :<br>
+<em>{{ petition_title }}</em>?
+</p>
+<form action="{% url "mainApp:signPetition" %}" method="POST">
+{% if registered_user_form %}
+    <p>Pour signer la pétition, nous avons besoin des informations suivantes: </p>
+    <div class="form-row pb-5">
+        <div class="col-md-5">
+            <div class="form-group">
+                <label class="small mb-1">Code postal:</label>
+                    {{ registered_user_form.zip_code }}
+            </div>
+            <div class="form-group">
+                <label class="small mb-1">Ville:</label>
+                    {{ registered_user_form.city }}
+            </div>
+            <div class="form-group">
+                <label class="small mb-1">Année de naissance:</label>
+                    {{ registered_user_form.birth_year }}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<p><input type="checkbox" name="signature_checkbox" class="required-form-input"> Je soussigné {{ first_name }} {{ last_name }}signe la pétition.</p>
+</form>

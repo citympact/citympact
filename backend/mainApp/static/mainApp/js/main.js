@@ -11,9 +11,14 @@ $(document).ready(function() {
         ) {
             $("#popup_next_button").hide();
         } else {
-            $("#popup_next_button").show();
+            $("#popup_next_button").show().addClass('disabled');
         }
-        console.log("Updated the popup...")
+
+        popupFormAudited = false;
+        $("#popup_content").find("input").each(function(i, e) {
+            console.log("item =", i, e)
+        });
+
     };
     $("a.upvote,a.downvote").click(function(event) {
         let project_id = $(this).parents("div.project-div")

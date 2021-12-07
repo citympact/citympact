@@ -397,9 +397,7 @@ class SignPetition(generic.View):
         Post a new signature (from the confirmation popup).
         """
 
-        session = Session.objects.get(pk=request.session.session_key)
-        if session == None or \
-            not "petition_id" in request.POST or \
+        if not "petition_id" in request.POST or \
             not request.user.is_authenticated \
         :
             return JsonResponse({"result": "refused"});
@@ -448,12 +446,24 @@ class SignPetition(generic.View):
 
         petition_id = int(request.GET["petition_id"])
         petition = Petition.objects.get(pk=petition_id)
-        popup_content = "<p>Êtes-vous sûr de signer la pétition intitulée :" \
-            + "<br><em>%s</em></p>" % petition.title \
-            + """<form action="%s">
-                <input type="hidden" name="petition_id" value="%d" />
-                </form>
-                """ % (reverse('mainApp:signPetition', args=()), petition_id)
+
+
+        registered_user_form = None
+        if request.user.registereduser.zip_code is None \
+            or request.user.registereduser.city is None \
+            or request.user.registereduser.birth_year is None \
+        :
+            registered_user_form = \
+                RegisteredUserForm(instance=request.user.registereduser)
+
+
+        popup_content = body = render_to_string("mainApp/sign_petition.html", {
+                "first_name": request.user.first_name,
+                "last_name": request.user.last_name,
+                "petition_title": petition.title,
+                'registered_user_form': registered_user_form,
+            })
+
         return JsonResponse({
             "result": "OK",
             "popup_title": "Confirmation de signature",

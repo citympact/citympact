@@ -90,9 +90,7 @@ class Petition(BaseModel):
     summary = models.TextField()
     description = models.TextField()
     image = models.ImageField(blank=True, null=True)
-    #"author":
-    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING,
-        null=True, db_constraint=False)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
