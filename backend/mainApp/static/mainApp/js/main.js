@@ -15,8 +15,29 @@ $(document).ready(function() {
         }
 
         popupFormAudited = false;
-        $("#popup_content").find("input").each(function(i, e) {
-            console.log("item =", i, e)
+        let validateFields = function() {
+            popupFormAudited = true;
+            $("#popup_content").find("input").each(
+                function(i, elt) {
+                    if(
+                        ($(this).attr('type') == "checkbox" && !$(this).is(":checked"))
+                    || ($(this).val().length<1)) {
+                        popupFormAudited = false;
+                    }
+                }
+            );
+            
+            if(popupFormAudited) {
+                $("#popup_next_button").removeClass('disabled');
+            } else {
+                $("#popup_next_button").addClass('disabled');
+            }
+        };
+
+        $("#popup_content").find("input").each(function(i, elt) {
+            $(elt).unbind("input").on("input", function() {
+                validateFields();
+            });
         });
 
     };
