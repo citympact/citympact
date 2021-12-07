@@ -4,6 +4,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.functional import SimpleLazyObject
 from django.urls import reverse
 from django.views import generic
@@ -398,6 +399,21 @@ class SignPetition(generic.View):
             and registered_user.city is not None \
             and registered_user.birth_year is not None
 
+    def getSummaryViewContent(self, request, petition):
+        signature_count = petition.petitionsignature_set.all().count()
+        petition_url = "%s://%s" \
+            % (request.scheme, request.META["HTTP_HOST"]) \
+            + reverse('mainApp:petitionDetail', kwargs={
+                'petition_id': petition.id
+            })
+
+        return """<h4>Merci</h4>""" \
+            + """<p class="pb-5"> Merci pour votre signature</p>""" \
+            + """<p>%s personne%s ont signé cette pétition</p>""" \
+                % (signature_count, "s" if signature_count>0 else "") \
+            + create_sharing_div(petition_url, petition.title)
+
+
     def post(self, request, *args, **kwargs):
         """
         Post a new signature (from the confirmation popup).
@@ -429,23 +445,10 @@ class SignPetition(generic.View):
         )
         signature.save()
 
-        peittion = Petition.objects.get(pk=petition_id)
-        signature_count = petition.petitionsignature_set.all().count()
-        petition_url = "%s://%s" \
-            % (request.scheme, request.META["HTTP_HOST"]) \
-            + reverse('mainApp:petitionDetail', kwargs={
-                'petition_id': petition.id
-            })
-
-        popup_content = """<h4>Merci</h4>""" \
-            + """<p class="pb-5"> Merci pour votre signature</p>""" \
-            + """<p>%s personne%s ont signé cette pétition</p>""" \
-                % (signature_count, "s" if signature_count>0 else "") \
-            + create_sharing_div(petition_url, petition.title)
         return JsonResponse({
             "result": "OK",
             "popup_title": "Pétition signée",
-            "popup_content": popup_content,
+            "popup_content": self.getSummaryViewContent(request, petition),
             "popup_next_button_val": None
             });
 
@@ -460,15 +463,25 @@ class SignPetition(generic.View):
             });
 
 
-        session = Session.objects.get(pk=request.session.session_key)
-        if session == None or \
-            not "petition_id" in request.GET \
-        :
+        if "petition_id" not in request.GET:
             return JsonResponse({"result": "refused"});
 
         petition_id = int(request.GET["petition_id"])
         petition = Petition.objects.get(pk=petition_id)
 
+        # If the signature already exists, then we display the summary view:
+        try:
+            signature = PetitionSignature.objects.get(
+                petition=petition,
+                user=request.user
+            )
+            return JsonResponse({
+                "result": "OK",
+                "popup_title": "Pétition déjà signée",
+                "popup_content": self.getSummaryViewContent(request, petition)
+                });
+        except ObjectDoesNotExist as e:
+            pass
 
         registered_user_form = None
         if not SignPetition._is_account_complete(request.user.registereduser):
