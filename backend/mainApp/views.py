@@ -392,6 +392,12 @@ class VoteProject(generic.View):
 
 
 class SignPetition(generic.View):
+
+    def _is_account_complete(registered_user):
+        return registered_user.zip_code is not None \
+            and registered_user.city is not None \
+            and registered_user.birth_year is not None
+
     def post(self, request, *args, **kwargs):
         """
         Post a new signature (from the confirmation popup).
@@ -400,17 +406,31 @@ class SignPetition(generic.View):
         if not "petition_id" in request.POST or \
             not request.user.is_authenticated \
         :
-            return JsonResponse({"result": "refused"});
+            return JsonResponse({"result": "refused", "reason": "1"});
+
+        if not SignPetition._is_account_complete(request.user.registereduser):
+            registered_user_form = \
+                RegisteredUserForm(
+                    request.POST,
+                    request.FILES,
+                    instance=request.user.registereduser
+                )
+            registered_user_form.save()
+        if not SignPetition._is_account_complete(request.user.registereduser):
+            return JsonResponse({"result": "refused", "reason": "2"});
+
 
         petition_id = int(request.POST["petition_id"])
         petition = Petition.objects.get(pk=petition_id)
 
         signature, is_new_signature = PetitionSignature.objects.get_or_create(
             petition=petition,
-            session=session
+            user=request.user
         )
         signature.save()
 
+        peittion = Petition.objects.get(pk=petition_id)
+        signature_count = petition.petitionsignature_set.all().count()
         petition_url = "%s://%s" \
             % (request.scheme, request.META["HTTP_HOST"]) \
             + reverse('mainApp:petitionDetail', kwargs={
@@ -419,6 +439,8 @@ class SignPetition(generic.View):
 
         popup_content = """<h4>Merci</h4>""" \
             + """<p class="pb-5"> Merci pour votre signature</p>""" \
+            + """<p>%s personne%s ont signé cette pétition</p>""" \
+                % (signature_count, "s" if signature_count>0 else "") \
             + create_sharing_div(petition_url, petition.title)
         return JsonResponse({
             "result": "OK",
@@ -449,10 +471,7 @@ class SignPetition(generic.View):
 
 
         registered_user_form = None
-        if request.user.registereduser.zip_code is None \
-            or request.user.registereduser.city is None \
-            or request.user.registereduser.birth_year is None \
-        :
+        if not SignPetition._is_account_complete(request.user.registereduser):
             registered_user_form = \
                 RegisteredUserForm(instance=request.user.registereduser)
 
@@ -461,6 +480,7 @@ class SignPetition(generic.View):
                 "first_name": request.user.first_name,
                 "last_name": request.user.last_name,
                 "petition_title": petition.title,
+                "petition_id": petition_id,
                 'registered_user_form': registered_user_form,
             })
 

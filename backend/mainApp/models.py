@@ -109,5 +109,4 @@ class Petition(BaseModel):
 
 class PetitionSignature(BaseModel):
     petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING,
-        null=True, db_constraint=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
