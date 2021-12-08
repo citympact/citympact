@@ -113,3 +113,11 @@ class PetitionSignature(BaseModel):
 
     def __str__(self):
         return "%s - %s " % (str(self.user), self.petition.title)
+
+class PetitionComment(BaseModel):
+    petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
+    visitor = models.ForeignKey(Visitor, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    validated = models.BooleanField()
+    name_displayed = models.BooleanField()
+    comment = models.TextField()
