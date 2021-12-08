@@ -334,7 +334,7 @@ class AddVoteComment(generic.View):
                 self._create_stats_div(request.POST["project_id"]) \
                 + create_sharing_div(project_url, project.title) \
                 + additional_div,
-            "popup_next_button_val": None
+            "popup_next_button_vals": []
         })
 
 class VoteProject(generic.View):
@@ -346,7 +346,7 @@ class VoteProject(generic.View):
             title = "Je n'aime pas le projet %s car:" % project_name
 
         return """
-            <h5>""" + title + """</h5>
+            <p>""" + title + """</p>
             <form action="%s">
             <textarea name="comment"></textarea>
             <input type="hidden" name="project_id" value="%d" />
@@ -387,8 +387,10 @@ class VoteProject(generic.View):
             "new_vote": new_vote,
             "vote":vote_object.vote,
             "popup_title": "Merci pour votre vote",
-            "popup_content": popup_content,
-            "popup_next_button_val": "Commenter",
+            "popup_content":
+                "<p>Si vous le Souhaitez, vous pouvez commenter votre vote ci-dessous. Sinon vous pouvez ignorer et voir les résultats.</p>"
+                + popup_content,
+            "popup_next_button_vals": ["Juste voir les résultats", "Commenter"],
         });
 
 
@@ -449,7 +451,7 @@ class SignPetition(generic.View):
             "result": "OK",
             "popup_title": "Pétition signée",
             "popup_content": self.getSummaryViewContent(request, petition),
-            "popup_next_button_val": None
+            "popup_next_button_vals": []
             });
 
     def get(self, request, *args, **kwargs):
@@ -501,5 +503,5 @@ class SignPetition(generic.View):
             "result": "OK",
             "popup_title": "Confirmation de signature",
             "popup_content": popup_content,
-            "popup_next_button_val": "Signer la pétition"
+            "popup_next_button_vals": ["Signer la pétition"]*2
             });

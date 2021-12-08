@@ -5,13 +5,25 @@ $(document).ready(function() {
 
         $("#popup_title").html(response.popup_title);
         $("#popup_content").html(response.popup_content);
-        $("#popup_next_button").html(response.popup_next_button_val);
-        if(response.popup_next_button_val == null ||
-            response.popup_next_button_val.length < 1
+        if(response.popup_next_button_vals == null ||
+            response.popup_next_button_vals.length < 1
         ) {
             $("#popup_next_button").hide();
         } else {
-            $("#popup_next_button").show().addClass('disabled');
+            $("#popup_next_button").html(response.popup_next_button_vals[0]);
+            $("#popup_next_button")
+                .data("invalid_text", response.popup_next_button_vals[0])
+                .data("valid_text", response.popup_next_button_vals[1]);
+
+            // If the button names are similar, it means there is only one
+            // action on the formular, hence the fields needs to be all
+            // audited, hence the button is disabled by default:
+            if(response.popup_next_button_vals[0]
+                == response.popup_next_button_vals[1]
+            ) {
+                $("#popup_next_button").addClass('disabled');
+            }
+            $("#popup_next_button").show();
         }
 
         popupFormAudited = false;
@@ -27,10 +39,19 @@ $(document).ready(function() {
                 }
             );
 
+            let invalid_text = $("#popup_next_button").data("invalid_text");
+            let valid_text = $("#popup_next_button").data("valid_text");
+            if(invalid_text == valid_text) {
+                if(popupFormAudited) {
+                    $("#popup_next_button").removeClass('disabled');
+                } else {
+                    $("#popup_next_button").addClass('disabled');
+                }
+            }
             if(popupFormAudited) {
-                $("#popup_next_button").removeClass('disabled');
+                $("#popup_next_button").html(valid_text);
             } else {
-                $("#popup_next_button").addClass('disabled');
+                $("#popup_next_button").html(invalid_text);
             }
         };
 
