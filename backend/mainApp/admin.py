@@ -15,5 +15,6 @@ admin.site.register(CityProjectVote)
 
 admin.site.register(Petition)
 admin.site.register(PetitionSignature)
+admin.site.register(PetitionComment)
 
 admin.site.register(RegisteredUser)

@@ -218,4 +218,8 @@ $(document).ready(function() {
         });
         event.preventDefault();
     });
+    
+    $("#comment_toggle_button").click(function(event) {
+        $("#comment_add").toggle();
+    });
 });

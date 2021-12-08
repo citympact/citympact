@@ -15,4 +15,37 @@
     </div>
 </div>
 
+<div class="container pb-5">
+    <div class="row">
+        <div class="col-sm-12">
+            <input type="button" value="Ajouter un commentaire" class="mb-4" id="comment_toggle_button"/>
+            <form id="comment_add" style="display: none;" action="{% url "mainApp:addNewComment" %}" method="POST"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row pb-4">
+                    <div class="col-sm-12">
+                        <textarea name="comment" rows="8" cols="80"></textarea>
+                    </div>
+                    <div class="col-sm-12"><input type="checkbox" name="anonymous" id="anonymous">  <label for="anonymous">Poster ce commentaire en anonyme?</label>
+                    </div>
+                    <input type="hidden" name="model_name" value="{{ model_name }}" />
+                    <input type="hidden" name="id" value="{{ id }}" />
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary" id="popup_next_button">Poster un commentaire</button>
+                    </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            {% for comment in comments %}
+                {{ comment }}
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

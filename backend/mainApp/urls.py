@@ -17,6 +17,8 @@ urlpatterns = [
 
     path('petition/<int:petition_id>', views.PetitionView.as_view(), \
         name='petitionDetail'),
+    path('comment/add', views.AddNewCommentView.as_view(),
+        name='addNewComment'),
     path('petition/sign', views.SignPetition.as_view(), name='signPetition'),
     path('petition/add', login_required(views.AddNewPetition.as_view()), name='addNewPetition'),
     path('add_vote_comment', views.AddVoteComment.as_view(),

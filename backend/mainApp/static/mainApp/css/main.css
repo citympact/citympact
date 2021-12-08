@@ -87,3 +87,25 @@ a.upvote,a.downvote {
     width: 100%;
     min-height: 150px;
 }
+
+.comment {
+    position: relative;
+    border-top: 1px solid grey;
+    padding: 2em;
+}
+
+.comment>img {
+    position: relative;
+    float: left;
+    border-radius: 50%;
+    margin-right: 2em;
+    margin-bottom: 2em;
+}
+.comment>.create_date {
+    margin-bottom: 1rem;
+}
+.comment::after {
+  content: "";
+  clear: both;
+  display: table;
+}

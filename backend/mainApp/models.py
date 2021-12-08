@@ -117,7 +117,8 @@ class PetitionSignature(BaseModel):
 class PetitionComment(BaseModel):
     petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
     visitor = models.ForeignKey(Visitor, on_delete=models.DO_NOTHING)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
+        null=True)
     validated = models.BooleanField()
     name_displayed = models.BooleanField()
     comment = models.TextField()

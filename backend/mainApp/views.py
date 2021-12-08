@@ -166,11 +166,47 @@ class ProjectView(generic.View):
             _contextifyDetail(CityProject.objects.get(pk=kwargs["project_id"]))
         return render(request, 'mainApp/detailView.html', context)
 
-class PetitionView(generic.View):
-    def get(self, request, *args, **kwargs):
+class AddNewCommentView(generic.View):
+    def post(self, request, *args, **kwargs):
+        if not "audited":
+            return HttpResponseRedirect(reverse('mainApp:index', args=()))
 
+
+        return JsonResponse({
+            "result": "ok",
+            });
+class PetitionView(generic.View):
+
+    def render_comment(self, comment):
+
+        author = "Anne Ho-Nihm";
+        if comment.user is not None and comment.name_displayed:
+            author = "%s %s" % (comment.user.first_name, comment.user.last_name)
+
+        context = {
+            "author": author,
+            "comment": comment.comment,
+            "create_date": comment.create_datetime
+        }
+
+        return render_to_string("mainApp/comment_detail.html",  context)
+
+
+    def get(self, request, *args, **kwargs):
+        petition = Petition.objects.get(pk=kwargs["petition_id"])
+        comments = PetitionComment.objects.filter(petition=petition)
         context = \
-            _contextifyDetail(Petition.objects.get(pk=kwargs["petition_id"]))
+            _contextifyDetail(petition)
+
+        rendered_comments = []
+        for comment in comments:
+            if comment.validated:
+                rendered_comments.append(self.render_comment(comment))
+
+        context["comments"] = rendered_comments
+        context["model_name"] = "petition"
+        context["id"] = petition.id
+
         return render(request, 'mainApp/detailView.html', context)
 
 class AddNewPetition(generic.View):
@@ -491,7 +527,7 @@ class SignPetition(generic.View):
                 RegisteredUserForm(instance=request.user.registereduser)
 
 
-        popup_content = body = render_to_string("mainApp/sign_petition.html", {
+        popup_content = render_to_string("mainApp/sign_petition.html", {
                 "first_name": request.user.first_name,
                 "last_name": request.user.last_name,
                 "petition_title": petition.title,
