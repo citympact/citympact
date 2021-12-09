@@ -225,25 +225,18 @@ class AddNewCommentView(generic.View):
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
         if request.POST["model_name"] == "petition":
             petition = Petition.objects.get(pk=request.POST["id"])
-            comment = PetitionComment(
-                petition=petition,
-                visitor=visitor,
-                user=request.user,
-                comment=request.POST["comment"],
-            )
+            comment = PetitionComment(petition=petition)
         elif request.POST["model_name"] == "project":
             project = CityProject.objects.get(pk=request.POST["id"])
-            comment = CityProjectComment(
-                project=project,
-                visitor=visitor,
-                user=request.user,
-                comment=request.POST["comment"],
-            )
+            comment = CityProjectComment(project=project)
 
-
+        comment.visitor = visitor
+        comment.comment = request.POST["comment"]
+        comment.validated = False
+        comment.name_displayed = False
+        
         if request.user.is_authenticated:
-            comment.validated = False
-            comment.name_displayed = False
+            comment.user=request.user,
 
             if "publish_name" in request.POST \
                 and request.POST["publish_name"]=="on" \
