@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     {% if comment_user_name %}
-                        <div class="col-sm-12"><input type="checkbox" name="publish_name" id="publish_name" checked="checked">  <label for="publish_name">Poster ce commentaire avec votre nom ({{ comment_user_name }})?</label><br><small>Les commentaires anonymes sont soumis à une validation et ne sont affichés qu'après leur approbation.</small>
+                        <div class="col-sm-12"><input type="checkbox" name="publish_name" id="publish_name" checked="checked">  <label for="publish_name">Poster ce commentaire avec votre nom ({{ comment_user_name }}) ?</label><br><small>Les commentaires anonymes sont soumis à une validation et ne sont affichés qu'après leur approbation.</small>
                         </div>
                     {% else %}
                     <small>Votre commentaire sera publié anonymement mais sera soumis à approbation. Si vous ne voulez pas attendre cette validation, vous pouvez <a href="{% url 'login' %}?next={{ login_next_url }}">vous authentifier ici</a>.</small>

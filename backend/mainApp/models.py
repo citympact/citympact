@@ -85,6 +85,16 @@ class CityProjectVote(BaseModel):
             + " (%s)" % self.visitor.pk
 
 
+class CityProjectComment(BaseModel):
+    project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
+    visitor = models.ForeignKey(Visitor, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
+        null=True)
+    validated = models.BooleanField()
+    name_displayed = models.BooleanField()
+    comment = models.TextField()
+
+
 class Petition(BaseModel):
     title = models.CharField(max_length=200)
     summary = models.TextField()
