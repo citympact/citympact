@@ -238,8 +238,17 @@ $(document).ready(function() {
     $("#comment_add").submit(function(event) {
         if(auditCommentTextarea()) {
             $.post($(this).attr("action"),  $(this).serialize(),
-            function(response){
-                alert("OK");
+            function(response) {
+                if("result" in response === true && response.result == "success") {
+                    addCommentTextarea.val("");
+                    $("#publish_name").prop("checked", true);
+                    isAddCommentFormValid = false;
+                    $("#comment_add").hide();
+
+                    if("comment" in response === true) {
+                        $("#comments_div").append(response.comment);
+                    }
+                }
             });
         }
         event.preventDefault();

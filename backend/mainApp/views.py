@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.serializers import serialize
 from django.utils.functional import SimpleLazyObject
 from django.urls import reverse
 from django.views import generic
@@ -14,6 +15,7 @@ from .models import *
 from .forms import *
 
 import urllib.parse
+import random
 
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
@@ -174,22 +176,60 @@ class AddNewCommentView(generic.View):
         :
             return HttpResponseRedirect(reverse('mainApp:index', args=()))
 
+        response = {
+            "result": "success",
+        }
+        if request.POST["model_name"] == "petition":
+            visitor = Visitor.objects.get(pk=request.session["visitor_id"])
+            petition = Petition.objects.get(pk=request.POST["id"])
+            comment = PetitionComment(
+                petition=petition,
+                visitor=visitor,
+                user=request.user,
+                comment=request.POST["comment"],
+            )
 
-        return JsonResponse({
-            "result": "ok",
-            });
+            if request.user.is_authenticated:
+                comment.validated = False
+                comment.name_displayed = False
+
+                if "publish_name" in request.POST \
+                    and request.POST["publish_name"]=="on" \
+                :
+                    comment.name_displayed = True
+                    comment.validated = True
+            comment.save()
+
+            # If the comment is validated (i.e. authenticated and non-anonymous)
+            # then the BE should respond it to the FE:
+            if comment.validated:
+                response["comment"] = PetitionView.render_comment(comment);
+
+
+        return JsonResponse(response);
 class PetitionView(generic.View):
 
-    def render_comment(self, comment):
-
+    def render_comment(comment):
+        if not comment.validated:
+            raise AttributeError(
+                "The comment should be validated to be displayed."
+            )
         author = "Anne Ho-Nihm";
         if comment.user is not None and comment.name_displayed:
             author = "%s %s" % (comment.user.first_name, comment.user.last_name)
 
+        validated_details = None
+        if not comment.name_displayed:
+                validated_details = "Commentaire anonyme validé"
+
+        image_ids = [22, 325, 628, 1, 455, 786, 602]
+        r = random.randint(0,len(image_ids)-1)
         context = {
-            "author": author,
+            "profile_picture": "https://picsum.photos/id/%d/200/200" % image_ids[r],
+            "author_name": author,
             "comment": comment.comment,
-            "create_date": comment.create_datetime
+            "create_date": comment.create_datetime,
+            "validated_details": validated_details,
         }
 
         return render_to_string("mainApp/comment_detail.html",  context)
@@ -204,11 +244,17 @@ class PetitionView(generic.View):
         rendered_comments = []
         for comment in comments:
             if comment.validated:
-                rendered_comments.append(self.render_comment(comment))
+                rendered_comments.append(PetitionView.render_comment(comment))
 
         context["comments"] = rendered_comments
         context["model_name"] = "petition"
         context["id"] = petition.id
+
+        context["login_next_url"] = reverse('mainApp:petitionDetail', args=(),
+            kwargs={'petition_id': petition.id})
+        context["comment_user_name"] = None
+        if request.user.is_authenticated:
+            context["comment_user_name"] = "%s %s" % (request.user.first_name, request.user.last_name)
 
         return render(request, 'mainApp/detailView.html', context)
 
