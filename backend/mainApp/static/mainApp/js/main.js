@@ -22,6 +22,8 @@ $(document).ready(function() {
                 == response.popup_next_button_vals[1]
             ) {
                 $("#popup_next_button").addClass('disabled');
+            } else {
+                $("#popup_next_button").removeClass('disabled');
             }
             $("#popup_next_button").show();
         }
@@ -81,8 +83,10 @@ $(document).ready(function() {
             if(response.vote!=0) {
                 clickedElement.addClass("active-vote");
             }
-            prepareModal(response);
-            modal.show();
+            if(vote != 0) {
+                prepareModal(response);
+                modal.show();
+            }
 
 
         });
@@ -245,6 +249,9 @@ $(document).ready(function() {
                     isAddCommentFormValid = false;
                     $("#comment_add").hide();
 
+                    if("message" in response === true) {
+                        $("#message_div").html("").append("<div class=\"alert alert-primary\" role=\"alert\">" + response.message +"</div>");
+                    }
                     if("comment" in response === true) {
                         $("#comments_div").append(response.comment);
                     }

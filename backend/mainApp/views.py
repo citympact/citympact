@@ -234,21 +234,29 @@ class AddNewCommentView(generic.View):
         comment.comment = request.POST["comment"]
         comment.validated = False
         comment.name_displayed = False
-        
+        validation_text = "Votre commentaire va être validé aussitôt que " \
+            + "possible."
+
         if request.user.is_authenticated:
-            comment.user=request.user,
+            user = User.objects.get(pk=int(request.user.id))
+            comment.user = user
 
             if "publish_name" in request.POST \
                 and request.POST["publish_name"]=="on" \
             :
                 comment.name_displayed = True
                 comment.validated = True
+                validation_text = "Votre commentaire, publié en votre nom, a " \
+                    + "été automatiquement validé et est affiché ci-dessous."
         comment.save()
 
         # If the comment is validated (i.e. authenticated and non-anonymous)
         # then the BE should respond it to the FE:
         if comment.validated:
             response["comment"] = render_comment(comment);
+
+        response["message"] = "Merci pour votre commentaire !<br>" \
+            + validation_text
 
         return JsonResponse(response);
 class PetitionView(generic.View):
