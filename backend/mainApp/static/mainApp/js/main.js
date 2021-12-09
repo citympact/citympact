@@ -218,8 +218,30 @@ $(document).ready(function() {
         });
         event.preventDefault();
     });
-    
+
     $("#comment_toggle_button").click(function(event) {
         $("#comment_add").toggle();
+    });
+
+    let isAddCommentFormValid = false;
+    let addCommentTextarea  = $(this).find("#comment_add textarea");
+    let auditCommentTextarea = function() {
+        if(addCommentTextarea.val().length<1) {
+            addCommentTextarea.removeClass("is-valid").addClass("is-invalid");
+            return false;
+        } else {
+            addCommentTextarea.removeClass("is-invalid").addClass("is-valid");
+            return true;
+        }
+    };
+    addCommentTextarea.off("input").on("input", auditCommentTextarea);
+    $("#comment_add").submit(function(event) {
+        if(auditCommentTextarea()) {
+            $.post($(this).attr("action"),  $(this).serialize(),
+            function(response){
+                alert("OK");
+            });
+        }
+        event.preventDefault();
     });
 });

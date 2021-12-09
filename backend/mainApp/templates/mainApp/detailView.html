@@ -18,13 +18,16 @@
 <div class="container pb-5">
     <div class="row">
         <div class="col-sm-12">
-            <input type="button" value="Ajouter un commentaire" class="mb-4" id="comment_toggle_button"/>
+            <button class="btn btn-secondary mb-4" id="comment_toggle_button">Ajouter un commentaire</button>
             <form id="comment_add" style="display: none;" action="{% url "mainApp:addNewComment" %}" method="POST"
                 enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row pb-4">
-                    <div class="col-sm-12">
-                        <textarea name="comment" rows="8" cols="80"></textarea>
+                    <div class="col-sm-12  mb-4">
+                        <textarea name="comment" rows="8" cols="80" class="form-control"></textarea>
+                        <div class="invalid-feedback">
+                            Merci d'insérer un commentaire.
+                        </div>
                     </div>
                     <div class="col-sm-12"><input type="checkbox" name="anonymous" id="anonymous">  <label for="anonymous">Poster ce commentaire en anonyme?</label>
                     </div>

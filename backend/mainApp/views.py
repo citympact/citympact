@@ -168,7 +168,10 @@ class ProjectView(generic.View):
 
 class AddNewCommentView(generic.View):
     def post(self, request, *args, **kwargs):
-        if not "audited":
+        if "comment" not in request.POST \
+            or "model_name" not in request.POST \
+            or "id" not in request.POST \
+        :
             return HttpResponseRedirect(reverse('mainApp:index', args=()))
 
 
