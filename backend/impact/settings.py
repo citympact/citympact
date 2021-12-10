@@ -159,11 +159,6 @@ class SwissIDOpenId(OpenIdAuth):
             "STATE?"
             )
 
-SWISS_ID_CLIENT_ID = "?"
-SWISS_ID_CLIENT_SECRET = "?"
-SWISS_ID_ENV = "?"
-
-
 try:
     # Google auth related keys:
     SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ["SOCIAL_AUTH_GOOGLE_OAUTH2_KEY"]
@@ -176,23 +171,20 @@ try:
         globals()[email_key] = os.environ[email_key]
     EMAIL_USE_TLS = True
 
-
-
-    # mail related  keys:
+    # LinkedIn auth related keys:
+    for email_key in ["SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY", "SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET"]:
+        globals()[email_key] = os.environ[email_key]
+    EMAIL_USE_TLS = True
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")
     print("Missing environment variable: %s." % e)
     sys.exit(-1)
 
-# Apple auth related keys:
-KEY = "?"
-TEAM = "?"
-CLIENT = "?"
-SECRET = "?"
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.open_id.OpenIdAuth',
     'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.linkedin.LinkedinOAuth2',
     'social_core.backends.apple.AppleIdAuth',
     'social_core.backends.twitter.TwitterOAuth',
     'django.contrib.auth.backends.ModelBackend',
