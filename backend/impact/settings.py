@@ -174,7 +174,8 @@ try:
     # LinkedIn auth related keys:
     for email_key in ["SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY", "SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET"]:
         globals()[email_key] = os.environ[email_key]
-    EMAIL_USE_TLS = True
+    LINKEDIN_EXTENDED_PERMISSIONS = ['email']
+
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")
     print("Missing environment variable: %s." % e)
