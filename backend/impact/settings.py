@@ -31,8 +31,6 @@ IMG_THUMBNAIL_SIZE = (600, 400);
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '<TODO CHANGE SECRET KEY>'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "dev.citympact.ch"]
 
@@ -161,6 +159,8 @@ class SwissIDOpenId(OpenIdAuth):
             )
 
 try:
+    DEBUG = (os.environ["DEBUG"].lower() == "true")
+
     # Google auth related keys:
     SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ["SOCIAL_AUTH_GOOGLE_OAUTH2_KEY"]
     SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = \
@@ -240,3 +240,6 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.SUCCESS: 'success',
                 message_constants.WARNING: 'warning',
                 message_constants.ERROR: 'danger',}
+
+
+print("DEBUG DEBUG DEBUG =", DEBUG)
