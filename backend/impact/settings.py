@@ -175,6 +175,7 @@ try:
     for email_key in ["SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY", "SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET"]:
         globals()[email_key] = os.environ[email_key]
     SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_liteprofile', 'r_emailaddress']
+    SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['emailAddress']
     SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('id', 'id'),
                                           ('firstName', 'first_name'),
                                           ('lastName', 'last_name'),
