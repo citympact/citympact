@@ -182,6 +182,15 @@ try:
                                           ('lastName', 'last_name'),
                                           ('emailAddress', 'email_address')]
 
+    # Facebook auth related keys:
+    for email_key in ["SOCIAL_AUTH_FACEBOOK_KEY", "SOCIAL_AUTH_FACEBOOK_SECRET"]:
+        globals()[email_key] = os.environ[email_key]
+    SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+    SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+      'locale': 'fr_FR',
+      'fields': 'id, name, email, age_range'
+    }
+
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")
     print("Missing environment variable: %s." % e)
@@ -193,7 +202,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.linkedin.LinkedinOAuth2',
     'social_core.backends.apple.AppleIdAuth',
-    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
