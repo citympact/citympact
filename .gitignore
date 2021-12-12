@@ -143,3 +143,6 @@ bin/
 # Django temporary sent mail folder:
 backend/sent_emails/
 backend/*.env
+
+# Django collected static folder:
+backend/collected_static/
