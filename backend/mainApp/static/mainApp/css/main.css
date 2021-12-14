@@ -109,3 +109,8 @@ a.upvote,a.downvote {
   clear: both;
   display: table;
 }
+
+.navbar-brand>img{
+    max-width: 180px;
+    width: auto;
+}
