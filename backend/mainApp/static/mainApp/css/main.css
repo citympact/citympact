@@ -114,3 +114,70 @@ a.upvote,a.downvote {
     max-width: 180px;
     width: auto;
 }
+
+
+#topNavbar.navbar-collapse,
+#topNavbar.navbar-collapse.show+div .navbar-nav,
+#topNavbar.navbar-collapse.collapsing+div .navbar-nav{
+    text-align: center;
+    font-size: 3rem;
+}
+
+
+#topMenuBar button,
+.navbar-toggler {
+    border: 0 !important;
+}
+#topMenuBar,
+#topMenuBar .container,
+#topMenuBar .container-fluid {
+    max-width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+
+#topNavbar.navbar-collapse .navbar-nav a,
+#topNavbar.navbar-collapse.show+div .navbar-nav a,
+#topNavbar.navbar-collapse.collapsing+div .navbar-nav a {
+    background-color: pink;
+}
+
+
+#topNavbar.navbar-collapse.show+div,
+#topNavbar.navbar-collapse.collapsing+div {
+    flex-basis: 100%;
+    flex-grow: 1;
+}
+
+#topNavbar.navbar-collapse .navbar-nav a,
+#topNavbar.navbar-collapse.show+div .navbar-nav a,
+#topNavbar.navbar-collapse.collapsing+div .navbar-nav a{
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+@media (min-width: 992px) {
+    #topMenuBar,
+    #topMenuBar .container,
+    #topMenuBar .container-fluid {
+        max-width: none;
+        padding-right: var(--bs-gutter-x,.75rem);
+        padding-left: var(--bs-gutter-x,.75rem);
+    }
+
+    #topNavbar.navbar-collapse,
+    #topNavbar.navbar-collapse.show+div .navbar-nav,
+    #topNavbar.navbar-collapse.collapsing+div .navbar-nav{
+        background-color: transparent;
+        font-size: 1rem;
+    }
+
+    #topNavbar.navbar-collapse+div,
+    #topNavbar.navbar-collapse+div {
+        flex-basis: auto;
+        flex-grow: 0;
+    }
+
+
+}
