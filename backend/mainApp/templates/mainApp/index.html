@@ -7,15 +7,14 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-        <div class="bg-white p-5 rounded shadow">
-                <div class="input-group mb-3">
+        <div class="header">
+                <div class="search-group">
                   <input type="text" class="form-control" placeholder="Que veux tu changer dans ta ville?" aria-label="Que veux tu changer dans ta ville?" aria-describedby="button-addon2" id="search-input" autocomplete="off">
                   <div class="suggestions-dropdown" style="display: none;">
                       <ul>
                           <li><a href="{% url 'mainApp:addNewPetition' %}">>> Propser une pétition</a></li>
                       </ul>
                   </div>
-                  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Chercher</button>
                 </div>
 
         </div>
@@ -25,12 +24,16 @@
 <div class="container pt-5">
     <div class="row">
         <div class="col-sm-12">
-            <h1 class="pt-3 pb-2">Que penses-tu de ces projets?</h1>
+            <h1 class="homepage_title">Que penses-tu de ces projets?</h1>
             {% if projects_votes %}
                 <div class="row row-slider">
                     {% for project, voteClasses in projects_votes %}
                         <div data-project-id="{{ project.pk }}" data-project-vote="{{ vote }}" class="project-div">
-                            <a href="{% url 'mainApp:projectDetail' project.id %}"><img src="{{ project.image.url|thumbnailize }}" alt="{{ project.title }}" alt="" class="sliderThumbnail"/></a>
+                            <div class="image_and_vote_buttons">
+                                <a href="{% url 'mainApp:projectDetail' project.id %}"><img src="{{ project.image.url|thumbnailize }}" alt="{{ project.title }}" alt="" class="sliderThumbnail"/></a>
+                                <a class="upvote_button" href="#"></a>
+                                <a class="downvote_button" href="#"></a>
+                            </div>
                             <h2><a href="{% url 'mainApp:projectDetail' project.id %}">{{ project.title }}</a></h2>
                             <div>
                                 <a href="#" class="downvote {{ voteClasses.0 }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down" viewBox="0 0 16 16">
@@ -54,7 +57,7 @@
 <div class="container pt-5">
     <div class="row">
         <div class="col-sm-12">
-            <h1 class="pt-3 pb-2">Que penses-tu de ces pétitions?</h1>
+            <h1 class="homepage_title">Que penses-tu de ces pétitions?</h1>
             {% if petitions %}
                 <div class="row row-slider">
                     {% for petition in petitions %}

@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 body {
 }
 #searchInput {
@@ -140,6 +139,9 @@ a.upvote,a.downvote {
     border: 0px solid transparent;
     box-shadow: none !important;
 }
+#topMenuBar {
+    background-color: white;
+}
 #topMenuBar,
 #topMenuBar .container,
 #topMenuBar .container-fluid {
@@ -149,7 +151,8 @@ a.upvote,a.downvote {
 }
 
 
-#topNavbar.navbar-collapse .navbar-nav a,
+#topNavbar.navbar-collapse.show .navbar-nav a,
+#topNavbar.navbar-collapse.collapsing .navbar-nav a,
 #topNavbar.navbar-collapse.show+div .navbar-nav a,
 #topNavbar.navbar-collapse.collapsing+div .navbar-nav a {
     background-color: #FDF8EB;
@@ -190,6 +193,85 @@ a.upvote,a.downvote {
         flex-basis: auto;
         flex-grow: 0;
     }
+}
 
+body {
+    background-color: #FDF8EB;
+}
 
+.header {
+    background-color: #F9D2C0;
+    background-image: url('../images/header.jpg');
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 18px;
+    box-shadow: 5px 5px black;
+    height: 300px;
+}
+.header .search-group {
+    position: relative;
+    margin: 125px 10% 0 50%;
+}
+.header {
+    margin: 0 0 3rem;
+}
+#search-input {
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 18px;
+    box-shadow: 5px 5px black;
+}
+
+h1.homepage_title {
+    display: inline-block;
+    background: #FCF0B3;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 7.5px;
+    box-shadow: 5px 5px black;
+    padding: 12px 25px;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    margin: 0 0 3rem;
+    color: #F2522F;
+    letter-spacing: 0em;
+}
+
+.sliderThumbnail {
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.image_and_vote_buttons {
+    position: relative;
+    margin-bottom: 4rem;
+}
+.upvote_button, .downvote_button {
+    position: absolute;
+    display: inline-block;
+    width: 68.79px;
+    height: 68.79px;
+    bottom: -34px;
+    left: 0px;
+    border-radius: 7.5px;
+    box-shadow: 5px 5px black;
+    background-color: #BAEB0D;
+    background-image: url('../images/upvote.png');
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+.downvote_button {
+    left: auto;
+    right: 0px;
+    background-color: #F2522F;
+    background-image: url('../images/downvote.png');
 }
