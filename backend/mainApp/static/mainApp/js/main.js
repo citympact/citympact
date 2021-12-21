@@ -64,15 +64,15 @@ $(document).ready(function() {
         });
 
     };
-    $("a.upvote,a.downvote").click(function(event) {
-        let project_id = $(this).parents("div.project-div")
+    $("a.upvote_button,a.downvote_button").click(function(event) {
+        let project_id = $(this).parents("div.detail_div")
             .first().data("project-id");
         let vote = $(this).hasClass("upvote") ? 1  : -1;
         if($(this).hasClass("active-vote")) {
             vote = 0;
         }
         let clickedElement = $(this);
-        clickedElement.parent().find("a.upvote,a.downvote")
+        clickedElement.parent().find("a.upvote_button,a.downvote_button")
             .removeClass("active-vote");
         $.post("project/vote",  {
             project_id: project_id,
@@ -204,9 +204,9 @@ $(document).ready(function() {
         }
     });
 
-    $("a.sign_petition").click(function(event) {
+    $(".sign_petition_div>a").click(function(event) {
         let clickedElement = $(this);
-        let petition_id = $(this).parents("div").first().data("petition-id");
+        let petition_id = $(this).parents("div.detail_div").first().data("petition-id");
 
         $.get("petition/sign",  {
             petition_id: petition_id,
@@ -261,4 +261,33 @@ $(document).ready(function() {
         event.preventDefault();
     });
 
+    $(".detail_row").each(function(index, elt) {
+        let rowHeight = $(elt).outerHeight(true);
+        let maxCellHeight = 0;
+        let showMoreDiv = $(elt).parent().find(".show_more_div");
+        $(elt).find(".detail_div").each(function(subIndex, subElt) {
+            if($(subElt).outerHeight(true)) {
+                maxCellHeight = $(subElt).outerHeight(true);
+            }
+        });
+        if(rowHeight>maxCellHeight) {
+            $(elt).css("overflow", "hidden").height(maxCellHeight);
+        } else {
+            showMoreDiv.hide();
+        }
+        showMoreDiv.click(function(event) {
+            let button = showMoreDiv.find("a");
+            if(!button.data("toggle")) {
+                $(elt).css("overflow", "visible").css("height", "auto");
+                let newText = button.data("toggle-text");
+                button.data("toggle-text", button.html());
+                button.html(newText);
+            } else {
+                $(elt).css("overflow", "hidden").height(maxCellHeight);
+            }
+            button.data("toggle", !button.data("toggle"))
+            event.preventDefault();
+            return false;
+        });
+    });
 });

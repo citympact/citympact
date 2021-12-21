@@ -110,7 +110,7 @@ class Petition(BaseModel):
         Quickly overriding the super()-function in order to also save a
         thumbnail.
         """
-        super(models.Model, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         if self.image and hasattr(self.image, 'path'):
             createThumbnail(self.image.path)
 

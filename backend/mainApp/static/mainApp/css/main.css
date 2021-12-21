@@ -1,33 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap');
+
 body {
+    font-family: Poppins;
 }
 #searchInput {
     width: 100%;
-}
-.row-slider {
-    position: relative;
-    flex-wrap: nowrap;
-    overflow-x: scroll;
-    overflow-y: hidden;
-}
-.row-slider>div {
-    position: relative;
-    width: 33%;
-    float: left;
-    margin-right: 5%
 }
 
 .sliderThumbnail {
     width: 100%;
     height: auto;
     border: 1px solid black;
-}
-.row-slider a {
-    text-decoration: none;
-    color: inherit;
-}
-a.upvote,a.downvote {
-    padding: 0.075em 0.35em;
 }
 .active-vote {
     background-color: lightblue;
@@ -172,6 +156,17 @@ a.upvote,a.downvote {
     padding-bottom: 2rem;
 }
 
+.header .search-group {
+    position: relative;
+    margin: 125px 10% 0 10%;
+}
+
+@media (min-width: 768px) {
+
+    .header .search-group {
+        margin: 125px 10% 0 30%;
+    }
+}
 @media (min-width: 992px) {
     #topMenuBar,
     #topMenuBar .container,
@@ -193,6 +188,10 @@ a.upvote,a.downvote {
         flex-basis: auto;
         flex-grow: 0;
     }
+
+    .header .search-group {
+        margin: 125px 10% 0 50%;
+    }
 }
 
 body {
@@ -209,10 +208,6 @@ body {
     border-radius: 18px;
     box-shadow: 5px 5px black;
     height: 300px;
-}
-.header .search-group {
-    position: relative;
-    margin: 125px 10% 0 50%;
 }
 .header {
     margin: 0 0 3rem;
@@ -242,6 +237,11 @@ h1.homepage_title {
     letter-spacing: 0em;
 }
 
+h1.homepage_title.petition_title {
+    color: white;
+    background-color: #2E39F6;
+}
+
 .sliderThumbnail {
     border: 1px solid #051320;
     box-sizing: border-box;
@@ -262,7 +262,6 @@ h1.homepage_title {
     border-radius: 7.5px;
     box-shadow: 5px 5px black;
     background-color: #BAEB0D;
-    background-image: url('../images/upvote.png');
     background-repeat: no-repeat;
     background-size: auto 100%;
     border: 1px solid #051320;
@@ -273,5 +272,130 @@ h1.homepage_title {
     left: auto;
     right: 0px;
     background-color: #F2522F;
-    background-image: url('../images/downvote.png');
+}
+.upvote_button>img {
+    margin-top: 5px;
+}
+
+.upvote_button:hover,
+.upvote_button.active-vote {
+    background: repeating-linear-gradient(
+        45deg,
+        #BAEB0D,
+        #BAEB0D 10px,
+        #d7ff3d 10px,
+        #d7ff3d 20px
+    );
+}
+.downvote_button:hover,
+.downvote_button.active-vote {
+    background: repeating-linear-gradient(
+        -45deg,
+        #F2522F,
+        #F2522F 10px,
+        #ff6f47 10px,
+        #ff6f47 20px
+    );
+}
+
+
+.detail_div {
+    padding-bottom: 3rem;
+}
+.detail_div a {
+    text-decoration: none;
+    color: inherit;
+}
+.detail_div h2 {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+
+}
+
+.detail_div p {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.detail_div .know-more>a {
+    display: inline-block;
+    background: #FFFFFF;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 8px 22px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    box-shadow: 3px 3px black;
+}
+
+.show_more_div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.show_more_div a {
+    color: #F2522F;
+    background: #FCF0B3;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 8px 22px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    box-shadow: 3px 3px black;
+    text-decoration: none;
+}
+
+.sign_petition_div {
+    position: relative;
+}
+
+.sign_petition_div a {
+    position: relative;
+    top: -2rem;
+    width: 100%;
+    display: inline-block;
+    background: #2E39F6;
+    border: 1px solid #051320;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #FFFFFF !important;
+    padding: 1rem 2rem;
+    box-shadow: 3px 3px black;
+    text-align: center;
+}
+
+#new_petition {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+#new_petition a {
+    display: inline-block;
+    background: #F42C2C;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 27px;
+    text-align: center;
+    text-decoration: none;
+    padding: 15px 65px;
+    box-shadow: 3px 3px black;
+    color: #FCF0B3;
 }
