@@ -261,22 +261,26 @@ $(document).ready(function() {
         event.preventDefault();
     });
 
-    $(".detail_row").each(function(index, elt) {
+    let computeHeightsAndAdjustView = function(elt, initialLoading) {
         let rowHeight = $(elt).outerHeight(true);
         let maxCellHeight = 0;
+
         let showMoreDiv = $(elt).parent().find(".show_more_div");
+        let button = showMoreDiv.find("a");
         $(elt).find(".detail_div").each(function(subIndex, subElt) {
             if($(subElt).outerHeight(true)) {
                 maxCellHeight = $(subElt).outerHeight(true);
             }
         });
-        if(rowHeight>maxCellHeight) {
-            $(elt).css("overflow", "hidden").height(maxCellHeight);
-        } else {
-            showMoreDiv.hide();
+        console.log("initialLoading =", initialLoading)
+        if(initialLoading) {
+            if(rowHeight>maxCellHeight) {
+                $(elt).css("overflow", "hidden").height(maxCellHeight);
+            } else {
+                showMoreDiv.hide();
+            }
         }
-        showMoreDiv.click(function(event) {
-            let button = showMoreDiv.find("a");
+        showMoreDiv.off("click").click(function(event) {
             if(!button.data("toggle")) {
                 $(elt).css("overflow", "visible").css("height", "auto");
                 let newText = button.data("toggle-text");
@@ -288,6 +292,15 @@ $(document).ready(function() {
             button.data("toggle", !button.data("toggle"))
             event.preventDefault();
             return false;
+        });
+    };
+    $(".detail_row").each(function(index, elt) {
+        computeHeightsAndAdjustView(elt, true);
+    });
+
+    $(window).resize(function() {
+        $(".detail_row").each(function(index, elt) {
+            computeHeightsAndAdjustView(elt, false);
         });
     });
 });

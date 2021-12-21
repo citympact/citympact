@@ -341,6 +341,7 @@ h1.homepage_title.petition_title {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 2rem;
 }
 .show_more_div a {
     color: #F2522F;
@@ -379,7 +380,7 @@ h1.homepage_title.petition_title {
 
 #new_petition {
     text-align: center;
-    margin-bottom: 5rem;
+    margin: 5rem 0;
 }
 #new_petition a {
     display: inline-block;
@@ -398,4 +399,23 @@ h1.homepage_title.petition_title {
     padding: 15px 65px;
     box-shadow: 3px 3px black;
     color: #FCF0B3;
+}
+
+#logo {
+    position: relative;
+    margin-bottom: 25px;
+}
+#city {
+    background: #FFFFFF;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 18px;
+    text-transform: capitalize;
+    padding: 1px 12px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: 70px;
 }
