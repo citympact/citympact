@@ -577,3 +577,47 @@ h1.homepage_title.petition_title {
 .changement img {
     height: 30px;
 }
+
+.center_image {
+    display: inline-block;
+    width: 60%;
+    margin-left: 15%;
+    margin-bottom: 3 rem;
+}
+
+.form_row label {
+    display: block;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #051320;
+    margin-bottom: 0.5rem;
+
+}
+
+
+
+.form_row input {
+    background: #FFFFFF;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 3px 3px black;
+    padding: 0.5rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.account_button {
+    background: #7D18D7;
+    color: white;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 3px 3px black;
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 1.5rem;
+}
