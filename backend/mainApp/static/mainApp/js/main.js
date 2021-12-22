@@ -67,7 +67,7 @@ $(document).ready(function() {
     $("a.upvote_button,a.downvote_button").click(function(event) {
         let project_id = $(this).parents("div.detail_div")
             .first().data("project-id");
-        let vote = $(this).hasClass("upvote") ? 1  : -1;
+        let vote = $(this).hasClass("upvote_button") ? 1  : -1;
         if($(this).hasClass("active-vote")) {
             vote = 0;
         }
@@ -303,4 +303,8 @@ $(document).ready(function() {
             computeHeightsAndAdjustView(elt, false);
         });
     });
+
+    $("#popup_close").off("click").click(function(event) {
+        modal.hide();
+    }).css("cursor", "pointer");
 });

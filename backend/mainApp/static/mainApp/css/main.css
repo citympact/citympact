@@ -405,6 +405,7 @@ h1.homepage_title.petition_title {
     position: relative;
     margin-bottom: 25px;
 }
+
 #city {
     background: #FFFFFF;
     border: 1px solid #051320;
@@ -418,4 +419,162 @@ h1.homepage_title.petition_title {
     position: absolute;
     right: 0;
     top: 70px;
+}
+
+.modal-content {
+    background-color: #FDF8EB;
+}
+#popup_content {
+    text-align: center;
+}
+
+
+#popup_close {
+    width: 52px;
+    height: 52px;
+    margin: 22px 0 22px calc(100% - 74px);
+}
+
+.popup_center_image {
+    padding-bottom: 2rem;
+    max-width: 66%;
+}
+
+.textarea_group > textarea {
+    border: 0px;
+}
+.textarea_group > label {
+}
+
+.textarea_group {
+    background-color: white;
+    text-align: left;
+    -moz-appearance: textfield-multiline;
+    -webkit-appearance: textarea;
+    border: 1px solid gray;
+    overflow: auto;
+    border-radius: 5px;
+    box-shadow: 5px 5px black;
+    padding: 10px;
+}
+
+.modal-footer {
+    text-align: center;
+    display: inline;
+    border-top: 0;
+}
+#popup_next_button {
+    background: #DCFF97;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 3px 3px black;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+    color: #FF3EC0;
+}
+
+
+.popup_title {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+    color: #051320;
+}
+
+.create_petition_from_popup {
+    display: inline-block;
+    background: #F42C2C;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 27px;
+    text-align: center;
+    text-decoration: none;
+    padding: 15px 65px;
+    box-shadow: 3px 3px black;
+    color: #FCF0B3;
+    margin-top: 1rem;
+    margin-left: 12.5%;
+    width: 75%;
+}
+.create_petition_from_popup:hover {
+    text-decoration: none;
+    color: #FCF0B3;
+}
+
+.syndication_p {
+    margin-top: 1rem;
+}
+.syndication_p > a {
+    color: white;
+    background: #051320;
+    border: 1px solid #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    box-shadow: 3px 3px black;
+}
+
+.result_div_positive {
+    margin-bottom: 1rem;
+}
+.result_div_positive img,
+.result_div_negative img {
+    height: 50px;
+    background: #F2522F;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 5px;
+    box-shadow: 3px 3px black;
+}
+.result_div_positive img {
+    background: #BAEB0D;
+    padding-top: 7.5px;
+}
+.result_div_positive span,
+.result_div_negative span {
+    display:inline-block;
+    vertical-align: middle;
+    background-color: white;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 12.5px 5rem 5px 20px;
+    width: calc(100% - 55px);
+    height: 50px;
+    box-shadow: 3px 3px black;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+}
+.changement {
+    max-width: 50%;
+    margin:0 auto;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+
+    color: #051320;
+    background-color: white;
+    border: 1px solid #051320;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: 3px 3px black;
+    padding: 10px 17px;
+    margin-bottom: 3rem;
+}
+.changement img {
+    height: 30px;
 }

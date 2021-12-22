@@ -63,7 +63,7 @@
                             <h2><a href="{% url 'mainApp:petitionDetail' petition.id %}">{{ petition.title }}</a>
                             </h2>
                             <p class="">{{ petition.summary }}</p>
-                            <div class="know-more"><a href="#">En savoir plus</a></div>
+                            <div class="know-more"><a href="{% url 'mainApp:petitionDetail' petition.id %}">En savoir plus</a></div>
                         </div>
                     {% endfor %}
                 </div>

@@ -67,7 +67,7 @@ class IndexView(generic.View):
         votes = [ \
             ["", ""] if (v is None or v.vote==0) \
             else \
-                ["", "active-vote"] if v.vote>0 else ["active-vote",""] \
+                ["active-vote", ""] if v.vote>0 else ["", "active-vote"] \
             for v in
                 [p.cityprojectvote_set.all().filter(visitor=visitor).first() \
                     for p in projects\
@@ -384,8 +384,8 @@ def create_sharing_div(target_url, link_title):
     for name, link in sharePlatforms.items():
         shareButtons += "<a href=\"%s\" target=\"_blank\">%s</a> " \
             % (link, name)
-    return "<div><h4>Partager ce projet:</h4>" \
-        + """<p class="pb-5">""" + shareButtons + """</p></div>"""
+    return "<div><h4 class=\"popup_title\">Partage ce projet</h4>" \
+        + """<p class="syndication_p pb-5">""" + shareButtons + """</p></div>"""
 
 class AddVoteComment(generic.View):
     def _create_stats_div(self, project_id):
@@ -395,10 +395,10 @@ class AddVoteComment(generic.View):
         down_votes = len(
             [v.vote for v in project.cityprojectvote_set.all().filter(vote=-1)])
 
-        return "<div><h4>Vote actuel:</h4>" \
-            + """<p class="pb-5">%d positifs, %d négatifs.</p></div>""" \
-            % (up_votes, down_votes)
-
+        return "<h4 class=\"popup_title\">Résultats actuel du vote</h4>" \
+            + """<div class="pb-5"><div class="result_div_positive"><img src="static/mainApp/images/upvote.png" alt="" /><span>%d vote%s positif%s</span></div>""" % (up_votes, "s" if up_votes>1 else "", "s" if up_votes>1 else "") \
+            + """<div class="result_div_negative"><img src="static/mainApp/images/downvote.png" alt="" /><span>%d vote%s négatif%s</span></div>""" % (down_votes, "s" if down_votes>1 else "", "s" if down_votes>1 else "")  \
+            +"</div>"
 
     def post(self, request, *args, **kwargs):
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
@@ -428,42 +428,36 @@ class AddVoteComment(generic.View):
             })
 
         additional_div = ""
+        image_filename = "summary_upvote.png"
+        action_div = create_sharing_div(project_url, project.title)
+
         if vote.vote < 0:
+            image_filename = "summary_downvote.png"
+            action_div = "<div class=\"changement\"><img src=\"static/mainApp/images/motivation.png\" alt=\"\" /> Crée le changement</div>"
             petition_title = urllib.parse.quote(
                 "Pétition contre le projet "+project.title)
-            additional_div = """<div><h4>Créer une pétition:</h4>""" \
-                + """<p class="pb-5">Vous n'avez pas aimé ce projet, voulez-vous <a href="%s?title=%s">créer une pétition</a>?</p></div>""" \
+            additional_div = """<a href="%s?title=%s" class="create_petition_from_popup">Lancer une pétition ?</a></div>""" \
                 % (
                     reverse('mainApp:addNewPetition', args=()),
                     petition_title
                 )
 
+
+
         return JsonResponse({
             "result": "ok",
             "popup_title": "Merci pour votre vote!",
             "popup_content":
-                self._create_stats_div(request.POST["project_id"]) \
-                + create_sharing_div(project_url, project.title) \
-                + additional_div,
+                "<img src=\"static/mainApp/images/" + image_filename + "\" alt=\"Merci!\" class=\"popup_center_image\" />" \
+                + "<div class=\"text-start\">"
+                    + action_div \
+                    + self._create_stats_div(request.POST["project_id"]) \
+                    + additional_div \
+                + "</div>",
             "popup_next_button_vals": []
         })
 
 class VoteProject(generic.View):
-
-    def _create_followup_form(self, project_id, project_name, vote):
-        if vote > 0:
-            title = "Je trouve le projet %s très bien car:" % project_name
-        else:
-            title = "Je n'aime pas le projet %s car:" % project_name
-
-        return """
-            <p>""" + title + """</p>
-            <form action="%s">
-            <textarea name="comment"></textarea>
-            <input type="hidden" name="project_id" value="%d" />
-            <input type="hidden" name="vote" value="%d" />
-            </form>
-        """ % (reverse('mainApp:addVoteComment', args=()), project_id, vote)
 
     def post(self, request, *args, **kwargs):
         """
@@ -491,17 +485,31 @@ class VoteProject(generic.View):
         vote_object.vote = vote
         vote_object.save()
 
-        popup_content = self._create_followup_form(project.id, project.title, vote)
+
+        image_filename = "thanks_upvote.png"
+        if vote > 0:
+            textarea_precaption = "Je trouve le projet <strong>%s</strong> très bien car:" % project.title
+        else:
+            textarea_precaption = "Je n'aime pas le projet <strong>%s</strong> car:" % project.title
+            image_filename = "thanks_downvote.png"
+
+        popup_content = """<img src="static/mainApp/images/%s" alt="merci pour ton vote" class="popup_center_image" />
+           <form action="%s">
+            <div class="textarea_group">
+                <label>%s</label>
+                <textarea name="comment"></textarea>
+            </div>
+            <input type="hidden" name="project_id" value="%d" />
+            <input type="hidden" name="vote" value="%d" />
+            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), textarea_precaption, project_id, vote)
 
         return JsonResponse({
             "result": "OK",
             "new_vote": new_vote,
             "vote":vote_object.vote,
             "popup_title": "Merci pour votre vote",
-            "popup_content":
-                "<p>Si vous le Souhaitez, vous pouvez commenter votre vote ci-dessous. Sinon vous pouvez ignorer et voir les résultats.</p>"
-                + popup_content,
-            "popup_next_button_vals": ["Juste voir les résultats", "Commenter"],
+            "popup_content": popup_content,
+            "popup_next_button_vals": ["Voir les résultats", "Commenter et voir les résultats"],
         });
 
 
@@ -520,7 +528,7 @@ class SignPetition(generic.View):
                 'petition_id': petition.id
             })
 
-        return """<h4>Merci</h4>""" \
+        return """<h4 class=\"popup_title\">Merci</h4>""" \
             + """<p class="pb-5"> Merci pour votre signature</p>""" \
             + """<p>%s personne%s ont signé cette pétition</p>""" \
                 % (signature_count, "s" if signature_count>0 else "") \
