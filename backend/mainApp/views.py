@@ -351,7 +351,7 @@ class SearchView(generic.View):
             });
 
 
-def create_sharing_div(target_url, link_title):
+def create_sharing_div(target_url, link_title, share_title):
     link_title = urllib.parse.quote(link_title)
     sharePlatforms = {
         """<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
@@ -384,7 +384,7 @@ def create_sharing_div(target_url, link_title):
     for name, link in sharePlatforms.items():
         shareButtons += "<a href=\"%s\" target=\"_blank\">%s</a> " \
             % (link, name)
-    return "<div><h4 class=\"popup_title\">Partage ce projet</h4>" \
+    return "<div><h4 class=\"popup_title\">" + share_title +"</h4>" \
         + """<p class="syndication_p pb-5">""" + shareButtons + """</p></div>"""
 
 class AddVoteComment(generic.View):
@@ -429,7 +429,7 @@ class AddVoteComment(generic.View):
 
         additional_div = ""
         image_filename = "summary_upvote.png"
-        action_div = create_sharing_div(project_url, project.title)
+        action_div = create_sharing_div(project_url, project.title, "Partage ce projet")
 
         if vote.vote < 0:
             image_filename = "summary_downvote.png"
@@ -521,18 +521,16 @@ class SignPetition(generic.View):
             and registered_user.birth_year is not None
 
     def getSummaryViewContent(self, request, petition):
-        signature_count = petition.petitionsignature_set.all().count()
         petition_url = "%s://%s" \
             % (request.scheme, request.META["HTTP_HOST"]) \
             + reverse('mainApp:petitionDetail', kwargs={
                 'petition_id': petition.id
             })
 
-        return """<h4 class=\"popup_title\">Merci</h4>""" \
-            + """<p class="pb-5"> Merci pour votre signature</p>""" \
-            + """<p>%s personne%s ont signé cette pétition</p>""" \
-                % (signature_count, "s" if signature_count>0 else "") \
-            + create_sharing_div(petition_url, petition.title)
+        return """<img src="/static/mainApp/images/thanks_signature.png" alt="" class="signature_popup_image">""" \
+            + """<p class="pt-3">Merci <strong>%s %s</strong>,<br>grâce à toi les choses<br>bougent dans la commune!</p>""" \
+                % (request.user.first_name, request.user.last_name) \
+            + create_sharing_div(petition_url, petition.title, "Partage cette pétition")
 
 
     def post(self, request, *args, **kwargs):

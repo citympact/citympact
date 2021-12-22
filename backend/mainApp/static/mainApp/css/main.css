@@ -664,3 +664,7 @@ h1.homepage_title.petition_title {
     text-decoration: none;
     color: #FF3EC0;
 }
+
+.signature_popup_image {
+    width: 60%;
+}
