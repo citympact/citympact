@@ -620,4 +620,47 @@ h1.homepage_title.petition_title {
     font-weight: 600;
     font-size: 20px;
     margin-bottom: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+.sso_login_icon {
+    display: inline-block;
+    background: black;
+    color: white;
+    border: 1px solid white;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 3px 3px black;
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 2rem;
+    margin-right: 0.5rem;
+    text-decoration: none;
+}
+.sso_login_icon:hover {
+    text-decoration: none;
+    color: white;
+}
+
+
+
+.account_secondary_button {
+    display: inline-block;
+    background: #DCFF97;
+    color: #FF3EC0;
+    border: 1px solid black;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 3px 3px black;
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 2rem;
+    margin-right: 0.5rem;
+    text-decoration: none;
+}
+.account_secondary_button:hover {
+    text-decoration: none;
+    color: #FF3EC0;
 }
