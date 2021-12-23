@@ -116,7 +116,6 @@ class AccountsCreate(generic.View):
                 # If the token is valid, then the account is activated:
                 user.is_active = True
                 user.save()
-                print("user saved...")
                 messages.add_message(request, messages.INFO, "Compte validé! " \
                     + "Vous pouvez vous authentifier ci-dessous:")
             return HttpResponseRedirect(reverse('login', args=()))
@@ -184,6 +183,7 @@ class AccountsProfile(generic.View):
 
         if registered_user_form.is_valid():
             registered_user_form.save()
+            messages.add_message(request, messages.INFO, "Compte mis à jour! ")
 
         return HttpResponseRedirect(reverse('mainApp:accounts_profile', args=()))
 
@@ -286,11 +286,14 @@ class PetitionView(generic.View):
 
 class AddNewPetition(generic.View):
     def post(self, request, *args, **kwargs):
-        session = Session.objects.get(pk=request.session.session_key)
+        user = None
+        if request.user.is_authenticated:
+            user = User.objects.get(pk=int(request.user.id))
+
         if "title" in request.POST and \
             "description" in request.POST and \
             "image" in request.FILES and \
-            session is not None:
+            user is not None:
 
             # Computing the summary:
             parser = PlaintextParser.from_string(request.POST["description"],
@@ -304,14 +307,14 @@ class AddNewPetition(generic.View):
             petition = Petition(title=request.POST["title"],
                 description=request.POST["description"],
                 summary=summary,
-                session=session,
-                image=request.FILES["image"]
+                image=request.FILES["image"],
+                author=user,
             )
             petition.save()
             request.session["message"] = "Nouvelle pétition ajoutée."
+            messages.add_message(request, messages.INFO, "Nouvelle pétition ajoutée")
         else:
-            request.session["message"] = "Impossible d'enregistrer votre petition."
-            request.session["severity"] = "danger"
+            messages.add_message(request, messages.ERROR, "Impossible d'enregistrer votre petition")
 
         return HttpResponseRedirect(reverse('mainApp:index', args=()))
 
@@ -319,8 +322,14 @@ class AddNewPetition(generic.View):
         title = ""
         if "title" in request.GET:
             title = request.GET["title"]
+
+        user_full_name =  ""
+        if request.user.is_authenticated:
+            user = User.objects.get(pk=int(request.user.id))
+            user_full_name = "%s %s" % (user.first_name, user.last_name)
         return render(request, "mainApp/newPetition.html", {
-            "title": title
+            "title": title,
+            "user_full_name": user_full_name,
         })
 
 class SearchView(generic.View):
@@ -483,6 +492,15 @@ class VoteProject(generic.View):
             visitor=visitor
         )
         vote_object.vote = vote
+
+
+        anonymous_text = """<p class="mt-5 text-start">Vous n'êtes pas enregistrés, votre a été enregistré anonymement. En vous connectant, vous donnerez plus de poids à votre voix:</p><a href="%s" class="account_button mb-5">S'authentifier</a>""" % reverse('login', args=())
+
+        if request.user.is_authenticated:
+            user = User.objects.get(pk=int(request.user.id))
+            vote_object.user = user
+            anonymous_text = ""
+
         vote_object.save()
 
 
@@ -493,6 +511,7 @@ class VoteProject(generic.View):
             textarea_precaption = "Je n'aime pas le projet <strong>%s</strong> car:" % project.title
             image_filename = "thanks_downvote.png"
 
+
         popup_content = """<img src="static/mainApp/images/%s" alt="merci pour ton vote" class="popup_center_image" />
            <form action="%s">
             <div class="textarea_group">
@@ -501,7 +520,8 @@ class VoteProject(generic.View):
             </div>
             <input type="hidden" name="project_id" value="%d" />
             <input type="hidden" name="vote" value="%d" />
-            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), textarea_precaption, project_id, vote)
+            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), textarea_precaption, project_id, vote) \
+            + anonymous_text
 
         return JsonResponse({
             "result": "OK",

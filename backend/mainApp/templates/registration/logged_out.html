@@ -1,13 +1,13 @@
 {% extends "mainApp/base.html" %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h1>{{ title }}</h1>
-                <p>Vous avez correctement été déconnecté.<br>
-                Voulez-vous <a href="{% url 'mainApp:index' %}">retourner à la page d'accueil</a> ou vous <a href="{% url 'login' %}">re-authentifier</a>?</p>
-            </div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
+            <img src="/static/mainApp/images/logged_out.png" alt="" class="center_image"/>
+            <p>Vous avez correctement été déconnecté.</p>
+            <p><a href="{% url 'mainApp:index' %}" class="account_secondary_button">Page d'accueil</a> <a href="{% url 'login' %}" class="account_secondary_button">Se re-authentifier</a></p>
         </div>
     </div>
+</div>
 {% endblock %}

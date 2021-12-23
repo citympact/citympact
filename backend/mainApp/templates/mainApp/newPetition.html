@@ -2,17 +2,30 @@
 
 {% block content %}
 <div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            <h1>Propose ta pétition?</h1>
+    <div class="row justify-content-center">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
+            <img src="/static/mainApp/images/new_petition.png" alt="" class="center_image"/>
             <form action="{% url "mainApp:addNewPetition" %}" method="POST"
                 enctype="multipart/form-data">
 
                 {% csrf_token %}
-                title: <input type="text" name="title" value="{{ title }}" size="50" /><br>
-                img: <input type="file" name="image" /><br>
-                desc: <textarea name="description" rows="8" cols="80"></textarea><br>
-                <input type="submit" value="Save">
+                <div class="form_row">
+                    <label>Titre de la pétition:</label>
+                    <input type="text" name="title" value="{{ title }}" size="50" />
+                </div>
+                <div class="form_row">
+                    <label>Image de la pétition:</label>
+                    <input type="file" name="image" />
+                </div>
+                <div class="form_row">
+                    <label>Description de la pétition:</label>
+                    <textarea name="description" rows="8"></textarea>
+                </div>
+                <div class="form_row">
+                    <label>Auteur·trice de la pétition:</label>
+                    <input type="text" name="title" value="{{ user_full_name }}" disabled="disabled" />
+                </div>
+                <input type="submit" value="Save" class="account_button">
             </form>
         </div>
     </div>

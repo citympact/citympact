@@ -2,75 +2,76 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-                <h1>Résumé de compte</h1>
-
-                {% if messages %}
-                      {% for message in messages %}
-                      <div class="alert alert-{{ message.tags }} pb-0" role="alert">
-                          <p>{{ message }}</p>
-                      </div>
-                      {% endfor %}
-                  {% endif %}
-                <div class="form-content">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-row">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label class="small mb-1">Nom d'utilisateur:</label>
-                                        {{ user_form.username }}
-                                    <label class="small mb-1">Email:</label>
-                                        {{ user_form.email }}
-                                </div>
-                                <div class="form-group">
-                                    <label class="small mb-1">Prénom:</label>
-                                        {{ user_form.first_name }}
-                                    <label class="small mb-1">Nom de famille:</label>
-                                        {{ user_form.last_name }}
-                                </div>
-                                <div class="form-group">
-                                    <p class="small mt-3">
-                                        {% if password_reset %}
-                                            <a href="{% url 'password_change' %}">Changer le mot de passe</a>
-                                        {% endif %}
-                                        {% if registration_provider %}
-                                            Compte authentifié par {{ registration_provider }}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row pt-5">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label class="small mb-1">Zip code:</label>
-                                        {{ registered_user_form.zip_code }}
-                                </div>
-                                <div class="form-group">
-                                    <label class="small mb-1">city:</label>
-                                        {{ registered_user_form.city }}
-                                </div>
-                                <div class="form-group">
-                                    <label class="small mb-1">birth_year:</label>
-                                        {{ registered_user_form.birth_year }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <br><br>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                        <button type="reset" class="btn btn-secondary">Reset</button>
-                    </form>
-                    <div class="form-group">
-                        <a href="{% url 'logout' %}">Log out</a>
+    <div class="row justify-content-center">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
+            <img src="/static/mainApp/images/user_account.png" alt="" class="center_image"/>
+            {% if form.errors %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ form.non_field_errors }}</strong>
                     </div>
+                {% else %}
+                    {% for error in form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                   {% endfor %}
+                {% endif %}
+            {% endif %}
+            {% if messages %}
+                  {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} pb-0" role="alert">
+                      <p>{{ message }}</p>
+                  </div>
+                  {% endfor %}
+            {% endif %}
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form_row">
+                    <label>Nom d'utilisateur:</label>
+                        {{ user_form.username }}
+                    <label>Email:</label>
+                        {{ user_form.email }}
                 </div>
+                <div class="form_row">
+                    <label>Prénom:</label>
+                        {{ user_form.first_name }}
+                    <label>Nom de famille:</label>
+                        {{ user_form.last_name }}
+                </div>
+                <div class="form_row">
+                    <p class="small mt-3">
+                        {% if password_reset %}
+                            <a href="{% url 'password_change' %}">Changer le mot de passe</a>
+                        {% endif %}
+                        {% if registration_provider %}
+                            Compte authentifié par {{ registration_provider }}
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="form_row">
+                    <label>Code postal:</label>
+                        {{ registered_user_form.zip_code }}
+                </div>
+                <div class="form_row">
+                    <label>Ville:</label>
+                        {{ registered_user_form.city }}
+                </div>
+                <div class="form_row">
+                    <label>Année de naissance:</label>
+                        {{ registered_user_form.birth_year }}
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="account_button">Mettre à jour</button>
+                    <button type="reset" class="account_secondary_button">Effacer</button>
+                </div>
+            </form>
 
+            <div class="form_row">
+                <a href="{% url 'logout' %}" class="account_secondary_button">Se déconnecter</a>
+            </div>
         </div>
     </div>
 </div>
-
 
 {% endblock content %}

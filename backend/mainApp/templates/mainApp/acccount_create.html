@@ -2,53 +2,54 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-                <h1>Créer un compte</h1>
-                <div class="form-content">
-                    {% if new_user_form.errors %}
-                        {% for field in new_user_form %}
-                            {% for error in field.errors %}
-                                <div class="alert alert-danger">
-                                    <strong>{{ field.label|escape }}: </strong>{{ error|escape }}
-                                </div>
-                           {% endfor %}
-                        {% endfor %}
-                    {% endif %}
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-row">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label class="small mb-1">{{ new_user_form.username.label }}:</label>
-                                        {{ new_user_form.username }}
-                                    <label class="small mb-1">{{ new_user_form.email.label }}:</label>
-                                        {{ new_user_form.email }}
-                                </div>
-                                <div class="form-group">
-                                    <label class="small mb-1">{{ new_user_form.first_name.label }}:</label>
-                                        {{ new_user_form.first_name }}
-                                    <label class="small mb-1">{{ new_user_form.last_name.label }}:</label>
-                                        {{ new_user_form.last_name }}
-                                </div>
-                                <div class="form-group">
-                                    <label class="small mb-1">{{ new_user_form.password1.label }}:</label>
-                                        {{ new_user_form.password1 }}
-                                    <label class="small mb-1">{{ new_user_form.password2.label }}:</label>
-                                        {{ new_user_form.password2 }}
-                                </div>
-                            </div>
+    <div class="row justify-content-center">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
+            <img src="/static/mainApp/images/account_create.png" alt="" class="center_image"/>
+
+            {% if new_user_form.errors %}
+                {% for field in new_user_form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ field.label|escape }}: </strong>{{ error|escape }}
                         </div>
-
-                        <br><br>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                        <button type="reset" class="btn btn-secondary">Reset</button>
-                    </form>
-                </div>
-
-        </div>
+                   {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% if messages %}
+                  {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} pb-0" role="alert">
+                      <p>{{ message }}</p>
+                  </div>
+                  {% endfor %}
+              {% endif %}
+              <form method="post">
+                  {% csrf_token %}
+                  <div class="form_row">
+                          <div class="form_row">
+                              <label>{{ new_user_form.username.label }}:</label>
+                                  {{ new_user_form.username }}
+                              <label>{{ new_user_form.email.label }}:</label>
+                                  {{ new_user_form.email }}
+                          </div>
+                          <div class="form_row">
+                              <label>{{ new_user_form.first_name.label }}:</label>
+                                  {{ new_user_form.first_name }}
+                              <label>{{ new_user_form.last_name.label }}:</label>
+                                  {{ new_user_form.last_name }}
+                          </div>
+                          <div class="form_row">
+                              <label>{{ new_user_form.password1.label }}:</label>
+                                  {{ new_user_form.password1 }}
+                              <label>{{ new_user_form.password2.label }}:</label>
+                                  {{ new_user_form.password2 }}
+                          </div>
+                          <div class="form_row">
+                              <button type="submit" class="account_button">Créer le compte</button>
+                      </div>
+                  </div>
+              </form>
+          </div>
     </div>
 </div>
-
 
 {% endblock content %}

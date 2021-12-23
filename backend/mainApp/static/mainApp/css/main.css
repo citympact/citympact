@@ -608,6 +608,16 @@ h1.homepage_title.petition_title {
     margin-bottom: 1.5rem;
     width: 100%;
 }
+.form_row textarea {
+    background: #FFFFFF;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 3px 3px black;
+    padding: 0.5rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
 
 .account_button {
     background: #7D18D7;
@@ -621,6 +631,11 @@ h1.homepage_title.petition_title {
     font-size: 20px;
     margin-bottom: 1.5rem;
     margin-right: 0.5rem;
+    text-decoration: none;
+}
+a.account_button:hover {
+    text-decoration: none;
+    color: white;
 }
 
 .sso_login_icon {
