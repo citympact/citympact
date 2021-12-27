@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 body {
     font-family: Poppins;
 }
@@ -69,23 +69,58 @@ body {
     min-height: 150px;
 }
 
-.comment {
+#comments_div {
     position: relative;
-    border-top: 1px solid grey;
-    padding: 2em;
+    background: #FFF;
 }
 
-.comment>img {
+.comment {
+    border-bottom: 1px solid #051320;
+    padding-top: ;
+    padding: 25px 2em 2em 2em;
+}
+.comment>div>img {
     position: relative;
     float: left;
-    border-radius: 50%;
     margin-right: 2em;
     margin-bottom: 2em;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+    max-height: 100px;
+}
+.comment .author_name {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    font-size: 1.15rem;
+    line-height: 24px;
+    color: #051320;
+    margin-bottom: 0.25rem;
+}
+.comment_pill {
+    position: relative;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.8rem;
+    line-height: 15px;
+    border: 1px solid #7D18D7;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 3px 8px;
+    color: #FFFFFF;
 }
 .comment>.create_date {
+    margin-top: 0.5rem;
     margin-bottom: 1rem;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.8rem;
+    line-height: 15px;
 }
-.comment::after {
+.comment>div::after {
   content: "";
   clear: both;
   display: table;
@@ -598,7 +633,8 @@ h1.homepage_title.petition_title {
 
 
 
-.form_row input {
+.form_row input,
+#add_comment_textarea {
     background: #FFFFFF;
     border: 1px solid #051320;
     box-sizing: border-box;
@@ -682,4 +718,108 @@ a.account_button:hover {
 
 .signature_popup_image {
     width: 60%;
+}
+
+.detail_title {
+    display: inline-block;
+    font-family: VT323;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 40px;
+    line-height: 101%;
+    text-align: center;
+    text-transform: uppercase;
+    color: #F2522F;
+    padding: 15px 40px;
+    background: #FCF0B3;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin-bottom: 3rem;
+}
+
+.detail_subtitle {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+
+    color: #051320;
+    text-align: left;
+    margin-bottom: 1rem;
+}
+.detail_image {
+    border: 2px solid #051320;
+    box-sizing: border-box;
+    border-radius: 5px;
+    max-width: 100%;
+    margin-bottom: 2rem;
+}
+
+
+.detail_info_item {
+    margin-bottom: 1rem;
+}
+.detail_info_item img {
+    height: 50px;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 5px;
+    box-shadow: 3px 3px black;
+     display: table-cell; /* to have no space-like char caused spacing */
+}
+.detail_info_item span {
+    display:inline-block;
+    vertical-align: middle;
+    background-color: white;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 12.5px 5rem 5px 20px;
+    width: calc(100% - 55px);
+    height: 50px;
+    box-shadow: 3px 3px black;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.add_comment_button {
+    display: inline-block;
+    background: #FCF0B3;
+    color: #F2522F;
+    border: 1px solid black;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 3px 3px black;
+    padding: 0.5rem;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 2rem;
+    margin-right: 0.5rem;
+    text-decoration: none;
+}
+.add_comment_button:hover {
+    text-decoration: none;
+    color: #FF3EC0;
+}
+.add_comment_button>img {
+    max-height: 32px;
+}
+.bg_purple {
+    background-color: #7D18D7;
+}
+.bg_blue {
+    background-color: #2E39F6;
+}
+.bg_yellow {
+    background-color: #FED403;
+}
+.bg_red {
+    background-color: #F2522F;
+}
+.bg_green {
+    background-color: #BAEB0D;
 }

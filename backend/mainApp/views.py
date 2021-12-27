@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.views import generic
 from django.db.utils import IntegrityError
 from django.db.models import Q
+from django.db.models import Count
 from .models import *
 from .forms import *
 
@@ -73,7 +74,7 @@ class IndexView(generic.View):
                     for p in projects\
                 ] \
         ]
-        petitions = Petition.objects.all();
+        petitions = Petition.objects.filter(approved=True);
 
         # Retrieving the last message, if any, and resetting since it will be
         # displayed by the HTML template:
@@ -190,7 +191,26 @@ class AccountsProfile(generic.View):
 class ProjectView(generic.View):
     def get(self, request, *args, **kwargs):
         project = CityProject.objects.get(pk=kwargs["project_id"])
+
+        project.views += 1
+        project.save()
+
+        orderedProjects = CityProject.objects.order_by('-views')
+        rank = "?"
+        for i, p in enumerate(orderedProjects):
+            if p == project:
+                # zero-starting python index => into human one-starting index:
+                rank = i+1
+        ranking = "%d / %d" % (rank, len(orderedProjects))
+
+
         comments = CityProjectComment.objects.filter(project=project)
+
+        up_votes = len(
+            [v.vote for v in project.cityprojectvote_set.all().filter(vote=1)])
+        down_votes = len(
+            [v.vote for v in project.cityprojectvote_set.all().filter(vote=-1)])
+
         context = _contextifyDetail(project)
 
         rendered_comments = []
@@ -207,6 +227,12 @@ class ProjectView(generic.View):
         context["comment_user_name"] = None
         if request.user.is_authenticated:
             context["comment_user_name"] = "%s %s" % (request.user.first_name, request.user.last_name)
+        context["create_date"] = project.create_datetime
+        context["views_count"] = project.views
+        context["ranking"] = ranking
+        context["detail_type_text"] = "projet"
+        context["up_votes"] = up_votes
+        context["down_votes"] = down_votes
 
 
         return render(request, 'mainApp/detailView.html', context)
@@ -263,7 +289,22 @@ class PetitionView(generic.View):
 
     def get(self, request, *args, **kwargs):
         petition = Petition.objects.get(pk=kwargs["petition_id"])
+
+        petition.views += 1
+        petition.save()
+
+        orderedPetitions = Petition.objects.order_by('-views')
+        rank = "?"
+        for i, p in enumerate(orderedPetitions):
+            if p == petition:
+                # zero-starting python index => into human one-starting index:
+                rank = i+1
+        ranking = "%d / %d" % (rank, len(orderedPetitions))
+
         comments = PetitionComment.objects.filter(petition=petition)
+
+        signatures = len(petition.petitionsignature_set.all())
+
         context = \
             _contextifyDetail(petition)
 
@@ -276,11 +317,17 @@ class PetitionView(generic.View):
         context["model_name"] = "petition"
         context["id"] = petition.id
 
+
         context["login_next_url"] = reverse('mainApp:petitionDetail', args=(),
             kwargs={'petition_id': petition.id})
         context["comment_user_name"] = None
         if request.user.is_authenticated:
             context["comment_user_name"] = "%s %s" % (request.user.first_name, request.user.last_name)
+        context["create_date"] = petition.create_datetime
+        context["views_count"] = petition.views
+        context["ranking"] = ranking
+        context["detail_type_text"] = "projet"
+        context["signatures"] = signatures
 
         return render(request, 'mainApp/detailView.html', context)
 
@@ -310,11 +357,12 @@ class AddNewPetition(generic.View):
                 image=request.FILES["image"],
                 author=user,
             )
+            petition.approved = False
             petition.save()
             request.session["message"] = "Nouvelle pétition ajoutée."
             messages.add_message(request, messages.INFO, "Nouvelle pétition ajoutée")
         else:
-            messages.add_message(request, messages.ERROR, "Impossible d'enregistrer votre petition")
+            messages.add_message(request, messages.ERROR, "Impossible d'enregistrer votre petition. Merci de remplir tous les champs.")
 
         return HttpResponseRedirect(reverse('mainApp:index', args=()))
 

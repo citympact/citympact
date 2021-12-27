@@ -48,11 +48,6 @@
           </nav>
         </div>
       </div>
-    {% if message %}
-        <div class="alert alert-{{ message.severity }}" role="alert">
-        {{ message.content }}
-        </div>
-    {% endif %}
 
     {% block content %}{% endblock %}
 

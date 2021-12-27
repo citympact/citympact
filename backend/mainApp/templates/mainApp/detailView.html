@@ -5,12 +5,46 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-12">
-            <h1>{{ title }}</h1>
+        <div class="col-sm-12 text-center">
+            <h1 class="detail_title">{{ title }}</h1>
+
+            <h2 class="detail_subtitle">{{ title }}</h2>
             {% if image %}
-                <img src="{{ image.url|thumbnailize }}" alt="{{ title }}" alt="" class="sliderThumbnail"/>
+                <img src="{{ image.url|thumbnailize }}" alt="{{ title }}" alt="" class="detail_image"/>
             {% endif %}
             <p>{{ description }}</p>
+
+            <h2 class="detail_subtitle">Informations</h2>
+            <div class="detail_info_item">
+                <img class="bg_purple" src="/static/mainApp/images/calendar.png" alt="" />
+                <span>Créé le {{ create_date }}</span>
+            </div>
+            <div class="detail_info_item">
+                <img class="bg_blue" src="/static/mainApp/images/eye.png" alt="" />
+                <span>{{ views_count }} vues</span>
+            </div>
+            <div class="detail_info_item">
+                <img class="bg_yellow" src="/static/mainApp/images/circle_star.png" alt="" />
+                <span>{{ ranking }} {{ detail_type_text }} populaire</span>
+            </div>
+            {% if down_votes %}
+            <div class="detail_info_item">
+                <img class="bg_red" src="/static/mainApp/images/upvote.png" alt="" />
+                <span>{{ down_votes }} votes négatifs</span>
+            </div>
+            {% endif %}
+            {% if down_votes %}
+            <div class="detail_info_item">
+                <img class="bg_green" src="/static/mainApp/images/upvote.png" alt="" />
+                <span>{{ up_votes }} votes positifs</span>
+            </div>
+            {% endif %}
+            {% if signatures %}
+            <div class="detail_info_item">
+                <img class="bg_green" src="/static/mainApp/images/sign.png" alt="" />
+                <span>{{ signatures }} signatures</span>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -18,8 +52,9 @@
 <div class="container pb-5">
     <div class="row">
         <div class="col-sm-12">
+            <h2 class="detail_subtitle pt-5">Commentaires</h2>
+            <button class="add_comment_button" id="comment_toggle_button"><img src="/static/mainApp/images/sign.png" alt="" /> Ajouter un commentaire</button>
             <div id="message_div"></div>
-            <button class="btn btn-secondary mb-4" id="comment_toggle_button">Ajouter un commentaire</button>
             <form id="comment_add" style="display: none;"
                 action="{% url 'mainApp:addNewComment' %}"
                 method="POST"
@@ -27,7 +62,7 @@
                 {% csrf_token %}
                 <div class="row pb-4">
                     <div class="col-sm-12  mb-4">
-                        <textarea name="comment" rows="8" cols="80" class="form-control"></textarea>
+                        <textarea name="comment" rows="8" cols="80" class="form-control" id="add_comment_textarea"></textarea>
                         <div class="invalid-feedback">
                             Merci d'insérer un commentaire.
                         </div>
@@ -42,7 +77,7 @@
                     <input type="hidden" name="model_name" value="{{ model_name }}" />
                     <input type="hidden" name="id" value="{{ id }}" />
                     <div class="col-sm-12 mt-3 mb-3">
-                        <button type="submit" class="btn btn-primary">Poster un commentaire</button>
+                        <button type="submit" class="account_button">Poster un commentaire</button>
                     </div>
 
 
@@ -59,4 +94,5 @@
         </div>
     </div>
 </div>
+<div id="new_petition"><a href="{% url "mainApp:addNewPetition" %}">Lancer une pétition</a></div>
 {% endblock %}

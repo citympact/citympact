@@ -1,14 +1,13 @@
 <div class="comment">
-    <img src="{{ profile_picture }}" alt="profile" />
-    <div class="comment_author_div">
-        <span class="fs-3">{{ author_name }}</span>
+    <div>
+        <img src="{{ profile_picture }}" alt="profile" />
+        <span class="author_name">{{ author_name }}</span>
         {% if validated_details %}
-            <span class="badge rounded-pill bg-secondary">{{ validated_details }}</span>
+            <span class="comment_pill bg_blue">{{ validated_details }}</span>
         {% else %}
-            <span class="badge rounded-pill bg-primary">Utilisateur enregistré</span>
+            <span class="comment_pill bg_purple">Utilisateur enregistré</span>
         {% endif %}
+        <p class="create_date">{{ create_date }}</p>
     </div>
-    <p class="create_date">{{ create_date }}
-    </p>
     <p>{{ comment|linebreaksbr }}</p>
 </div>

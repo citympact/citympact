@@ -51,6 +51,8 @@ class CityProject(BaseModel):
     summary = models.TextField()
     description = models.TextField()
     image = models.ImageField()
+    views = models.IntegerField(default=0)
+
     def __str__(self):
         return self.title
 
@@ -94,6 +96,14 @@ class CityProjectComment(BaseModel):
     name_displayed = models.BooleanField()
     comment = models.TextField()
 
+    def __str__(self):
+        return "Commentaire de %s (%s/%s) - %s" % (
+            self.user,
+            "validé" if self.validated else "non validé",
+            "nom affiché" if self.name_displayed else "anonyme",
+            (self.comment[:25] + '...') if len(self.comment) > 25 else self.comment,
+        )
+
 
 class Petition(BaseModel):
     title = models.CharField(max_length=200)
@@ -101,9 +111,13 @@ class Petition(BaseModel):
     description = models.TextField()
     image = models.ImageField(blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    views = models.IntegerField(default=0)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.title
+        return "%s (%s)" % (self.title,
+            "Approuvée" if self.approved else "Non approuvée"
+        )
 
     def save(self, *args, **kwargs):
         """
@@ -132,3 +146,11 @@ class PetitionComment(BaseModel):
     validated = models.BooleanField()
     name_displayed = models.BooleanField()
     comment = models.TextField()
+
+    def __str__(self):
+        return "Commentaire de %s (%s/%s) - %s" % (
+            self.user,
+            "validé" if self.validated else "non validé",
+            "nom affiché" if self.name_displayed else "anonyme",
+            (self.comment[:25] + '...') if len(self.comment) > 25 else self.comment,
+        )
