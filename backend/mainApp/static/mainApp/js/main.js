@@ -132,11 +132,10 @@ $(document).ready(function() {
                     // Closing the suggestion div when the user has chosen an
                     // option (i.e. clicked on a proposal):
                     newLi.click(function(event) {
-                        console.log("click..")
                         if(suggestionsDiv !== undefined) {
                             suggestionsDiv.hide();
                         }
-                        window.location.href = newLi.find("a").attr("href");
+                        window.location.href = newLi.find("a").eq(selectedIndex).attr("href");
                         event.preventDefault();
                         return false;
                     });
@@ -272,7 +271,6 @@ $(document).ready(function() {
                 maxCellHeight = $(subElt).outerHeight(true);
             }
         });
-        console.log("initialLoading =", initialLoading)
         if(initialLoading) {
             if(rowHeight>maxCellHeight) {
                 $(elt).css("overflow", "hidden").height(maxCellHeight);

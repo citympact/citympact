@@ -32,7 +32,7 @@ IMG_THUMBNAIL_SIZE = (600, 400);
 SECRET_KEY = '<TODO CHANGE SECRET KEY>'
 
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "dev.citympact.ch"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "dev.citympact.ch", "dev2.citympact.ch", "www.citympact.ch", "citympact.ch"]
 
 
 # Application definition
@@ -242,4 +242,6 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.ERROR: 'danger',}
 
 
-print("DEBUG DEBUG DEBUG =", DEBUG)
+LOGIN_REDIRECT_URL = "/"
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = LOGIN_REDIRECT_URL
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = "/accounts/profile/"
