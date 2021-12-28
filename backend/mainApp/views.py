@@ -245,6 +245,7 @@ class AddNewCommentView(generic.View):
         :
             return HttpResponseRedirect(reverse('mainApp:index', args=()))
 
+        print("request.POST =", request.POST)
         response = {
             "result": "success",
         }
@@ -268,7 +269,7 @@ class AddNewCommentView(generic.View):
             comment.user = user
 
             if "publish_name" in request.POST \
-                and request.POST["publish_name"]=="on" \
+                and request.POST["publish_name"]=="true" \
             :
                 comment.name_displayed = True
                 comment.validated = True
