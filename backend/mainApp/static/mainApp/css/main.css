@@ -768,7 +768,7 @@ a.account_button:hover {
     border-radius: 4px;
     padding: 5px;
     box-shadow: 3px 3px black;
-     display: table-cell; /* to have no space-like char caused spacing */
+    dispay: inline-block;
 }
 .detail_info_item span {
     display:inline-block;
