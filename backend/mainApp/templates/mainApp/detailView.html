@@ -91,7 +91,10 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12" id="comments_div">
-            {% for comment in comments %}
+            {% for comment in authenticated_comments %}
+                {{ comment }}
+            {% endfor %}
+            {% for comment in anynymous_comments %}
                 {{ comment }}
             {% endfor %}
         </div>

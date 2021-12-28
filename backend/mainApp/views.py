@@ -204,7 +204,7 @@ class ProjectView(generic.View):
         ranking = "%d / %d" % (rank, len(orderedProjects))
 
 
-        comments = CityProjectComment.objects.filter(project=project)
+        validated_comments = CityProjectComment.objects.filter(project=project, validated=True).order_by("-create_datetime")
 
         up_votes = len(
             [v.vote for v in project.cityprojectvote_set.all().filter(vote=1)])
@@ -213,12 +213,17 @@ class ProjectView(generic.View):
 
         context = _contextifyDetail(project)
 
-        rendered_comments = []
-        for comment in comments:
-            if comment.validated:
-                rendered_comments.append(render_comment(comment))
+        rendered_authenticated_comments = []
+        rendered_anynymous_comments = []
+        for comment in validated_comments:
+            if comment.name_displayed:
+                rendered_authenticated_comments.append(render_comment(comment))
+            else:
+                rendered_anynymous_comments.append(render_comment(comment))
 
-        context["comments"] = rendered_comments
+        context["authenticated_comments"] = rendered_authenticated_comments
+        context["anynymous_comments"] = rendered_anynymous_comments
+
         context["model_name"] = "project"
         context["id"] = project.id
 
