@@ -28,8 +28,6 @@ IMG_THUMBNAIL_SIZE = (600, 400);
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '<TODO CHANGE SECRET KEY>'
 
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "dev.citympact.ch", "dev2.citympact.ch", "www.citympact.ch", "citympact.ch"]
@@ -190,6 +188,8 @@ try:
       'locale': 'fr_FR',
       'fields': 'id, name, email, age_range'
     }
+
+    SECRET_KEY = os.environ["SECRET_KEY"]
 
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")
