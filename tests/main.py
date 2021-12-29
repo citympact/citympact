@@ -48,10 +48,10 @@ class TestStringMethods(unittest.TestCase):
         try:
             return self.browser.find_element(
                 By.CLASS_NAME,
-                "project-div"
+                "detail_div"
             ).find_element(By.CLASS_NAME, vote_class)
         except:
-            self.fail("Unable to find the upvote element to click on.");
+            self.fail("Unable to find the upvote_button element to click on.");
 
     def scrollToElement(self, element):
         """ Helper function to scroll (and wait on) a given DOM element """
@@ -72,20 +72,20 @@ class TestStringMethods(unittest.TestCase):
 
     def test_project_votes(self):
         """ Testing the upvoting and the downvoting on a project. """
-        for vote_class in ["upvote", "downvote"]:
+        for vote_class in ["upvote_button", "downvote_button"]:
             self.browser.get(WEBAPP_URL)
             vote_elt = self.get_project_first_vote_elt(vote_class)
 
             # Making sure the newly vote is displayed as an active class on the
             # elt:
             try:
+                self.scrollToElement(vote_elt)
                 vote_elt.click()
                 WebDriverWait(self.browser, 2.5).until(lambda browser:
                     vote_elt.get_attribute("class") == vote_class+" active-vote"
                 )
             except TimeoutException as e:
                 self.fail("The voted button did not switch to active");
-
 
             # Refreshing the page (still with the same session) and making sure
             # that the registred vote is still displayed:
@@ -95,52 +95,53 @@ class TestStringMethods(unittest.TestCase):
                 vote_class+" active-vote")
 
 
-    def test_petition_five_star_vote(self):
-        """ Testing the 5-star voting on a petition """
+    def test_petition_sign(self):
+        """
+        Testing that signing a petition as anonymous user redirects to the
+        login page.
+        """
         self.browser.get(WEBAPP_URL)
 
 
-        first_project_stars = self.browser.find_elements(
-            By.CSS_SELECTOR, ".petition:first-child .rating-stars>.vote-star")
+        sign_petition_a = self.browser.find_element(
+            By.CSS_SELECTOR, ".detail_div:first-child .sign_petition_div a")
+        self.scrollToElement(sign_petition_a)
+        sign_petition_a.click()
 
-        for i, star in enumerate(first_project_stars):
-            self.scrollToElement(star)
-            star.click()
-            try:
-                WebDriverWait(self.browser, 2.5).until(lambda browser:
-                    "star-activated" in star.get_attribute("class")
-                )
-            except TimeoutException as e:
-                self.fail("The voted star did not switch to active");
-            # To do assert impact of the click on the frontend behaviour
+        try:
+            WebDriverWait(self.browser, 2.5).until(lambda browser:
+                "accounts/login" in browser.current_url
+            )
+        except TimeoutException as e:
+            self.fail("A click on the signature button should redirect to " \
+                + "the login page as this test did not authenticate " \
+                + "beforehand.");
 
-        # Finally storing the definitive vote and refreshing the page to assert
-        # that the vote is correctly displayed:
-        finalStarIndex = 4
-        star = first_project_stars[finalStarIndex]
-        star.click();
-        WebDriverWait(self.browser, 2.5).until(lambda browser:
-            "star-activated" in star.get_attribute("class")
-        )
-        self.browser.refresh();
 
-        first_project_stars = self.browser.find_elements(
-            By.CSS_SELECTOR, ".petition:first-child .rating-stars>.vote-star")
-        self.assertIn("star-activated", first_project_stars[finalStarIndex]\
-            .get_attribute("class"))
 
 
     def test_add_petition(self):
-        """ Testing the addition of a new petition """
+        """
+        Testing that clickon on add a petition as anonymous user redirects to
+        the login page.
+        """
         self.browser.get(WEBAPP_URL)
 
-        allAElements = self.browser.find_elements(
-            By.CSS_SELECTOR, "a")
-        a = list(filter(lambda x: x.text.startswith("Lance une pétition"),
-            allAElements))[0]
-
+        a = self.browser.find_element(By.CSS_SELECTOR, "#new_petition")
         self.scrollToElement(a)
         a.click();
+
+        try:
+            WebDriverWait(self.browser, 2.5).until(lambda browser:
+                "accounts/login" in browser.current_url
+            )
+        except TimeoutException as e:
+            self.fail("A click on the signature button should redirect to " \
+                + "the login page as this test did not authenticate " \
+                + "beforehand.");
+
+    def todo_test_logged_add_petition(self):
+        # FixMe: add a test that covers the login and the petition creation
         self.assertIn("petition/add", self.browser.current_url)
 
         self.addNewPetition(testPetition)
@@ -159,44 +160,77 @@ class TestStringMethods(unittest.TestCase):
 
     def test_search_bar(self):
         """ Testing the behaviour of the search bar """
+
+        def inputPrefixInSearchBar(text):
+            # First, resetting the search bar:
+            search_input.clear()
+            self.browser.find_element(
+                By.CSS_SELECTOR, "body").click()
+            try:
+                WebDriverWait(self.browser, 2.5).until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".suggestions-dropdown")))
+            except TimeoutException as e:
+                self.fail("The suggestions did not disappear.")
+
+            # Second, inputting the query (and waiting for the response)
+            for c in text[0:3]:
+                search_input.send_keys(c)
+                # Mimicking the user keyboard stroke latency - also giving us
+                # some time for ajax RTT:
+                time.sleep(0.150)
+            try:
+                WebDriverWait(self.browser, 2.5).until(lambda browser:
+                    len(_parent_element(search_input).find_element(
+                        By.CSS_SELECTOR,
+                        ".suggestions-dropdown"
+                    ).find_elements(By.CSS_SELECTOR, "ul>li>a"))>0
+                )
+            except TimeoutException as e:
+                self.fail("No suggestion displayed under the search bar.");
+
+
         self.browser.get(WEBAPP_URL)
-
-        # Making sure the petition was already saved, if not we quickly add it:
-        if self.findFirstPetitionH2ByText(testPetition["title"]) is None:
-            self.addNewPetition(testPetition)
-
         search_input = self.browser.find_element(
             By.CSS_SELECTOR, "#search-input")
-        search_input.send_keys(testPetition["title"][0:3])
+
+        petitionTitles = [h2.text for h2 in self.browser.find_elements(By.CSS_SELECTOR, ".detail_div .sign_petition_div+h2")]
+        self.assertGreater(len(petitionTitles), 0)
+
+        for  petitionTitle in petitionTitles:
+            inputPrefixInSearchBar(petitionTitle)
+            proposalsA = _parent_element(search_input).find_element(
+                By.CSS_SELECTOR,
+                ".suggestions-dropdown"
+            ).find_elements(By.CSS_SELECTOR, "ul>li>a")
+            proposalTitles = [a.text for a  in proposalsA]
+
+            # Converting the list of choices into a string for quick assertion:
+            self.assertIn(petitionTitle, str(proposalTitles))
+
+            # Making sure the last proposal is a link to add a new petition:
+            self.assertIn("Proposer une pétition", proposalsA[-1].text)
+            self.assertIn("petition/add", proposalsA[-1].get_attribute("href"))
 
 
-        proposalsA = _parent_element(search_input).find_element(
-            By.CSS_SELECTOR,
-            ".suggestions-dropdown"
-        ).find_elements(By.CSS_SELECTOR, "ul>li>a")
+            # Making sure the selection circles back correctly
+            for i in range(1 + len(proposalsA)):
+                search_input.send_keys(Keys.DOWN)
 
-        # Making sure the test petition is found in the list of proposals
-        found_petition_offset = -1
-        for i, proposalA in enumerate(proposalsA):
-            if testPetition["title"] in proposalA.text:
-                found_petition_offset = i
-                break
-        self.assertTrue(found_petition_offset>=0)
+            targetLi = _parent_element(proposalsA[0])
+            try:
+                WebDriverWait(self.browser, 2.5).until(lambda browser:
+                    _has_class(targetLi, "active-suggestion")
+                )
+            except TimeoutException as e:
+                self.fail("The keyboard DOWN-key selection did not work.");
 
-        # Making sure the last proposal is a link to add a new petition:
-        self.assertIn("Propser une pétition", proposalsA[-1].text)
-        self.assertIn("petition/add", proposalsA[-1].get_attribute("href"))
-
-        # Testing the keyboard arrow selection and click behaviour:
-
-        # Making sure the selection circles back correctly
-        for i in range(1 + found_petition_offset + len(proposalsA)):
-            search_input.send_keys(Keys.DOWN)
-
-        targetLi = _parent_element(proposalsA[found_petition_offset])
-        self.assertTrue(_has_class(targetLi, "active-suggestion"))
 
         # Making sure the click works and redirects to the correct page:
+        inputPrefixInSearchBar(petitionTitles[0])
+        search_input.send_keys(Keys.DOWN)
+        targetLi = _parent_element(_parent_element(search_input).find_element(
+            By.CSS_SELECTOR,
+            ".suggestions-dropdown"
+        ).find_elements(By.CSS_SELECTOR, "ul>li>a")[0])
         targetLi.click()
 
         self.assertIn("/petition/", self.browser.current_url)
@@ -223,6 +257,8 @@ class TestStringMethods(unittest.TestCase):
         addPetitionURLSuffix = "/petition/add"
         if not addPetitionURLSuffix in self.browser.current_url:
             self.browser.get(WEBAPP_URL+addPetitionURLSuffix)
+
+        import time; time.sleep(1)
 
         # Creating the image in the binary/ adjacent folder:
         img = Image.new('RGB', (600, 800), color = 'white')
