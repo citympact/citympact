@@ -232,12 +232,17 @@ class ProjectView(generic.View):
         context["comment_user_name"] = None
         if request.user.is_authenticated:
             context["comment_user_name"] = "%s %s" % (request.user.first_name, request.user.last_name)
-        context["create_date"] = project.create_datetime
+        context["create_date"] = project.create_datetime.date()
         context["views_count"] = project.views
         context["ranking"] = ranking
         context["detail_type_text"] = "projet"
         context["up_votes"] = up_votes
         context["down_votes"] = down_votes
+
+        context["title_css_class"] = "detail_project_title"
+        context["subtitle"] = "Projet"
+        context["body_class"] = "body_projet"
+
 
 
         return render(request, 'mainApp/detailView.html', context)
@@ -334,6 +339,10 @@ class PetitionView(generic.View):
         context["ranking"] = ranking
         context["detail_type_text"] = "projet"
         context["signatures"] = signatures
+
+        context["title_css_class"] = "detail_petition_title"
+        context["subtitle"] = "Pétition"
+        context["body_class"] = "body_petition"
 
         return render(request, 'mainApp/detailView.html', context)
 

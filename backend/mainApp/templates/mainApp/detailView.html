@@ -6,15 +6,27 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12 text-center">
-            <h1 class="detail_title">{{ title }}</h1>
+            <h1 class="{{ title_css_class }}">{{ title }}</h1>
 
-            <h2 class="detail_subtitle">{{ title }}</h2>
+            <h2 class="detail_subtitle">{{ subtitle }}</h2>
             {% if image %}
                 <img src="{{ image.url|thumbnailize }}" alt="{{ title }}" alt="" class="detail_image"/>
             {% endif %}
             <p>{{ description }}</p>
 
             <h2 class="detail_subtitle">Informations</h2>
+            {% if up_votes %}
+            <div class="detail_info_item">
+                <img class="bg_green" src="/static/mainApp/images/upvote.png" alt="" />
+                <span>{{ up_votes }} votes positifs</span>
+            </div>
+            {% endif %}
+            {% if down_votes %}
+            <div class="detail_info_item">
+                <img class="bg_red" src="/static/mainApp/images/downvote.png" alt="" />
+                <span>{{ down_votes }} votes négatifs</span>
+            </div>
+            {% endif %}
             <div class="detail_info_item">
                 <img class="bg_purple" src="/static/mainApp/images/calendar.png" alt="" />
                 <span>Créé le {{ create_date }}</span>
@@ -27,18 +39,6 @@
                 <img class="bg_yellow" src="/static/mainApp/images/circle_star.png" alt="" />
                 <span>{{ ranking }} {{ detail_type_text }} populaire</span>
             </div>
-            {% if down_votes %}
-            <div class="detail_info_item">
-                <img class="bg_red" src="/static/mainApp/images/upvote.png" alt="" />
-                <span>{{ down_votes }} votes négatifs</span>
-            </div>
-            {% endif %}
-            {% if down_votes %}
-            <div class="detail_info_item">
-                <img class="bg_green" src="/static/mainApp/images/upvote.png" alt="" />
-                <span>{{ up_votes }} votes positifs</span>
-            </div>
-            {% endif %}
             {% if signatures %}
             <div class="detail_info_item">
                 <img class="bg_green" src="/static/mainApp/images/sign.png" alt="" />

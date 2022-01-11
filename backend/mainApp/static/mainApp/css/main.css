@@ -257,7 +257,7 @@ body {
 h1.homepage_title {
     display: inline-block;
     background: #FCF0B3;
-    border: 1px solid #051320;
+    border: 2px solid #051320;
     box-sizing: border-box;
     border-radius: 7.5px;
     padding: 12px 25px;
@@ -720,7 +720,7 @@ a.account_button:hover {
     width: 60%;
 }
 
-.detail_title {
+.detail_project_title {
     display: inline-block;
     font-family: VT323;
     font-style: normal;
@@ -732,12 +732,36 @@ a.account_button:hover {
     color: #F2522F;
     padding: 15px 40px;
     background: #FCF0B3;
-    border: 1px solid #051320;
+    border: 2px solid #051320;
     box-sizing: border-box;
     border-radius: 5px;
     margin-bottom: 3rem;
 }
 
+.detail_petition_title {
+    display: inline-block;
+    font-family: Playfair Display;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 40px;
+    line-height: 101%;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FCF0B3;
+    padding: 5% 40px;
+    border-radius: 75%;
+    background: #2E39F6;
+    border: 2px solid #051320;
+    box-sizing: border-box;
+    box-shadow: 5px 5px black;
+}
+
+.body_petition {
+    background: #F4D7D7;
+}
+.body_projet {
+    background: #E0D4FC;
+}
 .detail_subtitle {
     font-family: Poppins;
     font-style: normal;
@@ -763,24 +787,22 @@ a.account_button:hover {
 }
 .detail_info_item img {
     height: 50px;
-    border: 1px solid #051320;
+    border: 2px solid #051320;
     box-sizing: border-box;
     border-radius: 4px;
     padding: 5px;
-    box-shadow: 3px 3px black;
     dispay: inline-block;
 }
 .detail_info_item span {
     display:inline-block;
     vertical-align: middle;
     background-color: white;
-    border: 1px solid #051320;
+    border: 2px solid #051320;
     box-sizing: border-box;
     border-radius: 4px;
     padding: 12.5px 5rem 5px 20px;
     width: calc(100% - 55px);
     height: 50px;
-    box-shadow: 3px 3px black;
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
