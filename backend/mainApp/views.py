@@ -312,19 +312,24 @@ class PetitionView(generic.View):
                 rank = i+1
         ranking = "%d / %d" % (rank, len(orderedPetitions))
 
-        comments = PetitionComment.objects.filter(petition=petition)
+        validated_comments = PetitionComment.objects.filter(petition=petition, validated=True).order_by("-create_datetime")
 
         signatures = len(petition.petitionsignature_set.all())
 
         context = \
             _contextifyDetail(petition)
 
-        rendered_comments = []
-        for comment in comments:
-            if comment.validated:
-                rendered_comments.append(render_comment(comment))
 
-        context["comments"] = rendered_comments
+        rendered_authenticated_comments = []
+        rendered_anynymous_comments = []
+        for comment in validated_comments:
+            if comment.name_displayed:
+                rendered_authenticated_comments.append(render_comment(comment))
+            else:
+                rendered_anynymous_comments.append(render_comment(comment))
+
+        context["authenticated_comments"] = rendered_authenticated_comments
+        context["anynymous_comments"] = rendered_anynymous_comments
         context["model_name"] = "petition"
         context["id"] = petition.id
 
@@ -375,7 +380,7 @@ class AddNewPetition(generic.View):
             petition.approved = False
             petition.save()
             request.session["message"] = "Nouvelle pétition ajoutée."
-            messages.add_message(request, messages.INFO, "Nouvelle pétition ajoutée")
+            messages.add_message(request, messages.INFO, "Nouvelle pétition ajoutée. Elle sera validée pusi publiée dès que possible.")
         else:
             messages.add_message(request, messages.ERROR, "Impossible d'enregistrer votre petition. Merci de remplir tous les champs.")
 
