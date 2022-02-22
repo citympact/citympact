@@ -380,7 +380,7 @@ class AddNewPetition(generic.View):
             petition.approved = False
             petition.save()
             request.session["message"] = "Nouvelle pétition ajoutée."
-            messages.add_message(request, messages.INFO, "Nouvelle pétition ajoutée. Elle sera validée pusi publiée dès que possible.")
+            messages.add_message(request, messages.INFO, "Nouvelle pétition ajoutée. Elle sera validée ausi publiée dès que possible.")
         else:
             messages.add_message(request, messages.ERROR, "Impossible d'enregistrer votre petition. Merci de remplir tous les champs.")
 

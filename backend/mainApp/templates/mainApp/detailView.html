@@ -12,7 +12,7 @@
             {% if image %}
                 <img src="{{ image.url|thumbnailize }}" alt="{{ title }}" alt="" class="detail_image"/>
             {% endif %}
-            <p>{{ description }}</p>
+            <p class="col-sm-12 text-start">{{ description|linebreaksbr }}</p>
 
             <h2 class="detail_subtitle">Informations</h2>
             {% if up_votes %}
