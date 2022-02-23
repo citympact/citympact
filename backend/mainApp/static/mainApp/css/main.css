@@ -819,6 +819,12 @@ a.account_button:hover {
     padding: 5px;
     dispay: inline-block;
 }
+.detail_info_item .bigger_img {
+    padding: 5px 0 0 0;
+    height: 50px;
+    width: 50px;
+}
+
 .detail_info_item span {
     display:inline-block;
     vertical-align: middle;

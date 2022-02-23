@@ -17,13 +17,13 @@
             <h2 class="detail_subtitle">Informations</h2>
             {% if up_votes %}
             <div class="detail_info_item">
-                <img class="bg_green" src="/static/mainApp/images/upvote.png" alt="" />
+                <img class="bg_green bigger_img" src="/static/mainApp/images/upvote.png" alt="" />
                 <span>{{ up_votes }} votes positifs</span>
             </div>
             {% endif %}
             {% if down_votes %}
             <div class="detail_info_item">
-                <img class="bg_red" src="/static/mainApp/images/downvote.png" alt="" />
+                <img class="bg_red bigger_img" src="/static/mainApp/images/downvote.png" alt="" />
                 <span>{{ down_votes }} votes négatifs</span>
             </div>
             {% endif %}
@@ -74,7 +74,7 @@
                         <input type="radio" name="publish_name" id="publish_name_false" value="false">  <label for="publish_name_false">Poster ce commentaire sans afficher votre nom?</label><br><small class="ps-3">Les commentaires anonymes sont soumis à une validation et ne sont affichés qu'après leur approbation.</small>
                         </div>
                     {% else %}
-                    <small>Votre commentaire sera publié anonymement mais sera soumis à approbation. Si vous ne voulez pas attendre cette validation, vous pouvez <a href="{% url 'login' %}?next={{ login_next_url }}">vous authentifier ici</a>.</small>
+                    <small>Ton commentaire sera publié anonymement mais sera soumis à approbation. Si tu ne veux pas attendre cette validation, tu peux <a href="{% url 'login' %}?next={{ login_next_url }}">t'authentifier ici</a>.</small>
                     </div>
                     {% endif %}
                     <input type="hidden" name="model_name" value="{{ model_name }}" />

@@ -305,4 +305,12 @@ $(document).ready(function() {
     $("#popup_close").off("click").click(function(event) {
         modal.hide();
     }).css("cursor", "pointer");
+
+
+
+    $('a[data-contact]').each(function () {
+        $(this).html($(this).attr('data-contact').replace('[at]', '@').replace(/\[dot]/g, '.'));
+        this.href = 'mailto:' + $(this).html();
+
+    });
 });

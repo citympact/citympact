@@ -57,7 +57,12 @@ def render_comment(comment):
     return render_to_string("mainApp/comment_detail.html",  context)
 
 
+class AboutView(generic.View):
+    def get(self, request, *args, **kwargs):
 
+        context = {
+        }
+        return render(request, 'mainApp/about.html', context)
 class IndexView(generic.View):
     def get(self, request, *args, **kwargs):
 
@@ -118,7 +123,7 @@ class AccountsCreate(generic.View):
                 user.is_active = True
                 user.save()
                 messages.add_message(request, messages.INFO, "Compte validé! " \
-                    + "Vous pouvez vous authentifier ci-dessous:")
+                    + "Tu peux t'authentifier ci-dessous:")
             return HttpResponseRedirect(reverse('login', args=()))
 
         new_user_form = NewUserForm()
@@ -562,7 +567,7 @@ class VoteProject(generic.View):
         vote_object.vote = vote
 
 
-        anonymous_text = """<p class="mt-5 text-start">Vous n'êtes pas enregistrés, votre a été enregistré anonymement. En vous connectant, vous donnerez plus de poids à votre voix:</p><a href="%s" class="account_button mb-5">S'authentifier</a>""" % reverse('login', args=())
+        anonymous_text = """<p class="mt-5 text-start">Tu n'es pas enregistrés, ton vote a été enregistré anonymement. En te connectant, tu donneras plus de poids à votre voix:</p><a href="%s" class="account_button mb-5">S'authentifier</a>""" % reverse('login', args=())
 
         if request.user.is_authenticated:
             user = User.objects.get(pk=int(request.user.id))
