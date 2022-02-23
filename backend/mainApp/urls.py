@@ -25,8 +25,8 @@ urlpatterns = [
         name='addVoteComment'),
 
 
-    path('about.html', views.AboutView.as_view(),
-        name='about'),
+    path('about.html', views.AboutView.as_view(), name='about'),
+    path('contact.html', views.ContactView.as_view(), name='contact'),
 
     path('accounts/create', views.AccountsCreate.as_view(),
         name='account_create'),

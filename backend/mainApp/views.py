@@ -63,6 +63,14 @@ class AboutView(generic.View):
         context = {
         }
         return render(request, 'mainApp/about.html', context)
+
+class ContactView(generic.View):
+    def get(self, request, *args, **kwargs):
+
+        context = {
+        }
+        return render(request, 'mainApp/contact.html', context)
+
 class IndexView(generic.View):
     def get(self, request, *args, **kwargs):
 
