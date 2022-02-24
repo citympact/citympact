@@ -8,6 +8,15 @@ The goal of this web app is to provide functionality for public administrations 
 
 
 ## Installing the project
+
+Start by creating a copy of the template settings configuration from `backend/settings.env.template` and adding at least a `SECRET_KEY` variable (the others can be left blank for now).
+
+This can be temporarily activated in your environment, if your copy is called for example `.env`, using the command:
+
+```
+source .env
+```
+
 ### Dependencies (and virtual environment)
 Optionally, you can create a virtual python environment (venv), before starting
 the server:
