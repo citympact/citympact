@@ -18,12 +18,13 @@ from .forms import *
 import urllib.parse
 import random
 
+"""
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
-
+"""
 
 LANGUAGE = "french"
 SUMMARY_SENTENCES_COUNT = 3
@@ -376,6 +377,7 @@ class AddNewPetition(generic.View):
             user is not None:
 
             # Computing the summary:
+            """
             parser = PlaintextParser.from_string(request.POST["description"],
                 Tokenizer(LANGUAGE))
             stemmer = Stemmer(LANGUAGE)
@@ -383,6 +385,8 @@ class AddNewPetition(generic.View):
             summarizer.stop_words = get_stop_words(LANGUAGE)
             summary = " ".join([str(x) for x in summarizer(parser.document,
                 SUMMARY_SENTENCES_COUNT)])
+            """
+            summary = request.POST["description"][0:50]
 
             petition = Petition(title=request.POST["title"],
                 description=request.POST["description"],
