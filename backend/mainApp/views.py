@@ -386,7 +386,7 @@ class AddNewPetition(generic.View):
             summary = " ".join([str(x) for x in summarizer(parser.document,
                 SUMMARY_SENTENCES_COUNT)])
             """
-            summary = request.POST["description"][0:50]
+            summary = request.POST["description"][0:250]
 
             petition = Petition(title=request.POST["title"],
                 description=request.POST["description"],
