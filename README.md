@@ -4,7 +4,7 @@ Citympact is an open-source platform for enabling citizens engagement.
 The goal of this web app is to provide functionality for public administrations (e.g. cities) to have their citizen
  - vote on public projects,
  - comment existing projects or
- - sign (and propose new) public petitions.
+ - sign (and propose new) public propositions.
 
 
 ## Installing the project

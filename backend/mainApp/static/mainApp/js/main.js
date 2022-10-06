@@ -121,7 +121,7 @@ $(document).ready(function() {
         function(response){
             if(response.result == "ok") {
                 lastItem = suggestionsUl.children().last();
-                // Saving the last link (i.e. the add a new petition link):
+                // Saving the last link (i.e. the add a new proposition link):
                 suggestionsUl.empty();
                 selectedIndex = -1;
                 $.each(response.suggestions, function(i, elt) {
@@ -203,12 +203,12 @@ $(document).ready(function() {
         }
     });
 
-    $(".sign_petition_div>a").click(function(event) {
+    $(".sign_proposition_div>a").click(function(event) {
         let clickedElement = $(this);
-        let petition_id = $(this).parents("div.detail_div").first().data("petition-id");
+        let proposition_id = $(this).parents("div.detail_div").first().data("proposition-id");
 
-        $.get("petition/sign",  {
-            petition_id: petition_id,
+        $.get("proposition/sign",  {
+            proposition_id: proposition_id,
             csrfmiddlewaretoken: $("#vote_csrf_token").val(),
         },
         function(response) {

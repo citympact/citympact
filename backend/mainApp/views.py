@@ -88,7 +88,7 @@ class IndexView(generic.View):
                     for p in projects\
                 ] \
         ]
-        petitions = Petition.objects.filter(approved=True);
+        propositions = Proposition.objects.filter(approved=True);
 
         # Retrieving the last message, if any, and resetting since it will be
         # displayed by the HTML template:
@@ -108,7 +108,7 @@ class IndexView(generic.View):
 
         context = {
             'projects_votes': list(zip(projects, votes)),
-            "petitions": petitions,
+            "propositions": propositions,
             "star_range": list(range(5)),
             "message" : message,
         }
@@ -274,9 +274,9 @@ class AddNewCommentView(generic.View):
             "result": "success",
         }
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
-        if request.POST["model_name"] == "petition":
-            petition = Petition.objects.get(pk=request.POST["id"])
-            comment = PetitionComment(petition=petition)
+        if request.POST["model_name"] == "proposition":
+            proposition = Proposition.objects.get(pk=request.POST["id"])
+            comment = PropositionComment(proposition=proposition)
         elif request.POST["model_name"] == "project":
             project = CityProject.objects.get(pk=request.POST["id"])
             comment = CityProjectComment(project=project)
@@ -310,28 +310,28 @@ class AddNewCommentView(generic.View):
             + validation_text
 
         return JsonResponse(response);
-class PetitionView(generic.View):
+class PropositionView(generic.View):
 
     def get(self, request, *args, **kwargs):
-        petition = Petition.objects.get(pk=kwargs["petition_id"])
+        proposition = Proposition.objects.get(pk=kwargs["proposition_id"])
 
-        petition.views += 1
-        petition.save()
+        proposition.views += 1
+        proposition.save()
 
-        orderedPetitions = Petition.objects.order_by('-views')
+        orderedPropositions = Proposition.objects.order_by('-views')
         rank = "?"
-        for i, p in enumerate(orderedPetitions):
-            if p == petition:
+        for i, p in enumerate(orderedPropositions):
+            if p == proposition:
                 # zero-starting python index => into human one-starting index:
                 rank = i+1
-        ranking = "%d / %d" % (rank, len(orderedPetitions))
+        ranking = "%d / %d" % (rank, len(orderedPropositions))
 
-        validated_comments = PetitionComment.objects.filter(petition=petition, validated=True).order_by("-create_datetime")
+        validated_comments = PropositionComment.objects.filter(proposition=proposition, validated=True).order_by("-create_datetime")
 
-        signatures = len(petition.petitionsignature_set.all())
+        signatures = len(proposition.propositionsignature_set.all())
 
         context = \
-            _contextifyDetail(petition)
+            _contextifyDetail(proposition)
 
 
         rendered_authenticated_comments = []
@@ -344,28 +344,28 @@ class PetitionView(generic.View):
 
         context["authenticated_comments"] = rendered_authenticated_comments
         context["anynymous_comments"] = rendered_anynymous_comments
-        context["model_name"] = "petition"
-        context["id"] = petition.id
+        context["model_name"] = "proposition"
+        context["id"] = proposition.id
 
 
-        context["login_next_url"] = reverse('mainApp:petitionDetail', args=(),
-            kwargs={'petition_id': petition.id})
+        context["login_next_url"] = reverse('mainApp:propositionDetail', args=(),
+            kwargs={'proposition_id': proposition.id})
         context["comment_user_name"] = None
         if request.user.is_authenticated:
             context["comment_user_name"] = "%s %s" % (request.user.first_name, request.user.last_name)
-        context["create_date"] = petition.create_datetime
-        context["views_count"] = petition.views
+        context["create_date"] = proposition.create_datetime
+        context["views_count"] = proposition.views
         context["ranking"] = ranking
         context["detail_type_text"] = "projet"
         context["signatures"] = signatures
 
-        context["title_css_class"] = "detail_petition_title"
+        context["title_css_class"] = "detail_proposition_title"
         context["subtitle"] = "Pétition"
-        context["body_class"] = "body_petition"
+        context["body_class"] = "body_proposition"
 
         return render(request, 'mainApp/detailView.html', context)
 
-class AddNewPetition(generic.View):
+class AddNewProposition(generic.View):
     def post(self, request, *args, **kwargs):
         user = None
         if request.user.is_authenticated:
@@ -388,18 +388,18 @@ class AddNewPetition(generic.View):
             """
             summary = request.POST["description"][0:250]
 
-            petition = Petition(title=request.POST["title"],
+            proposition = Proposition(title=request.POST["title"],
                 description=request.POST["description"],
                 summary=summary,
                 image=request.FILES["image"],
                 author=user,
             )
-            petition.approved = False
-            petition.save()
+            proposition.approved = False
+            proposition.save()
             request.session["message"] = "Nouvelle pétition ajoutée."
             messages.add_message(request, messages.INFO, "Nouvelle pétition ajoutée. Elle sera validée ausi publiée dès que possible.")
         else:
-            messages.add_message(request, messages.ERROR, "Impossible d'enregistrer votre petition. Merci de remplir tous les champs.")
+            messages.add_message(request, messages.ERROR, "Impossible d'enregistrer votre proposition. Merci de remplir tous les champs.")
 
         return HttpResponseRedirect(reverse('mainApp:index', args=()))
 
@@ -412,7 +412,7 @@ class AddNewPetition(generic.View):
         if request.user.is_authenticated:
             user = User.objects.get(pk=int(request.user.id))
             user_full_name = "%s %s" % (user.first_name, user.last_name)
-        return render(request, "mainApp/newPetition.html", {
+        return render(request, "mainApp/newProposition.html", {
             "title": title,
             "user_full_name": user_full_name,
         })
@@ -420,7 +420,7 @@ class AddNewPetition(generic.View):
 class SearchView(generic.View):
     def post(self, request, *args, **kwargs):
         """
-        This function searches the petitions and projects given a provided text
+        This function searches the propositions and projects given a provided text
         input from the search bar.
         """
 
@@ -429,8 +429,8 @@ class SearchView(generic.View):
 
         suggestions = []
 
-        petitions = Petition.objects.filter(Q(title__icontains=request.POST["content"]))
-        suggestions += [{"url": reverse('mainApp:petitionDetail', kwargs={'petition_id': p.id}), "title": """<span class="badge bg-success rounded-pill">Petition</span> """+p.title} for p in petitions]
+        propositions = Proposition.objects.filter(Q(title__icontains=request.POST["content"]))
+        suggestions += [{"url": reverse('mainApp:propositionDetail', kwargs={'proposition_id': p.id}), "title": """<span class="badge bg-success rounded-pill">Proposition</span> """+p.title} for p in propositions]
 
 
         cityProjects = CityProject.objects.filter(Q(title__icontains=request.POST["content"]))
@@ -528,12 +528,12 @@ class AddVoteComment(generic.View):
         if vote.vote < 0:
             image_filename = "summary_downvote.png"
             action_div = "<div class=\"changement\"><img src=\"static/mainApp/images/motivation.png\" alt=\"\" /> Crée le changement</div>"
-            petition_title = urllib.parse.quote(
+            proposition_title = urllib.parse.quote(
                 "Pétition contre le projet "+project.title)
-            additional_div = """<a href="%s?title=%s" class="create_petition_from_popup">Lancer une pétition ?</a></div>""" \
+            additional_div = """<a href="%s?title=%s" class="create_proposition_from_popup">Lancer une pétition ?</a></div>""" \
                 % (
-                    reverse('mainApp:addNewPetition', args=()),
-                    petition_title
+                    reverse('mainApp:addNewProposition', args=()),
+                    proposition_title
                 )
 
 
@@ -618,24 +618,24 @@ class VoteProject(generic.View):
         });
 
 
-class SignPetition(generic.View):
+class SignProposition(generic.View):
 
     def _is_account_complete(registered_user):
         return registered_user.zip_code is not None \
             and registered_user.city is not None \
             and registered_user.birth_year is not None
 
-    def getSummaryViewContent(self, request, petition):
-        petition_url = "%s://%s" \
+    def getSummaryViewContent(self, request, proposition):
+        proposition_url = "%s://%s" \
             % (request.scheme, request.META["HTTP_HOST"]) \
-            + reverse('mainApp:petitionDetail', kwargs={
-                'petition_id': petition.id
+            + reverse('mainApp:propositionDetail', kwargs={
+                'proposition_id': proposition.id
             })
 
         return """<img src="/static/mainApp/images/thanks_signature.png" alt="" class="signature_popup_image">""" \
             + """<p class="pt-3">Merci <strong>%s %s</strong>,<br>grâce à toi les choses<br>bougent dans la commune!</p>""" \
                 % (request.user.first_name, request.user.last_name) \
-            + create_sharing_div(petition_url, petition.title, "Partage cette pétition")
+            + create_sharing_div(proposition_url, proposition.title, "Partage cette pétition")
 
 
     def post(self, request, *args, **kwargs):
@@ -643,12 +643,12 @@ class SignPetition(generic.View):
         Post a new signature (from the confirmation popup).
         """
 
-        if not "petition_id" in request.POST or \
+        if not "proposition_id" in request.POST or \
             not request.user.is_authenticated \
         :
             return JsonResponse({"result": "refused", "reason": "1"});
 
-        if not SignPetition._is_account_complete(request.user.registereduser):
+        if not SignProposition._is_account_complete(request.user.registereduser):
             registered_user_form = \
                 RegisteredUserForm(
                     request.POST,
@@ -656,15 +656,15 @@ class SignPetition(generic.View):
                     instance=request.user.registereduser
                 )
             registered_user_form.save()
-        if not SignPetition._is_account_complete(request.user.registereduser):
+        if not SignProposition._is_account_complete(request.user.registereduser):
             return JsonResponse({"result": "refused", "reason": "2"});
 
 
-        petition_id = int(request.POST["petition_id"])
-        petition = Petition.objects.get(pk=petition_id)
+        proposition_id = int(request.POST["proposition_id"])
+        proposition = Proposition.objects.get(pk=proposition_id)
 
-        signature, is_new_signature = PetitionSignature.objects.get_or_create(
-            petition=petition,
+        signature, is_new_signature = PropositionSignature.objects.get_or_create(
+            proposition=proposition,
             user=request.user
         )
         signature.save()
@@ -672,7 +672,7 @@ class SignPetition(generic.View):
         return JsonResponse({
             "result": "OK",
             "popup_title": "Pétition signée",
-            "popup_content": self.getSummaryViewContent(request, petition),
+            "popup_content": self.getSummaryViewContent(request, proposition),
             "popup_next_button_vals": []
             });
 
@@ -687,37 +687,37 @@ class SignPetition(generic.View):
             });
 
 
-        if "petition_id" not in request.GET:
+        if "proposition_id" not in request.GET:
             return JsonResponse({"result": "refused"});
 
-        petition_id = int(request.GET["petition_id"])
-        petition = Petition.objects.get(pk=petition_id)
+        proposition_id = int(request.GET["proposition_id"])
+        proposition = Proposition.objects.get(pk=proposition_id)
 
         # If the signature already exists, then we display the summary view:
         try:
-            signature = PetitionSignature.objects.get(
-                petition=petition,
+            signature = PropositionSignature.objects.get(
+                proposition=proposition,
                 user=request.user
             )
             return JsonResponse({
                 "result": "OK",
                 "popup_title": "Pétition déjà signée",
-                "popup_content": self.getSummaryViewContent(request, petition)
+                "popup_content": self.getSummaryViewContent(request, proposition)
                 });
         except ObjectDoesNotExist as e:
             pass
 
         registered_user_form = None
-        if not SignPetition._is_account_complete(request.user.registereduser):
+        if not SignProposition._is_account_complete(request.user.registereduser):
             registered_user_form = \
                 RegisteredUserForm(instance=request.user.registereduser)
 
 
-        popup_content = render_to_string("mainApp/sign_petition.html", {
+        popup_content = render_to_string("mainApp/sign_proposition.html", {
                 "first_name": request.user.first_name,
                 "last_name": request.user.last_name,
-                "petition_title": petition.title,
-                "petition_id": petition_id,
+                "proposition_title": proposition.title,
+                "proposition_id": proposition_id,
                 'registered_user_form': registered_user_form,
             })
 

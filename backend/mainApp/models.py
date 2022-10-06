@@ -105,7 +105,7 @@ class CityProjectComment(BaseModel):
         )
 
 
-class Petition(BaseModel):
+class Proposition(BaseModel):
     title = models.CharField(max_length=200)
     summary = models.TextField()
     description = models.TextField()
@@ -131,15 +131,15 @@ class Petition(BaseModel):
 
 
 
-class PetitionSignature(BaseModel):
-    petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
+class PropositionSignature(BaseModel):
+    proposition = models.ForeignKey(Proposition, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s - %s " % (str(self.user), self.petition.title)
+        return "%s - %s " % (str(self.user), self.proposition.title)
 
-class PetitionComment(BaseModel):
-    petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
+class PropositionComment(BaseModel):
+    proposition = models.ForeignKey(Proposition, on_delete=models.CASCADE)
     visitor = models.ForeignKey(Visitor, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
         null=True)

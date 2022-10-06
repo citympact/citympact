@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from impact import settings
 
 
 class MainappConfig(AppConfig):
@@ -13,4 +14,5 @@ class MainappConfig(AppConfig):
 def constant_variables_processor(request):
     return {
         "APP_NAME": "Citympact platform",
+        "CITY_NAME": settings.CITY_NAME,
     }

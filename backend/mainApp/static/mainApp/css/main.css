@@ -73,7 +73,7 @@ body {
 
 }
 
-/* petitions tag: */
+/* propositions tag: */
 .suggestions-dropdown > ul .bg-success.rounded-pill {
     margin-right: 0.25rem;
     font-family: Poppins;
@@ -297,7 +297,7 @@ h1.homepage_title {
     letter-spacing: 0em;
 }
 
-h1.homepage_title.petition_title {
+h1.homepage_title.proposition_title {
     color: white;
     background-color: #2E39F6;
 }
@@ -418,11 +418,11 @@ h1.homepage_title.petition_title {
     text-decoration: none;
 }
 
-.sign_petition_div {
+.sign_proposition_div {
     position: relative;
 }
 
-.sign_petition_div a {
+.sign_proposition_div a {
     position: relative;
     top: -2rem;
     width: 100%;
@@ -438,11 +438,11 @@ h1.homepage_title.petition_title {
     text-align: center;
 }
 
-#new_petition {
+#new_proposition {
     text-align: center;
     margin: 5rem 0;
 }
-#new_petition a {
+#new_proposition a {
     display: inline-block;
     background: #F42C2C;
     border: 1px solid #051320;
@@ -546,7 +546,7 @@ h1.homepage_title.petition_title {
     color: #051320;
 }
 
-.create_petition_from_popup {
+.create_proposition_from_popup {
     display: inline-block;
     background: #F42C2C;
     border: 1px solid #051320;
@@ -567,7 +567,7 @@ h1.homepage_title.petition_title {
     margin-left: 12.5%;
     width: 75%;
 }
-.create_petition_from_popup:hover {
+.create_proposition_from_popup:hover {
     text-decoration: none;
     color: #FCF0B3;
 }
@@ -764,7 +764,7 @@ a.account_button:hover {
     margin-bottom: 3rem;
 }
 
-.detail_petition_title {
+.detail_proposition_title {
     display: inline-block;
     font-family: Playfair Display;
     font-style: italic;
@@ -782,7 +782,7 @@ a.account_button:hover {
     box-shadow: 5px 5px black;
 }
 
-.body_petition {
+.body_proposition {
     background: #F4D7D7;
 }
 .body_projet {

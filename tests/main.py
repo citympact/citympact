@@ -13,12 +13,12 @@ import unittest
 
 WEBAPP_URL = "http://127.0.0.1:8000"
 
-# New petition representation:
-testPetition = {
+# New proposition representation:
+testProposition = {
     "title": "New petiton from the test runner",
     "image": os.path.dirname(os.path.realpath(__file__)) \
         + "/binaries/testimage.jpg",
-    "description": "This petition was actually filled by a test run."
+    "description": "This proposition was actually filled by a test run."
 }
 
 
@@ -95,18 +95,18 @@ class TestStringMethods(unittest.TestCase):
                 vote_class+" active-vote")
 
 
-    def test_petition_sign(self):
+    def test_proposition_sign(self):
         """
-        Testing that signing a petition as anonymous user redirects to the
+        Testing that signing a proposition as anonymous user redirects to the
         login page.
         """
         self.browser.get(WEBAPP_URL)
 
 
-        sign_petition_a = self.browser.find_element(
-            By.CSS_SELECTOR, ".detail_div:first-child .sign_petition_div a")
-        self.scrollToElement(sign_petition_a)
-        sign_petition_a.click()
+        sign_proposition_a = self.browser.find_element(
+            By.CSS_SELECTOR, ".detail_div:first-child .sign_proposition_div a")
+        self.scrollToElement(sign_proposition_a)
+        sign_proposition_a.click()
 
         try:
             WebDriverWait(self.browser, 2.5).until(lambda browser:
@@ -120,14 +120,14 @@ class TestStringMethods(unittest.TestCase):
 
 
 
-    def test_add_petition(self):
+    def test_add_proposition(self):
         """
-        Testing that clickon on add a petition as anonymous user redirects to
+        Testing that clickon on add a proposition as anonymous user redirects to
         the login page.
         """
         self.browser.get(WEBAPP_URL)
 
-        a = self.browser.find_element(By.CSS_SELECTOR, "#new_petition")
+        a = self.browser.find_element(By.CSS_SELECTOR, "#new_proposition")
         self.scrollToElement(a)
         a.click();
 
@@ -140,18 +140,18 @@ class TestStringMethods(unittest.TestCase):
                 + "the login page as this test did not authenticate " \
                 + "beforehand.");
 
-    def todo_test_logged_add_petition(self):
-        # FixMe: add a test that covers the login and the petition creation
-        self.assertIn("petition/add", self.browser.current_url)
+    def todo_test_logged_add_proposition(self):
+        # FixMe: add a test that covers the login and the proposition creation
+        self.assertIn("proposition/add", self.browser.current_url)
 
-        self.addNewPetition(testPetition)
+        self.addNewProposition(testProposition)
         # We should have been redirected to the home page:
-        self.assertNotIn("petition/add", self.browser.current_url)
+        self.assertNotIn("proposition/add", self.browser.current_url)
 
         # Asserting that the project was correctly added by searching its title:
-        petitionH2 = self.findFirstPetitionH2ByText(testPetition["title"])
+        propositionH2 = self.findFirstPropositionH2ByText(testProposition["title"])
 
-        self.assertTrue(petitionH2 is not None)
+        self.assertTrue(propositionH2 is not None)
 
         # Making sur we have a valid confirmation message:
         alertDivs = self.browser.find_elements(
@@ -192,11 +192,11 @@ class TestStringMethods(unittest.TestCase):
         search_input = self.browser.find_element(
             By.CSS_SELECTOR, "#search-input")
 
-        petitionTitles = [h2.text for h2 in self.browser.find_elements(By.CSS_SELECTOR, ".detail_div .sign_petition_div+h2")]
-        self.assertGreater(len(petitionTitles), 0)
+        propositionTitles = [h2.text for h2 in self.browser.find_elements(By.CSS_SELECTOR, ".detail_div .sign_proposition_div+h2")]
+        self.assertGreater(len(propositionTitles), 0)
 
-        for  petitionTitle in petitionTitles:
-            inputPrefixInSearchBar(petitionTitle)
+        for  propositionTitle in propositionTitles:
+            inputPrefixInSearchBar(propositionTitle)
             proposalsA = _parent_element(search_input).find_element(
                 By.CSS_SELECTOR,
                 ".suggestions-dropdown"
@@ -204,11 +204,11 @@ class TestStringMethods(unittest.TestCase):
             proposalTitles = [a.text for a  in proposalsA]
 
             # Converting the list of choices into a string for quick assertion:
-            self.assertIn(petitionTitle, str(proposalTitles))
+            self.assertIn(propositionTitle, str(proposalTitles))
 
-            # Making sure the last proposal is a link to add a new petition:
+            # Making sure the last proposal is a link to add a new proposition:
             self.assertIn("Proposer une pétition", proposalsA[-1].text)
-            self.assertIn("petition/add", proposalsA[-1].get_attribute("href"))
+            self.assertIn("proposition/add", proposalsA[-1].get_attribute("href"))
 
 
             # Making sure the selection circles back correctly
@@ -225,7 +225,7 @@ class TestStringMethods(unittest.TestCase):
 
 
         # Making sure the click works and redirects to the correct page:
-        inputPrefixInSearchBar(petitionTitles[0])
+        inputPrefixInSearchBar(propositionTitles[0])
         search_input.send_keys(Keys.DOWN)
         targetLi = _parent_element(_parent_element(search_input).find_element(
             By.CSS_SELECTOR,
@@ -233,30 +233,30 @@ class TestStringMethods(unittest.TestCase):
         ).find_elements(By.CSS_SELECTOR, "ul>li>a")[0])
         targetLi.click()
 
-        self.assertIn("/petition/", self.browser.current_url)
+        self.assertIn("/proposition/", self.browser.current_url)
 
-        # Making sure there is an integer petition id part in the url:
-        petitionId = int(self.browser.current_url.split("/petition/")[-1])
-        self.assertTrue(petitionId>=0)
+        # Making sure there is an integer proposition id part in the url:
+        propositionId = int(self.browser.current_url.split("/proposition/")[-1])
+        self.assertTrue(propositionId>=0)
 
-    def findFirstPetitionH2ByText(self, petitionTitle):
+    def findFirstPropositionH2ByText(self, propositionTitle):
         """
-        Helper function to retrieve a petition title DOM element given content
+        Helper function to retrieve a proposition title DOM element given content
         """
-        allPetitionDiv = self.browser.find_elements(
-            By.CSS_SELECTOR, ".petition")
-        for petitionDiv in allPetitionDiv:
-            h2Element = petitionDiv.find_elements(
+        allPropositionDiv = self.browser.find_elements(
+            By.CSS_SELECTOR, ".proposition")
+        for propositionDiv in allPropositionDiv:
+            h2Element = propositionDiv.find_elements(
                 By.CSS_SELECTOR, "h2")[0]
-            if h2Element.text == petitionTitle:
+            if h2Element.text == propositionTitle:
                 return h2Element
         return None
 
-    def addNewPetition(self, petition):
-        """ Helper function to add a new petition """
-        addPetitionURLSuffix = "/petition/add"
-        if not addPetitionURLSuffix in self.browser.current_url:
-            self.browser.get(WEBAPP_URL+addPetitionURLSuffix)
+    def addNewProposition(self, proposition):
+        """ Helper function to add a new proposition """
+        addPropositionURLSuffix = "/proposition/add"
+        if not addPropositionURLSuffix in self.browser.current_url:
+            self.browser.get(WEBAPP_URL+addPropositionURLSuffix)
 
         import time; time.sleep(1)
 
@@ -264,9 +264,9 @@ class TestStringMethods(unittest.TestCase):
         img = Image.new('RGB', (600, 800), color = 'white')
         d = ImageDraw.Draw(img)
         d.text((100,200), "Test image", fill=(0,0,0))
-        img.save(petition["image"])
+        img.save(proposition["image"])
 
-        for k,v in petition.items():
+        for k,v in proposition.items():
             inputOrTextarea = self.browser.find_elements(By.CSS_SELECTOR,
                 "input[name=%s], textarea[name=%s]" % (k, k))[0]
             # FixMe: add robustness to the CSS selection (waiting for better FE)

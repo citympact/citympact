@@ -190,6 +190,7 @@ try:
     }
 
     SECRET_KEY = os.environ["SECRET_KEY"]
+    CITY_NAME = os.environ["CITY_NAME"]
 
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")
