@@ -10,19 +10,19 @@
 
                 {% csrf_token %}
                 <div class="form_row">
-                    <label>Titre de la pétition:</label>
+                    <label>Titre de la proposition:</label>
                     <input type="text" name="title" value="{{ title }}" size="50" />
                 </div>
                 <div class="form_row">
-                    <label>Image de la pétition:</label>
+                    <label>Image de la proposition:</label>
                     <input type="file" name="image" />
                 </div>
                 <div class="form_row">
-                    <label>Description de la pétition:</label>
+                    <label>Description de la proposition:</label>
                     <textarea name="description" rows="8"></textarea>
                 </div>
                 <div class="form_row">
-                    <label>Auteur·trice de la pétition:</label>
+                    <label>Auteur·trice de la proposition:</label>
                     <input type="text" name="title" value="{{ user_full_name }}" disabled="disabled" />
                 </div>
                 <input type="submit" value="Save" class="account_button">

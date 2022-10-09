@@ -19,7 +19,7 @@
                   <input type="text" class="form-control" placeholder="Que veux tu changer dans ta ville?" aria-label="Que veux tu changer dans ta ville?" aria-describedby="button-addon2" id="search-input" autocomplete="off">
                   <div class="suggestions-dropdown" style="display: none;">
                       <ul>
-                          <li><a href="{% url 'mainApp:addNewProposition' %}">>> Proposer une pétition</a></li>
+                          <li><a href="{% url 'mainApp:addNewProposition' %}">>> Proposer une proposition</a></li>
                       </ul>
                   </div>
                 </div>
@@ -58,7 +58,7 @@
 <div class="container pt-5">
     <div class="row">
         <div class="col-sm-12">
-            <h1 class="homepage_title proposition_title">Donne ton avis - pétitions en cours</h1>
+            <h1 class="homepage_title proposition_title">Donne ton avis - propositions en cours</h1>
             {% if propositions %}
                 <div class="row detail_row">
                     {% for proposition in propositions %}
@@ -66,7 +66,7 @@
                             {% if proposition.image %}
                                 <a href="{% url 'mainApp:propositionDetail' proposition.id %}"><img src="{{ proposition.image.url|thumbnailize }}" alt="{{ proposition.title }}" alt="" class="sliderThumbnail"/></a>
                             {% endif %}
-                            <div class="sign_proposition_div"><a href="#"><img src="static/mainApp/images/sign.png" alt="" height="25"> Signer la pétition</a></div>
+                            <div class="sign_proposition_div"><a href="#"><img src="static/mainApp/images/sign.png" alt="" height="25"> Signer la proposition</a></div>
                             <h2><a href="{% url 'mainApp:propositionDetail' proposition.id %}">{{ proposition.title }}</a>
                             </h2>
                             <p class="">{{ proposition.summary }}</p>
@@ -74,12 +74,12 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="show_more_div"><a href="#" data-toggle-text="Montrer moins d'éléments">Afficher plus de pétitions</a></div>
+                <div class="show_more_div"><a href="#" data-toggle-text="Montrer moins d'éléments">Afficher plus de propositions</a></div>
             {% else %}
-                <p>Il n'y a pas encore de pétitions.</p>
+                <p>Il n'y a pas encore de propositions.</p>
             {% endif %}
 
-            <div id="new_proposition"><a href="{% url "mainApp:addNewProposition" %}">Lancer une pétition</a></div>
+            <div id="new_proposition"><a href="{% url "mainApp:addNewProposition" %}">Lancer une proposition</a></div>
         </div>
     </div>
 </div>
