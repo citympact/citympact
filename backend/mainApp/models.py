@@ -104,6 +104,28 @@ class CityProjectComment(BaseModel):
             (self.comment[:25] + '...') if len(self.comment) > 25 else self.comment,
         )
 
+QUESTIONS_TYPES = (
+    ("YES_NO", "Oui/non"),
+    ("TEXTAREA", "Champ libre"),
+    ("RATING_STARS", "Évaluation - 5 étoiles"),
+    ("RATING_10_5_0", "Évaluation - 10/5/0"),
+)
+
+class CityProjectQuestion(BaseModel):
+    project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
+    question_statement = models.CharField(max_length=200)
+    type = models.CharField(max_length=50,
+                      choices=QUESTIONS_TYPES,
+                      default="TEXTAREA")
+
+    def __str__(self):
+        return "Question (%s) sur le projet %s: %s" % (
+            self.type,
+            self.project,
+            self.question_statement,
+        )
+
+
 
 class Proposition(BaseModel):
     title = models.CharField(max_length=200)

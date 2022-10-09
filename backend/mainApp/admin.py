@@ -13,6 +13,7 @@ class DescriptionModelAdmin(admin.ModelAdmin):
 admin.site.register(CityProject, DescriptionModelAdmin)
 admin.site.register(CityProjectVote)
 admin.site.register(CityProjectComment)
+admin.site.register(CityProjectQuestion)
 
 admin.site.register(Proposition)
 admin.site.register(PropositionSignature)
