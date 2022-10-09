@@ -207,7 +207,7 @@ class TestStringMethods(unittest.TestCase):
             self.assertIn(propositionTitle, str(proposalTitles))
 
             # Making sure the last proposal is a link to add a new proposition:
-            self.assertIn("Proposer un projet", proposalsA[-1].text)
+            self.assertIn("Proposer une pétition", proposalsA[-1].text)
             self.assertIn("proposition/add", proposalsA[-1].get_attribute("href"))
 
 

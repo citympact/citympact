@@ -360,7 +360,7 @@ class PropositionView(generic.View):
         context["signatures"] = signatures
 
         context["title_css_class"] = "detail_proposition_title"
-        context["subtitle"] = "Projet"
+        context["subtitle"] = "Pétition"
         context["body_class"] = "body_proposition"
 
         return render(request, 'mainApp/detailView.html', context)
@@ -396,8 +396,8 @@ class AddNewProposition(generic.View):
             )
             proposition.approved = False
             proposition.save()
-            request.session["message"] = "Nouveau projet ajoutée."
-            messages.add_message(request, messages.INFO, "Nouveau projet ajoutée. Elle sera validée ausi publiée dès que possible.")
+            request.session["message"] = "Nouvelle pétition ajoutée."
+            messages.add_message(request, messages.INFO, "Nouvelle pétition ajoutée. Elle sera validée ausi publiée dès que possible.")
         else:
             messages.add_message(request, messages.ERROR, "Impossible d'enregistrer votre proposition. Merci de remplir tous les champs.")
 
@@ -529,8 +529,8 @@ class AddVoteComment(generic.View):
             image_filename = "summary_downvote.png"
             action_div = "<div class=\"changement\"><img src=\"static/mainApp/images/motivation.png\" alt=\"\" /> Crée le changement</div>"
             proposition_title = urllib.parse.quote(
-                "Projet contre le projet "+project.title)
-            additional_div = """<a href="%s?title=%s" class="create_proposition_from_popup">Lancer un projet ?</a></div>""" \
+                "Pétition contre le projet "+project.title)
+            additional_div = """<a href="%s?title=%s" class="create_proposition_from_popup">Lancer une pétition ?</a></div>""" \
                 % (
                     reverse('mainApp:addNewProposition', args=()),
                     proposition_title
@@ -635,7 +635,7 @@ class SignProposition(generic.View):
         return """<img src="/static/mainApp/images/thanks_signature.png" alt="" class="signature_popup_image">""" \
             + """<p class="pt-3">Merci <strong>%s %s</strong>,<br>grâce à toi les choses<br>bougent dans la commune!</p>""" \
                 % (request.user.first_name, request.user.last_name) \
-            + create_sharing_div(proposition_url, proposition.title, "Partage ce projet")
+            + create_sharing_div(proposition_url, proposition.title, "Partage cette pétition")
 
 
     def post(self, request, *args, **kwargs):
@@ -671,7 +671,7 @@ class SignProposition(generic.View):
 
         return JsonResponse({
             "result": "OK",
-            "popup_title": "Projet signée",
+            "popup_title": "Pétition signée",
             "popup_content": self.getSummaryViewContent(request, proposition),
             "popup_next_button_vals": []
             });
@@ -701,7 +701,7 @@ class SignProposition(generic.View):
             )
             return JsonResponse({
                 "result": "OK",
-                "popup_title": "Projet déjà signée",
+                "popup_title": "Pétition déjà signée",
                 "popup_content": self.getSummaryViewContent(request, proposition)
                 });
         except ObjectDoesNotExist as e:
@@ -725,5 +725,5 @@ class SignProposition(generic.View):
             "result": "OK",
             "popup_title": "Confirmation de signature",
             "popup_content": popup_content,
-            "popup_next_button_vals": ["Signer le projet"]*2
+            "popup_next_button_vals": ["Signer la pétition"]*2
             });
