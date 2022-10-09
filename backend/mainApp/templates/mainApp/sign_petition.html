@@ -1,5 +1,5 @@
-<h4 class="popup_title">Signer la pétition</h4>
-<p>Es-tu sûr de signer la pétition intitulée :<br>
+<h4 class="popup_title">Signer le projet</h4>
+<p>Es-tu sûr de signer le projet intitulée :<br>
 <em>{{ proposition_title }}</em>?
 </p>
 
@@ -8,7 +8,7 @@
         <div class="col-xs-10">
             <form action="{% url "mainApp:signProposition" %}" method="POST">
             {% if registered_user_form %}
-                <p>Pour signer la pétition, nous avons besoin des informations suivantes: </p>
+                <p>Pour signer le projet, nous avons besoin des informations suivantes: </p>
                 <div class="form_row">
                     <label class="text-start">Code postal:</label>
                         {{ registered_user_form.zip_code }}
@@ -23,7 +23,7 @@
                 </div>
             {% endif %}
 
-            <p><input type="checkbox" name="signature_checkbox" class="required-form-input" id="signature_checkbox"> <label for="signature_checkbox">Je, soussigné <strong>{{ first_name }} {{ last_name }}</strong>, signe la pétition.</label></p>
+            <p><input type="checkbox" name="signature_checkbox" class="required-form-input" id="signature_checkbox"> <label for="signature_checkbox">Je, soussigné <strong>{{ first_name }} {{ last_name }}</strong>, signe le projet.</label></p>
             <input type="hidden" name="proposition_id" value="{{ proposition_id}}" />
             </form>
         </div>
