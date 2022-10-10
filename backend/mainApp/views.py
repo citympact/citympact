@@ -596,6 +596,14 @@ class VoteProject(generic.View):
             textarea_precaption = "Je n'aime pas le projet <strong>%s</strong> car:" % project.title
             image_filename = "thanks_downvote.png"
 
+        questionsHTML = ""
+        questions = CityProjectQuestion.objects.filter(project=int(project_id))
+        for question in questions:
+            questionsHTML += """<div class="textarea_group mt-2">
+                <p>%s</p>
+                <input type="radio" value="oui"> oui
+                <input type="radio" value="non"> non
+            </div>""" % (question.question_statement)
 
         popup_content = """<img src="static/mainApp/images/%s" alt="merci pour ton vote" class="popup_center_image" />
            <form action="%s">
@@ -603,9 +611,10 @@ class VoteProject(generic.View):
                 <label>%s</label>
                 <textarea name="comment"></textarea>
             </div>
+            %s
             <input type="hidden" name="project_id" value="%d" />
             <input type="hidden" name="vote" value="%d" />
-            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), textarea_precaption, project_id, vote) \
+            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), textarea_precaption, questionsHTML, project_id, vote) \
             + anonymous_text
 
         return JsonResponse({
