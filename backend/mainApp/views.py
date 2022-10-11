@@ -510,6 +510,22 @@ class AddVoteComment(generic.View):
         vote.save()
 
         project = CityProject.objects.get(pk=request.POST["project_id"])
+
+        # Saving the poll answers:
+        questions = CityProjectQuestion.objects.filter(project=project)
+        for question in questions:
+            if "answer_%d" % question.id in request.POST \
+                and len(request.POST["answer_%d" % question.id]) > 0:
+                # save answer...
+                answer, created = CityProjectAnswer.objects.get_or_create(
+                    question=question,
+                    visitor=visitor)
+                if question.type == "TEXTAREA":
+                    answer.text_answer = request.POST["answer_%d" % question.id]
+                else:
+                    answer.numeric_answer = request.POST["answer_%d" % question.id]
+                answer.save()
+
         up_votes = len(
             [v.vote for v in project.cityprojectvote_set.all().filter(vote=1)])
         down_votes = len(
@@ -596,14 +612,33 @@ class VoteProject(generic.View):
             textarea_precaption = "Je n'aime pas le projet <strong>%s</strong> car:" % project.title
             image_filename = "thanks_downvote.png"
 
-        questionsHTML = ""
+        questions_html = ""
         questions = CityProjectQuestion.objects.filter(project=int(project_id))
         for question in questions:
-            questionsHTML += """<div class="textarea_group mt-2">
+            form_fields = ""
+            field_name = "answer_%d" % question.id
+            if question.type == "YES_NO" or question.type == "RATING_10_5_0":
+                if question.type == "YES_NO":
+                    texts = CityProjectQuestion.yes_no
+                elif question.type == "RATING_10_5_0":
+                    texts = CityProjectQuestion.ratings_10_5_0_values
+                for i,t in enumerate(texts):
+                    css_id = "%s_%d" % (field_name, i)
+                    form_fields += """<input type="radio" name="%s" value="%d" id="%s"> <label for="%s">%s</label> """ % (field_name, i, css_id, css_id, t)
+            elif question.type == "TEXTAREA":
+                form_fields = """<textarea name="%s"></textarea>""" % field_name
+            elif question.type == "RATING_STARS":
+                form_fields = """<div class="rate">"""
+                for i in range(5, 0, -1):
+                    form_fields += """<input type="radio" id="%s_%d" name="%s" value="%d" />
+                    <label for="%s_%d" title="text">%d stars</label>
+                    """ % (field_name, i, field_name, i, field_name, i, i)
+                form_fields += """</div>"""
+
+            questions_html += """<div class="textarea_group mt-2">
                 <p>%s</p>
-                <input type="radio" value="oui"> oui
-                <input type="radio" value="non"> non
-            </div>""" % (question.question_statement)
+                %s
+            </div>""" % (question.question_statement, form_fields)
 
         popup_content = """<img src="static/mainApp/images/%s" alt="merci pour ton vote" class="popup_center_image" />
            <form action="%s">
@@ -614,7 +649,7 @@ class VoteProject(generic.View):
             %s
             <input type="hidden" name="project_id" value="%d" />
             <input type="hidden" name="vote" value="%d" />
-            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), textarea_precaption, questionsHTML, project_id, vote) \
+            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), textarea_precaption, questions_html, project_id, vote) \
             + anonymous_text
 
         return JsonResponse({
