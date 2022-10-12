@@ -17,6 +17,7 @@ from .forms import *
 
 import urllib.parse
 import random
+import statistics
 
 """
 from sumy.parsers.plaintext import PlaintextParser
@@ -489,10 +490,46 @@ class AddVoteComment(generic.View):
         down_votes = len(
             [v.vote for v in project.cityprojectvote_set.all().filter(vote=-1)])
 
+        # Saving the poll answers:
+        questions = CityProjectQuestion.objects.filter(project=project)
+        question_answers_html = "<h4 class=\"popup_title pt-5\">Questions complémentaires</h4>"
+        for question in questions:
+            res = "Pas encore assez de réponse..."
+            if question.type != "TEXTAREA":
+                if question.type == "YES_NO":
+                    try:
+                        res = statistics.mean([x.numeric_answer for x in question.cityprojectanswer_set.all()])
+                        res = "{:.0f}".format(res*100) + "% de oui"
+                    except:
+                        pass
+                elif question.type == "RATING_STARS":
+                    try:
+                        res = statistics.mean([x.numeric_answer for x in question.cityprojectanswer_set.all()])
+                        res = str(res) +"/5 étoile(s)"
+                    except:
+                        pass
+                elif question.type == "RATING_10_5_0":
+                    try:
+                        res = ""
+                        total = len(question.cityprojectanswer_set.all())
+                        for i, desc in enumerate(CityProjectQuestion.ratings_10_5_0_values):
+                            qty = len(question.cityprojectanswer_set.all().filter(
+                                numeric_answer=i)
+                            )
+                            res += "{:.2f}".format(qty/total*100) + "% " + desc + "<br>"
+                    except:
+                        pass
+
+                question_answers_html += """<div class="textarea_group mt-2">
+                    <p>%s</p>
+                    <p>%s</p>
+                </div>""" % (question.question_statement, res)
+
         return "<h4 class=\"popup_title\">Résultats actuel du vote</h4>" \
             + """<div class="pb-5"><div class="result_div_positive"><img src="static/mainApp/images/upvote.png" alt="" /><span>%d vote%s positif%s</span></div>""" % (up_votes, "s" if up_votes>1 else "", "s" if up_votes>1 else "") \
             + """<div class="result_div_negative"><img src="static/mainApp/images/downvote.png" alt="" /><span>%d vote%s négatif%s</span></div>""" % (down_votes, "s" if down_votes>1 else "", "s" if down_votes>1 else "")  \
-            +"</div>"
+            + question_answers_html \
+            + "</div>"
 
     def post(self, request, *args, **kwargs):
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
@@ -615,6 +652,13 @@ class VoteProject(generic.View):
         questions_html = ""
         questions = CityProjectQuestion.objects.filter(project=int(project_id))
         for question in questions:
+            existing_answer_numeric = None
+            # Trying to get the existing answer:
+            try:
+                existing_user_answers = question.cityprojectanswer_set \
+                    .get(visitor=visitor).numeric_answer
+            except:
+                pass
             form_fields = ""
             field_name = "answer_%d" % question.id
             if question.type == "YES_NO" or question.type == "RATING_10_5_0":
@@ -624,15 +668,21 @@ class VoteProject(generic.View):
                     texts = CityProjectQuestion.ratings_10_5_0_values
                 for i,t in enumerate(texts):
                     css_id = "%s_%d" % (field_name, i)
-                    form_fields += """<input type="radio" name="%s" value="%d" id="%s"> <label for="%s">%s</label> """ % (field_name, i, css_id, css_id, t)
+                    checked = ""
+                    if i == existing_answer_numeric:
+                        checked = " checked=\"checked\""
+                    form_fields += """<input type="radio" name="%s" value="%d" id="%s"%s> <label for="%s">%s</label> """ % (field_name, i, css_id, checked, css_id, t)
             elif question.type == "TEXTAREA":
                 form_fields = """<textarea name="%s"></textarea>""" % field_name
             elif question.type == "RATING_STARS":
                 form_fields = """<div class="rate">"""
                 for i in range(5, 0, -1):
-                    form_fields += """<input type="radio" id="%s_%d" name="%s" value="%d" />
+                    checked = ""
+                    if i == existing_answer_numeric:
+                        checked = " checked=\"checked\""
+                    form_fields += """<input type="radio" id="%s_%d"%s name="%s" value="%d" />
                     <label for="%s_%d" title="text">%d stars</label>
-                    """ % (field_name, i, field_name, i, field_name, i, i)
+                    """ % (field_name, i, checked, field_name, i, field_name, i, i)
                 form_fields += """</div>"""
 
             questions_html += """<div class="textarea_group mt-2">
