@@ -41,6 +41,11 @@ python3 manage.py loaddata demoData.json
 Then you should see the first entries. Note that the images are on purpose not
 version controlled. Please use the admin-site to upload some dummy images.
 
+To dump the existing data:
+```
+python manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e auth.Permission --indent 2 > demoData.json
+```
+
 ### Accessing the admin-site
 
 Django provides an admin site to manage your database. You need to create a

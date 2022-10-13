@@ -268,9 +268,13 @@ $(document).ready(function() {
         let button = showMoreDiv.find("a");
         $(elt).find(".detail_div").each(function(subIndex, subElt) {
             if($(subElt).outerHeight(true)) {
-                maxCellHeight = $(subElt).outerHeight(true);
+                if($(subElt).outerHeight(true) > maxCellHeight) {
+                    maxCellHeight = $(subElt).outerHeight(true);
+                    console.log("maxCellHeight =", maxCellHeight)
+                }
             }
         });
+        console.log("final maxCellHeight =", maxCellHeight)
         if(initialLoading) {
             if(rowHeight>maxCellHeight) {
                 $(elt).css("overflow", "hidden").height(maxCellHeight);
