@@ -492,14 +492,14 @@ class AddVoteComment(generic.View):
 
         # Saving the poll answers:
         questions = CityProjectQuestion.objects.filter(project=project)
-        question_answers_html = "<h4 class=\"popup_title pt-5\">Questions complémentaires</h4>"
+        question_answers_html = "<h4 class=\"popup_title pt-5\">Réponses complémentaires</h4>"
         for question in questions:
             res = "Pas encore assez de réponse..."
             if question.type != "TEXTAREA":
                 if question.type == "YES_NO":
                     try:
                         res = statistics.mean([x.numeric_answer for x in question.cityprojectanswer_set.all()])
-                        res = "{:.0f}".format(res*100) + "% de oui"
+                        res = "{:.0f}".format((1-res)*100) + "% de oui"
                     except:
                         pass
                 elif question.type == "RATING_STARS":
@@ -522,7 +522,7 @@ class AddVoteComment(generic.View):
 
                 question_answers_html += """<div class="textarea_group mt-2">
                     <p>%s</p>
-                    <p>%s</p>
+                    <p><strong>%s</strong></p>
                 </div>""" % (question.question_statement, res)
 
         return "<h4 class=\"popup_title\">Résultats actuel du vote</h4>" \
