@@ -263,7 +263,7 @@ class ProjectView(generic.View):
 
         similar_projects = CityProject.objects.filter(~Q(id=kwargs["project_id"]))[:4]
         # This handy syntax translates to a LIMIT 4 query!
-        
+
         # Fetching the vote (integers) of the user for each project:
         votes = [ \
             ["", ""] if (v is None or v.vote==0) \
@@ -274,7 +274,8 @@ class ProjectView(generic.View):
                     for p in similar_projects\
                 ] \
         ]
-        context["similar_projects_and_votes"] = list(zip(similar_projects, votes))
+        context["proposed_projects_and_votes"] = list(zip(similar_projects, votes))
+        context["proposed_projects_title"] = "Projets similaires"
 
         return render(request, 'mainApp/detailView.html', context)
 
@@ -379,6 +380,24 @@ class PropositionView(generic.View):
         context["title_css_class"] = "detail_proposition_title"
         context["subtitle"] = "Proposition"
         context["body_class"] = "body_proposition"
+
+        visitor = Visitor.objects.get(pk=request.session["visitor_id"])
+        proposed_projects = CityProject.objects.all()[:4]
+        # This handy syntax translates to a LIMIT 4 query!
+
+        # Fetching the vote (integers) of the user for each project:
+        votes = [ \
+            ["", ""] if (v is None or v.vote==0) \
+            else \
+                ["active-vote", ""] if v.vote>0 else ["", "active-vote"] \
+            for v in
+                [p.cityprojectvote_set.all().filter(visitor=visitor).first() \
+                    for p in proposed_projects\
+                ] \
+        ]
+        context["proposed_projects_and_votes"] = list(zip(proposed_projects, votes))
+        context["proposed_projects_title"] = "Autres projets"
+
 
         return render(request, 'mainApp/detailView.html', context)
 
