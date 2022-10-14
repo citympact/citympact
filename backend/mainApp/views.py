@@ -259,6 +259,22 @@ class ProjectView(generic.View):
         context["body_class"] = "body_projet"
 
 
+        visitor = Visitor.objects.get(pk=request.session["visitor_id"])
+
+        similar_projects = CityProject.objects.filter(~Q(id=kwargs["project_id"]))[:4]
+        # This handy syntax translates to a LIMIT 4 query!
+        
+        # Fetching the vote (integers) of the user for each project:
+        votes = [ \
+            ["", ""] if (v is None or v.vote==0) \
+            else \
+                ["active-vote", ""] if v.vote>0 else ["", "active-vote"] \
+            for v in
+                [p.cityprojectvote_set.all().filter(visitor=visitor).first() \
+                    for p in similar_projects\
+                ] \
+        ]
+        context["similar_projects_and_votes"] = list(zip(similar_projects, votes))
 
         return render(request, 'mainApp/detailView.html', context)
 
