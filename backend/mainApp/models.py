@@ -67,6 +67,22 @@ class CityProject(BaseModel):
             createThumbnail(self.image.path)
 
 
+class CityProjectAdditionalImage(BaseModel):
+    project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
+    image = models.ImageField()
+
+    def __str__(self):
+        return "Image aditionnelle au projet - %s" % self.project
+
+    def save(self, *args, **kwargs):
+        """
+        Quickly overriding the super()-function in order to also save a
+        thumbnail.
+        """
+        super(CityProjectAdditionalImage, self).save(*args, **kwargs)
+        if self.image is not None:
+            createThumbnail(self.image.path)
+
 class CityProjectVote(BaseModel):
     project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
     vote = models.IntegerField(default=0)
