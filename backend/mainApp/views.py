@@ -597,6 +597,11 @@ class AddVoteComment(generic.View):
                 )
 
 
+        anonymous_text = """<p class="mt-5 text-start">Tu n'es pas enregistrés, ton vote a été enregistré anonymement. En te connectant, tu donneras plus de poids à votre voix:</p><a href="%s" class="account_button mb-5">S'authentifier</a>""" % reverse('login', args=())
+
+        if request.user.is_authenticated:
+            anonymous_text = ""
+
 
         return JsonResponse({
             "result": "ok",
@@ -607,6 +612,7 @@ class AddVoteComment(generic.View):
                     + action_div \
                     + self._create_stats_div(request.POST["project_id"]) \
                     + additional_div \
+                    + anonymous_text \
                 + "</div>",
             "popup_next_button_vals": []
         })
@@ -639,12 +645,9 @@ class VoteProject(generic.View):
         vote_object.vote = vote
 
 
-        anonymous_text = """<p class="mt-5 text-start">Tu n'es pas enregistrés, ton vote a été enregistré anonymement. En te connectant, tu donneras plus de poids à votre voix:</p><a href="%s" class="account_button mb-5">S'authentifier</a>""" % reverse('login', args=())
-
         if request.user.is_authenticated:
             user = User.objects.get(pk=int(request.user.id))
             vote_object.user = user
-            anonymous_text = ""
 
         vote_object.save()
 
@@ -706,8 +709,7 @@ class VoteProject(generic.View):
             %s
             <input type="hidden" name="project_id" value="%d" />
             <input type="hidden" name="vote" value="%d" />
-            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), textarea_precaption, questions_html, project_id, vote) \
-            + anonymous_text
+            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), textarea_precaption, questions_html, project_id, vote)
 
         return JsonResponse({
             "result": "OK",
