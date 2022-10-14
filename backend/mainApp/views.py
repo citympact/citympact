@@ -561,6 +561,11 @@ class AddVoteComment(generic.View):
                     answer.text_answer = request.POST["answer_%d" % question.id]
                 else:
                     answer.numeric_answer = request.POST["answer_%d" % question.id]
+
+                # Saving the user if he is authenticated:
+                if request.user.is_authenticated:
+                    user = User.objects.get(pk=int(request.user.id))
+                    answer.user = user
                 answer.save()
 
         up_votes = len(
