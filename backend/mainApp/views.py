@@ -374,7 +374,6 @@ class AddNewProposition(generic.View):
 
         if "title" in request.POST and \
             "description" in request.POST and \
-            "image" in request.FILES and \
             user is not None:
 
             # Computing the summary:
@@ -388,11 +387,14 @@ class AddNewProposition(generic.View):
                 SUMMARY_SENTENCES_COUNT)])
             """
             summary = request.POST["description"][0:250]
+            image = None
+            if "image" in request.FILES:
+                image = request.FILES["image"]
 
             proposition = Proposition(title=request.POST["title"],
                 description=request.POST["description"],
                 summary=summary,
-                image=request.FILES["image"],
+                image=image,
                 author=user,
             )
             proposition.approved = False

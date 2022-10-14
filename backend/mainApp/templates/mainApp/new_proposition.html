@@ -6,12 +6,15 @@
         <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
             <img src="/static/mainApp/images/new_proposition.png" alt="" class="center_image"/>
             <form action="{% url "mainApp:addNewProposition" %}" method="POST"
-                enctype="multipart/form-data">
+                enctype="multipart/form-data" class="citympact_validated_form" >
 
                 {% csrf_token %}
                 <div class="form_row">
                     <label>Titre de la proposition:</label>
-                    <input type="text" name="title" value="{{ title }}" size="50" />
+                    <input type="text" name="title" value="{{ title }}" size="50" class="form-control" />
+                    <div class="invalid-feedback">
+                       Please choose a username.
+                    </div>
                 </div>
                 <div class="form_row">
                     <label>Image de la proposition:</label>
@@ -19,7 +22,7 @@
                 </div>
                 <div class="form_row">
                     <label>Description de la proposition:</label>
-                    <textarea name="description" rows="8"></textarea>
+                    <textarea name="description" rows="8" class="form-control"></textarea>
                 </div>
                 <div class="form_row">
                     <label>Auteur·trice de la proposition:</label>

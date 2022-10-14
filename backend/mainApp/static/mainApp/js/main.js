@@ -322,4 +322,26 @@ $(document).ready(function() {
         this.href = 'mailto:' + $(this).html();
 
     });
+    let validate_input = function() {
+        if($(this).val().length <= 0) {
+            $(this).addClass("invalid").removeClass("valid");
+        } else {
+            $(this).addClass("valid").removeClass("invalid");
+        }
+    }
+    $(".citympact_validated_form").submit(function() {
+        let validated = true;
+        $(this).find(".form-control").each(function () {
+            if($(this).val().length <= 0) {
+                validated = false;
+                $(this).addClass("invalid").removeClass("valid");
+                $(this).change(validate_input);
+            } else {
+                $(this).addClass("valid").removeClass("invalid");
+            }
+            console.log("THis field =", $(this).val())
+        });
+        console.log("validated =", validated)
+        return validated;
+    });
 });
