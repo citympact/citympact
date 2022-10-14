@@ -479,6 +479,7 @@ h1.homepage_title.proposition_title {
     position: absolute;
     right: 0;
     top: 70px;
+    box-shadow: 2px 2px black;
 }
 
 .modal-content {
