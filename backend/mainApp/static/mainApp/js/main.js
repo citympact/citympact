@@ -275,11 +275,9 @@ $(document).ready(function() {
             if($(subElt).outerHeight(true)) {
                 if($(subElt).outerHeight(true) > maxCellHeight) {
                     maxCellHeight = $(subElt).outerHeight(true);
-                    console.log("maxCellHeight =", maxCellHeight)
                 }
             }
         });
-        console.log("final maxCellHeight =", maxCellHeight)
         if(initialLoading) {
             if(rowHeight>maxCellHeight) {
                 $(elt).css("overflow", "hidden").height(maxCellHeight);
@@ -339,9 +337,7 @@ $(document).ready(function() {
             } else {
                 $(this).addClass("valid").removeClass("invalid");
             }
-            console.log("THis field =", $(this).val())
         });
-        console.log("validated =", validated)
         return validated;
     });
 });
