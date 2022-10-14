@@ -671,16 +671,16 @@ class VoteProject(generic.View):
                     checked = ""
                     if i == existing_answer_numeric:
                         checked = " checked=\"checked\""
-                    form_fields += """<input type="radio" name="%s" value="%d" id="%s"%s> <label for="%s">%s</label> """ % (field_name, i, css_id, checked, css_id, t)
+                    form_fields += """<input type="radio" name="%s" value="%d" id="%s"%s class="additional_questions_input"> <label for="%s">%s</label> """ % (field_name, i, css_id, checked, css_id, t)
             elif question.type == "TEXTAREA":
-                form_fields = """<textarea name="%s"></textarea>""" % field_name
+                form_fields = """<textarea name="%s" class="additional_questions_input"></textarea>""" % field_name
             elif question.type == "RATING_STARS":
                 form_fields = """<div class="rate">"""
                 for i in range(5, 0, -1):
                     checked = ""
                     if i == existing_answer_numeric:
                         checked = " checked=\"checked\""
-                    form_fields += """<input type="radio" id="%s_%d"%s name="%s" value="%d" />
+                    form_fields += """<input type="radio" id="%s_%d"%s name="%s" value="%d" class="additional_questions_input" />
                     <label for="%s_%d" title="text">%d stars</label>
                     """ % (field_name, i, checked, field_name, i, field_name, i, i)
                 form_fields += """</div>"""

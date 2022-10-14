@@ -28,7 +28,12 @@ $(document).ready(function() {
             $("#popup_next_button").show();
         }
 
-        popupFormAudited = false;
+        let additional_answers_interracted = false;
+        $(".additional_questions_input").change(function() {
+            additional_answers_interracted = true;
+            validateFields();
+        });
+        let popupFormAudited = false;
         let validateFields = function() {
             popupFormAudited = true;
             $("#popup_content").find("input,textarea").each(
@@ -50,7 +55,7 @@ $(document).ready(function() {
                     $("#popup_next_button").addClass('disabled');
                 }
             }
-            if(popupFormAudited) {
+            if(popupFormAudited || additional_answers_interracted) {
                 $("#popup_next_button").html(valid_text);
             } else {
                 $("#popup_next_button").html(invalid_text);
