@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'mainApp.middleware.UserMiddleware',
+    'mainApp.middleware.RedirectingDisallowedHost',
 ]
 
 ROOT_URLCONF = 'impact.urls'
