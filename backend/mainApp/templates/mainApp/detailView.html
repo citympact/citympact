@@ -10,9 +10,11 @@
 
             <h2 class="detail_subtitle">{{ subtitle }}</h2>
             <div class="details_view_gallery">
-                <div class="details_view_gallery_buttons left"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-                </svg></div>
+                {% if other_image_instances %}
+                    <div class="details_view_gallery_buttons left"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                    </svg></div>
+                {% endif %}
                 <div class="details_view_gallery_images">
                     {% if image %}
                         <img src="{{ image.url|thumbnailize }}" alt="{{ title }}" alt=""/>
@@ -23,9 +25,11 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-                <div class="details_view_gallery_buttons right"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                </svg></div>
+                {% if other_image_instances %}
+                    <div class="details_view_gallery_buttons right"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg></div>
+                {% endif %}
             </div>
             <p class="col-sm-12 text-start">{{ description|linebreaksbr }}</p>
 
