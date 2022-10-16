@@ -63,10 +63,11 @@
             <input type="hidden" name="next" value="{{ next }}">
             </form>
 
-
+            <p class="fw-bold pt-3">Un poids plus important est donné aux réponses fournies par des utilisateurs identifiés!</p>
             <div class="pt-4">
                 <p><a href="{% url 'mainApp:account_create' %}" class="account_secondary_button">Créer un compte</a> <a href="{% url 'password_reset' %}" class="account_secondary_button">Mot de passe oublié?</a></p>
             </div>
+            <p class="small">Tes données personnelles ne sont utilisées qu’à des fins de vérification de l’authenticité des utilisateurs et sont strictement réservées à une utilisation propre à Citympact.</p>
         </div>
     </div>
 </div>

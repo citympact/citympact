@@ -280,7 +280,7 @@ class ProjectView(generic.View):
                 ] \
         ]
         context["proposed_projects_and_votes"] = list(zip(similar_projects, votes))
-        context["proposed_projects_title"] = "Projets similaires"
+        context["proposed_projects_title"] = "Que penses-tu des autres projets ?"
 
         return render(request, 'mainApp/detailView.html', context)
 
@@ -401,7 +401,7 @@ class PropositionView(generic.View):
                 ] \
         ]
         context["proposed_projects_and_votes"] = list(zip(proposed_projects, votes))
-        context["proposed_projects_title"] = "Autres projets"
+        context["proposed_projects_title"] = "Ces projets pourraient t'intéresser:"
 
 
         return render(request, 'mainApp/detailView.html', context)
@@ -630,14 +630,14 @@ class AddVoteComment(generic.View):
             action_div = "<div class=\"changement\"><img src=\"static/mainApp/images/motivation.png\" alt=\"\" /> Crée le changement</div>"
             proposition_title = urllib.parse.quote(
                 "Proposition contre le projet "+project.title)
-            additional_div = """<a href="%s?title=%s" class="create_proposition_from_popup">Lancer une proposition ?</a></div>""" \
+            additional_div = """<a href="%s?title=%s" class="create_proposition_from_popup">Soumettre une proposition ?</a></div>""" \
                 % (
                     reverse('mainApp:addNewProposition', args=()),
                     proposition_title
                 )
 
 
-        anonymous_text = """<p class="mt-5 text-start">Tu n'es pas enregistré, ton vote a été enregistré anonymement. En te connectant, tu donneras plus de poids à ta voix:</p><a href="%s" class="account_button mb-5">S'authentifier</a>""" % reverse('login', args=())
+        anonymous_text = """<p class="mt-2 text-start alert alert-info pb-0">Ton vote et tes réponses ont été validés anonymement, car tu n’es pas enregistré. Donne plus de poids à ta voix en t’authentifiant !</p><p class="mb-5 text-start"><a href="%s" class="account_button">S'authentifier</a></p>""" % reverse('login', args=())
 
         if request.user.is_authenticated:
             anonymous_text = ""
@@ -649,10 +649,10 @@ class AddVoteComment(generic.View):
             "popup_content":
                 "<img src=\"static/mainApp/images/" + image_filename + "\" alt=\"Merci!\" class=\"popup_center_image\" />" \
                 + "<div class=\"text-start\">"
+                    + anonymous_text \
                     + action_div \
                     + self._create_stats_div(request.POST["project_id"]) \
                     + additional_div \
-                    + anonymous_text \
                 + "</div>",
             "popup_next_button_vals": []
         })
