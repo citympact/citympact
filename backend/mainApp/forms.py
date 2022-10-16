@@ -121,8 +121,8 @@ class NewUserForm(UserForm):
         link = "%s%s" % (self.site_name, url)
 
         body = "<h1>Confirmation de compte</h1><p>Bonjour %s %s,<br>" % (user.first_name, user.last_name) \
-            + "Ton compte a été créé mais tu dois encore le valider.<br>Merci de <a href=\"%s\">valider ici votre compte</a></p>" % link \
-            + "<p><small>Si votre navigateur n'affiche pas le liens, " \
+            + "Ton compte a été créé mais tu dois encore le valider.<br>Merci de <a href=\"%s\">valider ici ton compte</a></p>" % link \
+            + "<p><small>Si ton navigateur n'affiche pas le liens, " \
             + "tu peux copier le lien suivant dans la barre d'adresse de " \
             + "ton navigateur WEB:<br>%s</small></p>" % link
         body = render_to_string("mainApp/email_activate.html", {

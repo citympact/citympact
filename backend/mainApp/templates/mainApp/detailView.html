@@ -87,10 +87,10 @@
                         </div>
                     </div>
                     {% if comment_user_name %}
-                        <div class="col-sm-12"><input type="radio" name="publish_name" id="publish_name_true" value="true" checked="checked">  <label for="publish_name_true">Poster ce commentaire avec votre nom ({{ comment_user_name }}) ?</label>
+                        <div class="col-sm-12"><input type="radio" name="publish_name" id="publish_name_true" value="true" checked="checked">  <label for="publish_name_true">Poster ce commentaire avec ton nom ({{ comment_user_name }}) ?</label>
                         </div>
                         <div class="col-sm-12">
-                        <input type="radio" name="publish_name" id="publish_name_false" value="false">  <label for="publish_name_false">Poster ce commentaire sans afficher votre nom?</label><br><small class="ps-3">Les commentaires anonymes sont soumis à une validation et ne sont affichés qu'après leur approbation.</small>
+                        <input type="radio" name="publish_name" id="publish_name_false" value="false">  <label for="publish_name_false">Poster ce commentaire sans afficher ton nom?</label><br><small class="ps-3">Les commentaires anonymes sont soumis à une validation et ne sont affichés qu'après leur approbation.</small>
                         </div>
                     {% else %}
                     <small>Ton commentaire sera publié anonymement mais sera soumis à approbation. Si tu ne veux pas attendre cette validation, tu peux <a href="{% url 'login' %}?next={{ login_next_url }}">t'authentifier ici</a>.</small>

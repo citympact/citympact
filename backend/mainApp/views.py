@@ -149,7 +149,7 @@ class AccountsCreate(generic.View):
             new_user_form.set_email_sender(settings.DEFAULT_FROM_EMAIL)
             new_user_form.save()
 
-            messages.add_message(request, messages.INFO, 'Compte créé! Un email de confirmation a été envoyé. Merci d\'utiliser le lien dans le mail pour activer votre compte.')
+            messages.add_message(request, messages.INFO, 'Compte créé! Un email de confirmation a été envoyé. Merci d\'utiliser le lien dans le mail pour activer ton compte.')
             return HttpResponseRedirect(reverse('mainApp:accounts_profile', args=()))
         else:
             context = {
@@ -308,7 +308,7 @@ class AddNewCommentView(generic.View):
         comment.comment = request.POST["comment"]
         comment.validated = False
         comment.name_displayed = False
-        validation_text = "Votre commentaire va être validé aussitôt que " \
+        validation_text = "Ton commentaire va être validé aussitôt que " \
             + "possible."
 
         if request.user.is_authenticated:
@@ -320,7 +320,7 @@ class AddNewCommentView(generic.View):
             :
                 comment.name_displayed = True
                 comment.validated = True
-                validation_text = "Votre commentaire, publié en votre nom, a " \
+                validation_text = "Ton commentaire, publié en ton nom, a " \
                     + "été automatiquement validé et est affiché ci-dessous."
         comment.save()
 
@@ -329,7 +329,7 @@ class AddNewCommentView(generic.View):
         if comment.validated:
             response["comment"] = render_comment(comment);
 
-        response["message"] = "Merci pour votre commentaire !<br>" \
+        response["message"] = "Merci pour ton commentaire !<br>" \
             + validation_text
 
         return JsonResponse(response);
@@ -442,7 +442,7 @@ class AddNewProposition(generic.View):
             request.session["message"] = "Nouvelle proposition ajoutée."
             messages.add_message(request, messages.INFO, "Nouvelle proposition ajoutée. Elle sera validée ausi publiée dès que possible.")
         else:
-            messages.add_message(request, messages.ERROR, "Impossible d'enregistrer votre proposition. Merci de remplir tous les champs.")
+            messages.add_message(request, messages.ERROR, "Impossible d'enregistrer ta proposition. Merci de remplir tous les champs.")
 
         return HttpResponseRedirect(reverse('mainApp:index', args=()))
 
@@ -637,7 +637,7 @@ class AddVoteComment(generic.View):
                 )
 
 
-        anonymous_text = """<p class="mt-5 text-start">Tu n'es pas enregistrés, ton vote a été enregistré anonymement. En te connectant, tu donneras plus de poids à votre voix:</p><a href="%s" class="account_button mb-5">S'authentifier</a>""" % reverse('login', args=())
+        anonymous_text = """<p class="mt-5 text-start">Tu n'es pas enregistré, ton vote a été enregistré anonymement. En te connectant, tu donneras plus de poids à ta voix:</p><a href="%s" class="account_button mb-5">S'authentifier</a>""" % reverse('login', args=())
 
         if request.user.is_authenticated:
             anonymous_text = ""
@@ -645,7 +645,7 @@ class AddVoteComment(generic.View):
 
         return JsonResponse({
             "result": "ok",
-            "popup_title": "Merci pour votre vote!",
+            "popup_title": "Merci pour ton vote!",
             "popup_content":
                 "<img src=\"static/mainApp/images/" + image_filename + "\" alt=\"Merci!\" class=\"popup_center_image\" />" \
                 + "<div class=\"text-start\">"
@@ -755,7 +755,7 @@ class VoteProject(generic.View):
             "result": "OK",
             "new_vote": new_vote,
             "vote":vote_object.vote,
-            "popup_title": "Merci pour votre vote",
+            "popup_title": "Merci pour ton vote",
             "popup_content": popup_content,
             "popup_next_button_vals": ["Voir les résultats", "Commenter et voir les résultats"],
         });
