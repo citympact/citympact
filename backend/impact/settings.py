@@ -30,8 +30,8 @@ IMG_THUMBNAIL_SIZE = (600, 400);
 
 
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "dev.citympact.ch", "dev2.citympact.ch", "www.citympact.ch", "citympact.ch"]
-
+# The initial dot (".") in ".citympact.ch" lets Django to accept any subdomains:
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".citympact.ch"]
 
 # Application definition
 
