@@ -21,7 +21,7 @@
                     {% endif %}
                     {% if other_image_instances %}
                         {% for other_image_instance in other_image_instances %}
-                            <img src="{{ other_image_instance.image.url }}" alt="{{ title }}" alt="" class="detail_image"/>
+                            <img src="{{ other_image_instance.image.url|thumbnailize }}" alt="{{ title }}" alt="" class="detail_image"/>
                         {% endfor %}
                     {% endif %}
                 </div>
