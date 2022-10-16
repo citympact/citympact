@@ -340,4 +340,21 @@ $(document).ready(function() {
         });
         return validated;
     });
+
+    let gallery_image_index = 0;
+    $(".details_view_gallery_buttons").click(function() {
+        let images = $(this).parent().find(".details_view_gallery_images>img");
+        let increment = 1;
+        if($(this).hasClass("left")) {
+            increment = -1;
+        }
+        gallery_image_index = (gallery_image_index+increment+images.length) % images.length
+        console.log("gallery_image_index = " + gallery_image_index, $(".details_view_gallery_images>img")[gallery_image_index])
+        $(".details_view_gallery_images>img").each(function() {
+            console.log("this=", $(this))
+            $(this).css("display", "none");
+        });
+        let new_image = $(".details_view_gallery_images>img")[gallery_image_index];
+        $(new_image).css("display", "inline")
+    });
 });

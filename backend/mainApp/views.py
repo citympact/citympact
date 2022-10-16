@@ -258,6 +258,11 @@ class ProjectView(generic.View):
         context["subtitle"] = "Projet"
         context["body_class"] = "body_projet"
 
+        # Fetching the gallery images:
+        other_images = \
+            CityProjectAdditionalImage.objects.all().filter(project=project)
+        context["other_image_instances"] = other_images
+
 
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
 

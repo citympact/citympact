@@ -9,9 +9,24 @@
             <h1 class="{{ title_css_class }}">{{ title }}</h1>
 
             <h2 class="detail_subtitle">{{ subtitle }}</h2>
-            {% if image %}
-                <img src="{{ image.url|thumbnailize }}" alt="{{ title }}" alt="" class="detail_image"/>
-            {% endif %}
+            <div class="details_view_gallery">
+                <div class="details_view_gallery_buttons left"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                </svg></div>
+                <div class="details_view_gallery_images">
+                    {% if image %}
+                        <img src="{{ image.url|thumbnailize }}" alt="{{ title }}" alt=""/>
+                    {% endif %}
+                    {% if other_image_instances %}
+                        {% for other_image_instance in other_image_instances %}
+                            <img src="{{ other_image_instance.image.url }}" alt="{{ title }}" alt="" class="detail_image"/>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="details_view_gallery_buttons right"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg></div>
+            </div>
             <p class="col-sm-12 text-start">{{ description|linebreaksbr }}</p>
 
             <h2 class="detail_subtitle">Informations</h2>
@@ -104,7 +119,7 @@
 
 {% if proposed_projects_and_votes %}
 <div class="container">
-    <h1 class="homepage_title">{{ proposed_projects_title }}</h1>
+    <h1 class="detail_subtitle">{{ proposed_projects_title }}</h1>
     <div class="row detail_row">
         {% for project, voteClasses in proposed_projects_and_votes %}
             <div data-project-id="{{ project.pk }}" data-project-vote="{{ vote }}" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 detail_div">

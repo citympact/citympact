@@ -800,12 +800,51 @@ a.account_button:hover {
     text-align: left;
     margin-bottom: 1rem;
 }
-.detail_image {
+.details_view_gallery {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 5rem;
+}
+.details_view_gallery_images>img {
+    position: relative;
     border: 2px solid #051320;
     box-sizing: border-box;
     border-radius: 5px;
     max-width: 100%;
-    margin-bottom: 2rem;
+    display: none;
+}
+.details_view_gallery_images>img:first-child {
+    display: inline;
+}
+
+.details_view_gallery_buttons {
+    position: absolute;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    bottom: -35px;
+    border-radius: 7.5px;
+    box-shadow: 5px 5px black;
+    background-color: #FCF0B3;
+    color: #F2522F;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding-top: 12.5px;
+    z-index:3;
+    cursor: pointer;
+}
+.details_view_gallery_buttons:hover {
+background-color: #f9d72b;
+}
+
+.details_view_gallery_buttons.left {
+    left: 0;
+}
+.details_view_gallery_buttons.right {
+    right: 0;
 }
 
 
