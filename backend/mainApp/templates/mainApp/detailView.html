@@ -9,9 +9,28 @@
             <h1 class="{{ title_css_class }}">{{ title }}</h1>
 
             <h2 class="detail_subtitle">{{ subtitle }}</h2>
-            {% if image %}
-                <img src="{{ image.url|thumbnailize }}" alt="{{ title }}" alt="" class="detail_image"/>
-            {% endif %}
+            <div class="details_view_gallery">
+                {% if other_image_instances %}
+                    <div class="details_view_gallery_buttons left"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                    </svg></div>
+                {% endif %}
+                <div class="details_view_gallery_images">
+                    {% if image %}
+                        <img src="{{ image.url|thumbnailize }}" alt="{{ title }}" alt=""/>
+                    {% endif %}
+                    {% if other_image_instances %}
+                        {% for other_image_instance in other_image_instances %}
+                            <img src="{{ other_image_instance.image.url|thumbnailize }}" alt="{{ title }}" alt="" class="detail_image"/>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% if other_image_instances %}
+                    <div class="details_view_gallery_buttons right"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg></div>
+                {% endif %}
+            </div>
             <p class="col-sm-12 text-start">{{ description|linebreaksbr }}</p>
 
             <h2 class="detail_subtitle">Informations</h2>
@@ -68,10 +87,10 @@
                         </div>
                     </div>
                     {% if comment_user_name %}
-                        <div class="col-sm-12"><input type="radio" name="publish_name" id="publish_name_true" value="true" checked="checked">  <label for="publish_name_true">Poster ce commentaire avec votre nom ({{ comment_user_name }}) ?</label>
+                        <div class="col-sm-12"><input type="radio" name="publish_name" id="publish_name_true" value="true" checked="checked">  <label for="publish_name_true">Poster ce commentaire avec ton nom ({{ comment_user_name }}) ?</label>
                         </div>
                         <div class="col-sm-12">
-                        <input type="radio" name="publish_name" id="publish_name_false" value="false">  <label for="publish_name_false">Poster ce commentaire sans afficher votre nom?</label><br><small class="ps-3">Les commentaires anonymes sont soumis à une validation et ne sont affichés qu'après leur approbation.</small>
+                        <input type="radio" name="publish_name" id="publish_name_false" value="false">  <label for="publish_name_false">Poster ce commentaire sans afficher ton nom?</label><br><small class="ps-3">Les commentaires anonymes sont soumis à une validation et ne sont affichés qu'après leur approbation.</small>
                         </div>
                     {% else %}
                     <small>Ton commentaire sera publié anonymement mais sera soumis à approbation. Si tu ne veux pas attendre cette validation, tu peux <a href="{% url 'login' %}?next={{ login_next_url }}">t'authentifier ici</a>.</small>
@@ -100,5 +119,27 @@
         </div>
     </div>
 </div>
-<div id="new_petition"><a href="{% url "mainApp:addNewPetition" %}">Lancer une pétition</a></div>
+
+
+{% if proposed_projects_and_votes %}
+<div class="container">
+    <h1 class="detail_subtitle">{{ proposed_projects_title }}</h1>
+    <div class="row detail_row">
+        {% for project, voteClasses in proposed_projects_and_votes %}
+            <div data-project-id="{{ project.pk }}" data-project-vote="{{ vote }}" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 detail_div">
+                <div class="">
+                    <a href="{% url 'mainApp:projectDetail' project.id %}"><img src="{{ project.image.url|thumbnailize }}" alt="{{ project.title }}" alt="" class="sliderThumbnail"/></a>
+                </div>
+                <h2><a href="{% url 'mainApp:projectDetail' project.id %}">{{ project.title }}</a></h2>
+                <p>{{ project.summary }}</p>
+                <div class="know-more"><a href="{% url 'mainApp:projectDetail' project.id %}">En savoir plus</a></div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="show_more_div"><a href="#" data-toggle-text="Montrer moins d'éléments">Afficher plus de projets</a></div>
+</div>
+
+<div id="new_proposition"><a href="{% url "mainApp:addNewProposition" %}">Lancer un projet</a></div>
+{% endif %}
+
 {% endblock %}

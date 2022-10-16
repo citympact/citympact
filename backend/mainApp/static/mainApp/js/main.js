@@ -28,7 +28,12 @@ $(document).ready(function() {
             $("#popup_next_button").show();
         }
 
-        popupFormAudited = false;
+        let additional_answers_interracted = false;
+        $(".additional_questions_input").change(function() {
+            additional_answers_interracted = true;
+            validateFields();
+        });
+        let popupFormAudited = false;
         let validateFields = function() {
             popupFormAudited = true;
             $("#popup_content").find("input,textarea").each(
@@ -50,7 +55,7 @@ $(document).ready(function() {
                     $("#popup_next_button").addClass('disabled');
                 }
             }
-            if(popupFormAudited) {
+            if(popupFormAudited || additional_answers_interracted) {
                 $("#popup_next_button").html(valid_text);
             } else {
                 $("#popup_next_button").html(invalid_text);
@@ -121,7 +126,7 @@ $(document).ready(function() {
         function(response){
             if(response.result == "ok") {
                 lastItem = suggestionsUl.children().last();
-                // Saving the last link (i.e. the add a new petition link):
+                // Saving the last link (i.e. the add a new proposition link):
                 suggestionsUl.empty();
                 selectedIndex = -1;
                 $.each(response.suggestions, function(i, elt) {
@@ -203,12 +208,12 @@ $(document).ready(function() {
         }
     });
 
-    $(".sign_petition_div>a").click(function(event) {
+    $(".sign_proposition_div>a").click(function(event) {
         let clickedElement = $(this);
-        let petition_id = $(this).parents("div.detail_div").first().data("petition-id");
+        let proposition_id = $(this).parents("div.detail_div").first().data("proposition-id");
 
-        $.get("petition/sign",  {
-            petition_id: petition_id,
+        $.get("proposition/sign",  {
+            proposition_id: proposition_id,
             csrfmiddlewaretoken: $("#vote_csrf_token").val(),
         },
         function(response) {
@@ -268,7 +273,9 @@ $(document).ready(function() {
         let button = showMoreDiv.find("a");
         $(elt).find(".detail_div").each(function(subIndex, subElt) {
             if($(subElt).outerHeight(true)) {
-                maxCellHeight = $(subElt).outerHeight(true);
+                if($(subElt).outerHeight(true) > maxCellHeight) {
+                    maxCellHeight = $(subElt).outerHeight(true);
+                }
             }
         });
         if(initialLoading) {
@@ -312,5 +319,42 @@ $(document).ready(function() {
         $(this).html($(this).attr('data-contact').replace('[at]', '@').replace(/\[dot]/g, '.'));
         this.href = 'mailto:' + $(this).html();
 
+    });
+    let validate_input = function() {
+        if($(this).val().length <= 0) {
+            $(this).addClass("invalid").removeClass("valid");
+        } else {
+            $(this).addClass("valid").removeClass("invalid");
+        }
+    }
+    $(".citympact_validated_form").submit(function() {
+        let validated = true;
+        $(this).find(".form-control").each(function () {
+            if($(this).val().length <= 0) {
+                validated = false;
+                $(this).addClass("invalid").removeClass("valid");
+                $(this).change(validate_input);
+            } else {
+                $(this).addClass("valid").removeClass("invalid");
+            }
+        });
+        return validated;
+    });
+
+    let gallery_image_index = 0;
+    $(".details_view_gallery_buttons").click(function() {
+        let images = $(this).parent().find(".details_view_gallery_images>img");
+        let increment = 1;
+        if($(this).hasClass("left")) {
+            increment = -1;
+        }
+        gallery_image_index = (gallery_image_index+increment+images.length) % images.length
+        console.log("gallery_image_index = " + gallery_image_index, $(".details_view_gallery_images>img")[gallery_image_index])
+        $(".details_view_gallery_images>img").each(function() {
+            console.log("this=", $(this))
+            $(this).css("display", "none");
+        });
+        let new_image = $(".details_view_gallery_images>img")[gallery_image_index];
+        $(new_image).css("display", "inline")
     });
 });

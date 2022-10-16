@@ -73,7 +73,7 @@ body {
 
 }
 
-/* petitions tag: */
+/* propositions tag: */
 .suggestions-dropdown > ul .bg-success.rounded-pill {
     margin-right: 0.25rem;
     font-family: Poppins;
@@ -297,7 +297,7 @@ h1.homepage_title {
     letter-spacing: 0em;
 }
 
-h1.homepage_title.petition_title {
+h1.homepage_title.proposition_title {
     color: white;
     background-color: #2E39F6;
 }
@@ -418,11 +418,11 @@ h1.homepage_title.petition_title {
     text-decoration: none;
 }
 
-.sign_petition_div {
+.sign_proposition_div {
     position: relative;
 }
 
-.sign_petition_div a {
+.sign_proposition_div a {
     position: relative;
     top: -2rem;
     width: 100%;
@@ -438,11 +438,11 @@ h1.homepage_title.petition_title {
     text-align: center;
 }
 
-#new_petition {
+#new_proposition {
     text-align: center;
     margin: 5rem 0;
 }
-#new_petition a {
+#new_proposition a {
     display: inline-block;
     background: #F42C2C;
     border: 1px solid #051320;
@@ -479,6 +479,7 @@ h1.homepage_title.petition_title {
     position: absolute;
     right: 0;
     top: 70px;
+    box-shadow: 2px 2px black;
 }
 
 .modal-content {
@@ -546,7 +547,7 @@ h1.homepage_title.petition_title {
     color: #051320;
 }
 
-.create_petition_from_popup {
+.create_proposition_from_popup {
     display: inline-block;
     background: #F42C2C;
     border: 1px solid #051320;
@@ -567,7 +568,7 @@ h1.homepage_title.petition_title {
     margin-left: 12.5%;
     width: 75%;
 }
-.create_petition_from_popup:hover {
+.create_proposition_from_popup:hover {
     text-decoration: none;
     color: #FCF0B3;
 }
@@ -764,7 +765,7 @@ a.account_button:hover {
     margin-bottom: 3rem;
 }
 
-.detail_petition_title {
+.detail_proposition_title {
     display: inline-block;
     font-family: Playfair Display;
     font-style: italic;
@@ -782,7 +783,7 @@ a.account_button:hover {
     box-shadow: 5px 5px black;
 }
 
-.body_petition {
+.body_proposition {
     background: #F4D7D7;
 }
 .body_projet {
@@ -799,12 +800,51 @@ a.account_button:hover {
     text-align: left;
     margin-bottom: 1rem;
 }
-.detail_image {
+.details_view_gallery {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 5rem;
+}
+.details_view_gallery_images>img {
+    position: relative;
     border: 2px solid #051320;
     box-sizing: border-box;
     border-radius: 5px;
     max-width: 100%;
-    margin-bottom: 2rem;
+    display: none;
+}
+.details_view_gallery_images>img:first-child {
+    display: inline;
+}
+
+.details_view_gallery_buttons {
+    position: absolute;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    bottom: -35px;
+    border-radius: 7.5px;
+    box-shadow: 5px 5px black;
+    background-color: #FCF0B3;
+    color: #F2522F;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding-top: 12.5px;
+    z-index:3;
+    cursor: pointer;
+}
+.details_view_gallery_buttons:hover {
+background-color: #f9d72b;
+}
+
+.details_view_gallery_buttons.left {
+    left: 0;
+}
+.details_view_gallery_buttons.right {
+    right: 0;
 }
 
 
@@ -901,4 +941,47 @@ a.account_button:hover {
     color: #2CA800;
 }
 
-info
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    z-index: -1000;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+
+.invalid {
+    border-color: red !important;
+    box-shadow: 5px 5px red !important;
+}
+.valid {
+    border-color: green !important;
+    box-shadow: 5px 5px green !important;
+}

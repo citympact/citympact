@@ -30,8 +30,10 @@ IMG_THUMBNAIL_SIZE = (600, 400);
 
 
 
+
 # The initial dot (".") in ".citympact.ch" lets Django to accept any subdomains:
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".citympact.ch"]
+
 
 # Application definition
 
@@ -191,6 +193,7 @@ try:
     }
 
     SECRET_KEY = os.environ["SECRET_KEY"]
+    CITY_NAME = os.environ["CITY_NAME"]
 
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")

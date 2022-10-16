@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Petition',
+            name='Proposition',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('create_datetime', models.DateTimeField(auto_now_add=True)),
@@ -73,12 +73,12 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='PetitionSignature',
+            name='PropositionSignature',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('create_datetime', models.DateTimeField(auto_now_add=True)),
                 ('update_datetime', models.DateTimeField(auto_now=True)),
-                ('petition', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mainApp.petition')),
+                ('proposition', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mainApp.proposition')),
                 ('session', models.ForeignKey(db_constraint=False, null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='sessions.session')),
             ],
             options={

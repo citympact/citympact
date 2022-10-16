@@ -17,6 +17,4 @@ class UserMiddleware:
             request.session["visitor_id"] = visitor.id
 
         # Todo: add logic here for the registered user
-
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)

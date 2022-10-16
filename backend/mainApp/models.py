@@ -67,6 +67,22 @@ class CityProject(BaseModel):
             createThumbnail(self.image.path)
 
 
+class CityProjectAdditionalImage(BaseModel):
+    project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
+    image = models.ImageField()
+
+    def __str__(self):
+        return "Image aditionnelle au projet - %s" % self.project
+
+    def save(self, *args, **kwargs):
+        """
+        Quickly overriding the super()-function in order to also save a
+        thumbnail.
+        """
+        super(CityProjectAdditionalImage, self).save(*args, **kwargs)
+        if self.image is not None:
+            createThumbnail(self.image.path)
+
 class CityProjectVote(BaseModel):
     project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
     vote = models.IntegerField(default=0)
@@ -104,8 +120,58 @@ class CityProjectComment(BaseModel):
             (self.comment[:25] + '...') if len(self.comment) > 25 else self.comment,
         )
 
+QUESTIONS_TYPES = (
+    ("YES_NO", "Oui/non"),
+    ("TEXTAREA", "Champ libre"),
+    ("RATING_STARS", "Évaluation - 5 étoiles"),
+    ("RATING_10_5_0", "Évaluation - 10/5/0"),
+)
 
-class Petition(BaseModel):
+class CityProjectQuestion(BaseModel):
+    project = models.ForeignKey(CityProject, on_delete=models.CASCADE)
+    question_statement = models.CharField(max_length=200)
+    type = models.CharField(max_length=50,
+                      choices=QUESTIONS_TYPES,
+                      default="TEXTAREA")
+    ratings_10_5_0_values = ["Plus de 10 fois", "Entre 5 et 10 fois",
+        "Moins de 5 fois", "Jamais"]
+    yes_no = ["Oui", "Non"]
+    def __str__(self):
+        return "Question (%s) sur le projet %s: %s" % (
+            self.type,
+            self.project,
+            self.question_statement,
+        )
+
+class CityProjectAnswer(BaseModel):
+    question = models.ForeignKey(CityProjectQuestion, on_delete=models.CASCADE)
+    visitor = models.ForeignKey(Visitor, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
+        null=True)
+    text_answer = models.TextField()
+    numeric_answer = models.IntegerField(default=0)
+
+    def __str__(self):
+        question_short = str(self.question)[:40] + (str(self.question)[40:] and '...')
+        answer_short = ""
+        if self.question.type == "YES_NO":
+            answer_short = CityProjectQuestion.yes_no[self.numeric_answer]
+        elif self.question.type == "TEXTAREA":
+            answer_short = str(self.text_answer)[:40] + (str(self.text_answer)[40:] and '...')
+        elif self.question.type == "RATING_STARS":
+            answer_short = "1 étoile" if self.numeric_answer == 0 else "%d étoiles " % self.numeric_answer
+        elif self.question.type == "RATING_10_5_0":
+            answer_short = CityProjectQuestion.ratings_10_5_0_values[self.numeric_answer]
+
+        return "Réponse à la question \"%s\" = %s" % (
+            question_short,
+            answer_short
+
+        )
+
+
+
+class Proposition(BaseModel):
     title = models.CharField(max_length=200)
     summary = models.TextField()
     description = models.TextField()
@@ -131,15 +197,15 @@ class Petition(BaseModel):
 
 
 
-class PetitionSignature(BaseModel):
-    petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
+class PropositionSignature(BaseModel):
+    proposition = models.ForeignKey(Proposition, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s - %s " % (str(self.user), self.petition.title)
+        return "%s - %s " % (str(self.user), self.proposition.title)
 
-class PetitionComment(BaseModel):
-    petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
+class PropositionComment(BaseModel):
+    proposition = models.ForeignKey(Proposition, on_delete=models.CASCADE)
     visitor = models.ForeignKey(Visitor, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
         null=True)

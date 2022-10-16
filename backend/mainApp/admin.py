@@ -11,11 +11,14 @@ class DescriptionModelAdmin(admin.ModelAdmin):
         return super().get_form(request, obj, **kwargs)
 
 admin.site.register(CityProject, DescriptionModelAdmin)
+admin.site.register(CityProjectAdditionalImage)
 admin.site.register(CityProjectVote)
 admin.site.register(CityProjectComment)
+admin.site.register(CityProjectQuestion)
+admin.site.register(CityProjectAnswer)
 
-admin.site.register(Petition)
-admin.site.register(PetitionSignature)
-admin.site.register(PetitionComment)
+admin.site.register(Proposition)
+admin.site.register(PropositionSignature)
+admin.site.register(PropositionComment)
 
 admin.site.register(RegisteredUser)

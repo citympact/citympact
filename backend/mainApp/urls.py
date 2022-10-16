@@ -15,12 +15,12 @@ urlpatterns = [
     path('project/<int:project_id>', views.ProjectView.as_view(), name='projectDetail'),
     path('project/vote', views.VoteProject.as_view(), name='voteProject'),
 
-    path('petition/<int:petition_id>', views.PetitionView.as_view(), \
-        name='petitionDetail'),
+    path('propositon/<int:proposition_id>', views.PropositionView.as_view(), \
+        name='propositionDetail'),
     path('comment/add', views.AddNewCommentView.as_view(),
         name='addNewComment'),
-    path('petition/sign', views.SignPetition.as_view(), name='signPetition'),
-    path('petition/add', login_required(views.AddNewPetition.as_view()), name='addNewPetition'),
+    path('proposition/sign', views.SignProposition.as_view(), name='signProposition'),
+    path('proposition/add', login_required(views.AddNewProposition.as_view()), name='addNewProposition'),
     path('add_vote_comment', views.AddVoteComment.as_view(),
         name='addVoteComment'),
 

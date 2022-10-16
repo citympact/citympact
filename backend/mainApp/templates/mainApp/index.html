@@ -19,7 +19,7 @@
                   <input type="text" class="form-control" placeholder="Que veux tu changer dans ta ville?" aria-label="Que veux tu changer dans ta ville?" aria-describedby="button-addon2" id="search-input" autocomplete="off">
                   <div class="suggestions-dropdown" style="display: none;">
                       <ul>
-                          <li><a href="{% url 'mainApp:addNewPetition' %}">>> Proposer une pétition</a></li>
+                          <li><a href="{% url 'mainApp:addNewProposition' %}">>> Proposer une proposition</a></li>
                       </ul>
                   </div>
                 </div>
@@ -58,28 +58,28 @@
 <div class="container pt-5">
     <div class="row">
         <div class="col-sm-12">
-            <h1 class="homepage_title petition_title">Donne ton avis - pétitions en cours</h1>
-            {% if petitions %}
+            <h1 class="homepage_title proposition_title">Donne ton avis - propositions en cours</h1>
+            {% if propositions %}
                 <div class="row detail_row">
-                    {% for petition in petitions %}
-                        <div data-petition-id="{{ petition.pk }}" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 detail_div">
-                            {% if petition.image %}
-                                <a href="{% url 'mainApp:petitionDetail' petition.id %}"><img src="{{ petition.image.url|thumbnailize }}" alt="{{ petition.title }}" alt="" class="sliderThumbnail"/></a>
+                    {% for proposition in propositions %}
+                        <div data-proposition-id="{{ proposition.pk }}" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 detail_div">
+                            {% if proposition.image %}
+                                <a href="{% url 'mainApp:propositionDetail' proposition.id %}"><img src="{{ proposition.image.url|thumbnailize }}" alt="{{ proposition.title }}" alt="" class="sliderThumbnail"/></a>
                             {% endif %}
-                            <div class="sign_petition_div"><a href="#"><img src="static/mainApp/images/sign.png" alt="" height="25"> Signer la pétition</a></div>
-                            <h2><a href="{% url 'mainApp:petitionDetail' petition.id %}">{{ petition.title }}</a>
+                            <div class="sign_proposition_div"><a href="#"><img src="static/mainApp/images/sign.png" alt="" height="25"> Signer la proposition</a></div>
+                            <h2><a href="{% url 'mainApp:propositionDetail' proposition.id %}">{{ proposition.title }}</a>
                             </h2>
-                            <p class="">{{ petition.summary }}</p>
-                            <div class="know-more"><a href="{% url 'mainApp:petitionDetail' petition.id %}">En savoir plus</a></div>
+                            <p class="">{{ proposition.summary }}</p>
+                            <div class="know-more"><a href="{% url 'mainApp:propositionDetail' proposition.id %}">En savoir plus</a></div>
                         </div>
                     {% endfor %}
                 </div>
-                <div class="show_more_div"><a href="#" data-toggle-text="Montrer moins d'éléments">Afficher plus de pétitions</a></div>
+                <div class="show_more_div"><a href="#" data-toggle-text="Montrer moins d'éléments">Afficher plus de propositions</a></div>
             {% else %}
-                <p>Il n'y a pas encore de pétitions.</p>
+                <p>Il n'y a pas encore de propositions.</p>
             {% endif %}
 
-            <div id="new_petition"><a href="{% url "mainApp:addNewPetition" %}">Lancer une pétition</a></div>
+            <div id="new_proposition"><a href="{% url "mainApp:addNewProposition" %}">Lancer une proposition</a></div>
         </div>
     </div>
 </div>
