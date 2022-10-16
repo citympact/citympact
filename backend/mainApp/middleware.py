@@ -18,16 +18,3 @@ class UserMiddleware:
 
         # Todo: add logic here for the registered user
         return self.get_response(request)
-
-
-class RedirectingDisallowedHost:
-    def __init__(self, get_response):
-        self.get_response = get_response
-    
-    def __call__(self, request):
-        try:
-            checkhost = request.get_host()
-        except DisallowedHost:
-            return redirect("http://localhost/")
-
-        return self.get_response(request)
