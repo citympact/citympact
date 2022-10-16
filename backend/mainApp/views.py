@@ -256,7 +256,7 @@ class ProjectView(generic.View):
 
         context["title_css_class"] = "detail_project_title"
         context["subtitle"] = "Projet"
-        context["body_class"] = "body_projet"
+        context["body_class"] = "background_projects"
 
         # Fetching the gallery images:
         other_images = \
