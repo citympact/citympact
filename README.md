@@ -46,6 +46,11 @@ To dump the existing data:
 python manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e auth.Permission --indent 2 > demoData.json
 ```
 
+Another way to export manually selected table is as follows:
+```
+python3 manage.py dumpdata mainApp.CityProject mainApp.CityProjectAdditionalImage mainApp.CityProjectQuestion > citympactData.json
+```
+
 ### Accessing the admin-site
 
 Django provides an admin site to manage your database. You need to create a
