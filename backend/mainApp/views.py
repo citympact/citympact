@@ -63,6 +63,7 @@ class AboutView(generic.View):
     def get(self, request, *args, **kwargs):
 
         context = {
+            "page_title": "À propos",
         }
         return render(request, 'mainApp/about.html', context)
 
@@ -70,6 +71,7 @@ class ContactView(generic.View):
     def get(self, request, *args, **kwargs):
 
         context = {
+        "page_title": "Contact",
         }
         return render(request, 'mainApp/contact.html', context)
 
@@ -118,6 +120,7 @@ class IndexView(generic.View):
 def _contextifyDetail(databaseObject):
     return {
             "title": databaseObject.title,
+            "page_title": databaseObject.title,
             "description": databaseObject.description,
             "image": databaseObject.image,
         }
@@ -139,6 +142,7 @@ class AccountsCreate(generic.View):
         new_user_form = NewUserForm()
         context = {
             'new_user_form': new_user_form,
+            "page_title": "Création de compte",
         }
         return render(request, 'mainApp/acccount_create.html', context)
 
@@ -173,6 +177,7 @@ class AccountsProfile(generic.View):
         context = {
             'user_form': user_form,
             'registered_user_form': registered_user_form,
+            "page_title": "Mon compte",
         }
 
         if request.user.registereduser.registration_provider \

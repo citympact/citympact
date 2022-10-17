@@ -13,6 +13,6 @@ class MainappConfig(AppConfig):
 
 def constant_variables_processor(request):
     return {
-        "APP_NAME": "Citympact platform",
+        "APP_NAME": "Citympact",
         "CITY_NAME": settings.CITY_NAME,
     }

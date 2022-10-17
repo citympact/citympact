@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'mainApp/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'mainApp/css/main.css' %}">
-    <title>{% block title %}{{ APP_NAME }}{% endblock %}</title>
+    <title>{% block title %}{{ APP_NAME }} - {% if page_title %}{{ page_title|striptags }}{% else %}{{ CITY_NAME }}{% endif %}{% endblock %}</title>
 </head>
 
 <body class="{{ body_class }}">
