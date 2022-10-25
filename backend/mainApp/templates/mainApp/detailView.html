@@ -38,7 +38,7 @@
 
             {% if show_voting_box %}
             <input type="hidden" id="vote_csrf_token" value="{{ csrf_token }}" />
-            <div class="detail_view_voting" data-project-id="{{ project.pk }}">
+            <div class="detail_view_voting" data-project-id="{{ project_id }}">
                 <a class="upvote_button {{ upvote_class }}"><img src="/static/mainApp/images/upvote.png" alt="" height="66"></a>
                 <h4>Donne ton avis</h4>
                 <a class="downvote_button {{ downvote_class }}"><img src="/static/mainApp/images/downvote.png" alt="" height="66"></a>

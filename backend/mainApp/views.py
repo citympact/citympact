@@ -296,6 +296,7 @@ class ProjectView(generic.View):
             vote = vote_object.vote
         context["upvote_class"] = "active-vote" if vote > 0 else ""
         context["downvote_class"] = "active-vote" if vote < 0 else ""
+        context["project_id"] = project.pk
         return render(request, 'mainApp/detailView.html', context)
 
 class AddNewCommentView(generic.View):

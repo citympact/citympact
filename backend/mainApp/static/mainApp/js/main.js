@@ -74,7 +74,7 @@ $(document).ready(function() {
         let project_id = $(this).parents("div.detail_div")
             .first().data("project-id");
         if(project_id === undefined) {
-            let project_id = $(this).parents("div.detail_view_voting")
+            project_id = $(this).parents("div.detail_view_voting")
                 .first().data("project-id");
             showPopup = false;
         }
