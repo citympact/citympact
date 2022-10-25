@@ -8,6 +8,13 @@
         <div class="col-sm-12 text-center">
             <h1 class="{{ title_css_class }}">{{ title }}</h1>
 
+
+                        <div class="detail_view_voting">
+                            <div class="voting_button"><img src="/static/mainApp/images/upvote.png" alt="" height="66"></div>
+                            <h4>Donne ton avis</h4>
+                            <div class="voting_button"><img src="/static/mainApp/images/downvote.png" alt="" height="66"></div>
+                        </div>
+
             <h2 class="detail_subtitle">{{ subtitle }}</h2>
             <div class="details_view_gallery">
                 {% if other_image_instances %}
@@ -32,6 +39,11 @@
                 {% endif %}
             </div>
             <p class="col-sm-12 text-start">{{ description|linebreaksbr }}</p>
+
+
+
+
+
 
             <h2 class="detail_subtitle">Informations</h2>
             {% if up_votes %}

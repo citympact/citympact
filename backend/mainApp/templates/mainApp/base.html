@@ -9,9 +9,23 @@
     <link rel="stylesheet" type="text/css" href="{% static 'mainApp/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'mainApp/css/main.css' %}">
     <title>{% block title %}{{ APP_NAME }} - {% if page_title %}{{ page_title|striptags }}{% else %}{{ CITY_NAME }}{% endif %}{% endblock %}</title>
+    {% if not "localhost" in request.build_absolute_uri and not "127.0.0.1" in request.build_absolute_uri %}
+        <script>
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-TVXLC6B');
+        </script>
+    {% endif %}
+
 </head>
 
 <body class="{{ body_class }}">
+    {% if not "localhost" in request.build_absolute_uri and not "127.0.0.1" in request.build_absolute_uri %}
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TVXLC6B"
+        height="0" width="0" style="display:none;visibility:hidden;"></iframe></noscript>
+    {% endif %}
     <div class="container-fluid mb-5" id="topMenuBar">
         <div class="container">
           <nav class="navbar navbar-expand-lg navbar-light">
