@@ -992,7 +992,6 @@ background-color: #f9d72b;
     font-family: 'Playfair Display';
     font-style: italic;
     font-weight: 900;
-    font-size: 20px;
     line-height: 27px;
     text-align: center;
     color: #FCF0B3;
@@ -1002,26 +1001,53 @@ background-color: #f9d72b;
     padding-top: 25px;
     height: 88.79px;
     box-shadow: 5px 5px black;
+
+    display: inline-block;
+    padding-left: 125px;
+    padding-right: 125px;
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
-.detail_view_voting .voting_button {
+.detail_view_voting h4 {
+    font-size: 1.75rem;
+}
+.detail_view_voting .upvote_button,
+.detail_view_voting .downvote_button {
     position: absolute;
     top: 10px;
     width: 68.79px;
     height: 68.79px;
-
-    background: #BAEB0D;
-    border: 1px solid #051320;
-    border-radius: 4px;
-    box-shadow: 5px 5px black;
+    cursor: pointer;
 }
-.detail_view_voting div:nth-child(1).voting_button {
+.detail_view_voting .upvote_button {
     left: 10px;
 }
-.detail_view_voting div:nth-child(3).voting_button {
+.detail_view_voting .downvote_button {
     right: 10px;
-    background: #F2522F;
 }
+
+
 
 .detail_view_voting .voting_button>img {
     margin-top: 5px;
+}
+
+.opinion_detail_view_div {
+    margin-top: 25px;
+}
+.opinion_detail_view_div h4 {
+    display: inline-block;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    color: #F2522F;
+    background: #FCF0B3;
+    border: 1px solid #051320;
+    border-radius: 5px;
+    box-shadow: 5px 5px black;
+    padding: 10px;
+    font-size: 1.33rem;
+    text-align: left;
+    margin-bottom: 30px;
 }

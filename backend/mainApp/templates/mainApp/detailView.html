@@ -8,13 +8,6 @@
         <div class="col-sm-12 text-center">
             <h1 class="{{ title_css_class }}">{{ title }}</h1>
 
-
-                        <div class="detail_view_voting">
-                            <div class="voting_button"><img src="/static/mainApp/images/upvote.png" alt="" height="66"></div>
-                            <h4>Donne ton avis</h4>
-                            <div class="voting_button"><img src="/static/mainApp/images/downvote.png" alt="" height="66"></div>
-                        </div>
-
             <h2 class="detail_subtitle">{{ subtitle }}</h2>
             <div class="details_view_gallery">
                 {% if other_image_instances %}
@@ -38,12 +31,19 @@
                     </svg></div>
                 {% endif %}
             </div>
+            <div class="opinion_detail_view_div text-start">
+                <h4>{{ what_do_you_think }}</h4>
+            </div>
             <p class="col-sm-12 text-start">{{ description|linebreaksbr }}</p>
 
-
-
-
-
+            {% if show_voting_box %}
+            <input type="hidden" id="vote_csrf_token" value="{{ csrf_token }}" />
+            <div class="detail_view_voting" data-project-id="{{ project.pk }}">
+                <a class="upvote_button {{ upvote_class }}"><img src="/static/mainApp/images/upvote.png" alt="" height="66"></a>
+                <h4>Donne ton avis</h4>
+                <a class="downvote_button {{ downvote_class }}"><img src="/static/mainApp/images/downvote.png" alt="" height="66"></a>
+            </div>
+            {% endif %}
 
             <h2 class="detail_subtitle">Informations</h2>
             {% if up_votes %}

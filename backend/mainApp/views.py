@@ -287,6 +287,15 @@ class ProjectView(generic.View):
         context["proposed_projects_and_votes"] = list(zip(similar_projects, votes))
         context["proposed_projects_title"] = "Que penses-tu des autres projets ?"
 
+        context["what_do_you_think"] = "Que penses-tu de ce projet?"
+
+        context["show_voting_box"] = True
+        vote = 0
+        vote_object =  project.cityprojectvote_set.all().filter(visitor=visitor).first()
+        if vote_object is not None:
+            vote = vote_object.vote
+        context["upvote_class"] = "active-vote" if vote > 0 else ""
+        context["downvote_class"] = "active-vote" if vote < 0 else ""
         return render(request, 'mainApp/detailView.html', context)
 
 class AddNewCommentView(generic.View):
@@ -407,6 +416,8 @@ class PropositionView(generic.View):
         ]
         context["proposed_projects_and_votes"] = list(zip(proposed_projects, votes))
         context["proposed_projects_title"] = "Ces projets pourraient t'intéresser:"
+        context["what_do_you_think"] = "Que penses-tu de cette proposition?"
+
 
 
         return render(request, 'mainApp/detailView.html', context)
