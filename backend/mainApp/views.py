@@ -759,7 +759,7 @@ class VoteProject(generic.View):
 
         popup_content = """<img src="/static/mainApp/images/%s" alt="merci pour ton vote" class="popup_center_image" />
         %s
-           <form action="%s">
+           <form action="%s" class="mt-2">
             <div class="textarea_group">
                 <label>%s</label>
                 <textarea name="comment"></textarea>
