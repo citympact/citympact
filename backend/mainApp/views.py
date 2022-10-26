@@ -564,7 +564,7 @@ class AddVoteComment(generic.View):
                 elif question.type == "RATING_STARS":
                     try:
                         res = statistics.mean([x.numeric_answer for x in question.cityprojectanswer_set.all()])
-                        res = str(res) +"/5 étoile(s)"
+                        res = "{:.2f}".format(res) +"/5 étoile(s)"
                     except:
                         pass
                 elif question.type == "RATING_10_5_0":
@@ -585,8 +585,8 @@ class AddVoteComment(generic.View):
                 </div>""" % (question.question_statement, res)
 
         return "<h4 class=\"popup_title\">Résultats actuel du vote</h4>" \
-            + """<div class="pb-5"><div class="result_div_positive"><img src="static/mainApp/images/upvote.png" alt="" /><span>%d vote%s positif%s</span></div>""" % (up_votes, "s" if up_votes>1 else "", "s" if up_votes>1 else "") \
-            + """<div class="result_div_negative"><img src="static/mainApp/images/downvote.png" alt="" /><span>%d vote%s négatif%s</span></div>""" % (down_votes, "s" if down_votes>1 else "", "s" if down_votes>1 else "")  \
+            + """<div class="pb-5"><div class="result_div_positive"><img src="/static/mainApp/images/upvote.png" alt="" /><span>%d vote%s positif%s</span></div>""" % (up_votes, "s" if up_votes>1 else "", "s" if up_votes>1 else "") \
+            + """<div class="result_div_negative"><img src="/static/mainApp/images/downvote.png" alt="" /><span>%d vote%s négatif%s</span></div>""" % (down_votes, "s" if down_votes>1 else "", "s" if down_votes>1 else "")  \
             + question_answers_html \
             + "</div>"
 
@@ -644,7 +644,7 @@ class AddVoteComment(generic.View):
 
         if vote.vote < 0:
             image_filename = "summary_downvote.png"
-            action_div = "<div class=\"changement\"><img src=\"static/mainApp/images/motivation.png\" alt=\"\" /> Crée le changement</div>"
+            action_div = "<div class=\"changement\"><img src=\"/static/mainApp/images/motivation.png\" alt=\"\" /> Crée le changement</div>"
             proposition_title = urllib.parse.quote(
                 "Proposition contre le projet "+project.title)
             additional_div = """<a href="%s?title=%s" class="create_proposition_from_popup">Soumettre une proposition ?</a></div>""" \
@@ -664,7 +664,7 @@ class AddVoteComment(generic.View):
             "result": "ok",
             "popup_title": "Merci pour ton vote!",
             "popup_content":
-                "<img src=\"static/mainApp/images/" + image_filename + "\" alt=\"Merci!\" class=\"popup_center_image\" />" \
+                "<img src=\"/static/mainApp/images/" + image_filename + "\" alt=\"Merci!\" class=\"popup_center_image\" />" \
                 + "<div class=\"text-start\">"
                     + anonymous_text \
                     + action_div \
@@ -757,7 +757,7 @@ class VoteProject(generic.View):
                 %s
             </div>""" % (question.question_statement, form_fields)
 
-        popup_content = """<img src="static/mainApp/images/%s" alt="merci pour ton vote" class="popup_center_image" />
+        popup_content = """<img src="/static/mainApp/images/%s" alt="merci pour ton vote" class="popup_center_image" />
            <form action="%s">
             <div class="textarea_group">
                 <label>%s</label>

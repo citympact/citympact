@@ -70,13 +70,11 @@ $(document).ready(function() {
 
     };
     $("a.upvote_button,a.downvote_button").click(function(event) {
-        let showPopup = true;
         let project_id = $(this).parents("div.detail_div")
             .first().data("project-id");
         if(project_id === undefined) {
             project_id = $(this).parents("div.detail_view_voting")
                 .first().data("project-id");
-            showPopup = false;
         }
         let vote = $(this).hasClass("upvote_button") ? 1  : -1;
         if($(this).hasClass("active-vote")) {
@@ -94,7 +92,7 @@ $(document).ready(function() {
             if(response.vote!=0) {
                 clickedElement.addClass("active-vote");
             }
-            if(vote != 0 && showPopup) {
+            if(vote != 0) {
                 prepareModal(response);
                 modal.show();
             }
