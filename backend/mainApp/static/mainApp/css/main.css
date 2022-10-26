@@ -1009,8 +1009,16 @@ background-color: #f9d72b;
     margin-bottom: 25px;
 }
 .detail_view_voting h4 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
 }
+
+@media (min-width: 768px) {
+
+    .detail_view_voting h4 {
+        font-size: 1.75rem;
+    }
+}
+
 .detail_view_voting .upvote_button,
 .detail_view_voting .downvote_button {
     position: absolute;
