@@ -73,6 +73,7 @@ $(document).ready(function() {
         let project_id = $(this).parents("div.detail_div")
             .first().data("project-id");
         if(project_id === undefined) {
+            // The project detail view DOM is slightly different:
             project_id = $(this).parents("div.detail_view_voting")
                 .first().data("project-id");
         }

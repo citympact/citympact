@@ -758,15 +758,15 @@ class VoteProject(generic.View):
             </div>""" % (question.question_statement, form_fields)
 
         popup_content = """<img src="/static/mainApp/images/%s" alt="merci pour ton vote" class="popup_center_image" />
+        %s
            <form action="%s">
             <div class="textarea_group">
                 <label>%s</label>
                 <textarea name="comment"></textarea>
             </div>
-            %s
             <input type="hidden" name="project_id" value="%d" />
             <input type="hidden" name="vote" value="%d" />
-            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), textarea_precaption, questions_html, project_id, vote)
+            </form>""" % (image_filename, questions_html, reverse('mainApp:addVoteComment', args=()), textarea_precaption, project_id, vote)
 
         return JsonResponse({
             "result": "OK",
