@@ -163,10 +163,15 @@ class CityProjectAnswer(BaseModel):
         elif self.question.type == "RATING_10_5_0":
             answer_short = CityProjectQuestion.ratings_10_5_0_values[self.numeric_answer]
 
-        return "Réponse à la question \"%s\" = %s" % (
-            question_short,
-            answer_short
+        user_short_form = "un utilisateur anonyme"
+        if self.user != None:
+            user_short_form = self.user.username
 
+
+        return "Réponse à la question \"%s\" = %s (par %s)" % (
+            question_short,
+            answer_short,
+            user_short_form
         )
 
 
