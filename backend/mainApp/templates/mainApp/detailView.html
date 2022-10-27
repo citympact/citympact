@@ -36,8 +36,12 @@
             </div>
             <p class="col-sm-12 text-start">{{ description|linebreaksbr }}</p>
 
-            {% if show_voting_box %}
+            {% comment "CSRF token for the vote just below or for the sub project votes:" %}
+            {% endcomment %}
+            
             <input type="hidden" id="vote_csrf_token" value="{{ csrf_token }}" />
+
+            {% if show_voting_box %}
             <div class="detail_view_voting" data-project-id="{{ project_id }}">
                 <a class="upvote_button {{ upvote_class }}"><img src="/static/mainApp/images/upvote.png" alt="" height="66"></a>
                 <h4>Donne ton avis</h4>
@@ -139,9 +143,13 @@
     <div class="row detail_row">
         {% for project, voteClasses in proposed_projects_and_votes %}
             <div data-project-id="{{ project.pk }}" data-project-vote="{{ vote }}" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 detail_div">
-                <div class="">
+                <div class="image_and_vote_buttons">
                     <a href="{% url 'mainApp:projectDetail' project.id %}"><img src="{{ project.image.url|thumbnailize }}" alt="{{ project.title }}" alt="" class="sliderThumbnail"/></a>
+                    <a class="upvote_button {{ voteClasses.0 }}" href="#"><img src="/static/mainApp/images/upvote.png" alt="" height="66"></a>
+                    <a class="downvote_button {{ voteClasses.1 }}" href="#"><img src="/static/mainApp/images/downvote.png" alt="" height="66"></a>
+                    <p class="thanks_voting {{ voteClasses.2 }}">Merci d’avoir voté</p>
                 </div>
+
                 <h2><a href="{% url 'mainApp:projectDetail' project.id %}">{{ project.title }}</a></h2>
                 <p>{{ project.summary }}</p>
                 <div class="know-more"><a href="{% url 'mainApp:projectDetail' project.id %}">En savoir plus</a></div>

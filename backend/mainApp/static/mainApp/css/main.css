@@ -359,6 +359,40 @@ h1.homepage_title.proposition_title {
 }
 
 
+.downvote_button.full-active-vote,
+.upvote_button.full-active-vote {
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    z-index: 5;
+}
+
+.downvote_button.full-active-vote img,
+.upvote_button.full-active-vote img {
+    width: 100%;
+    height: 100%;
+}
+
+.thanks_voting {
+    position: absolute;
+    width: 100%;
+    background: white;
+    text-align: center;
+    display: none;
+    padding: 0.66rem;
+
+    box-shadow: 5px 5px black;
+    border: 1px solid #051320;
+    box-sizing: border-box;
+    border-radius: 4px;
+    bottom: -50px;
+    z-index: 10;
+}
+.thanks_voting.has_voted {
+    display: block;
+}
+
+
 .detail_div {
     padding-bottom: 3rem;
 }

@@ -83,9 +83,9 @@ class IndexView(generic.View):
         projects = CityProject.objects.all();
         # Fetching the vote (integers) of the user for each project:
         votes = [ \
-            ["", ""] if (v is None or v.vote==0) \
+            ["", "", ""] if (v is None or v.vote==0) \
             else \
-                ["active-vote", ""] if v.vote>0 else ["", "active-vote"] \
+                ["full-active-vote", "", "has_voted"] if v.vote>0 else ["", "full-active-vote", "has_voted"] \
             for v in
                 [p.cityprojectvote_set.all().filter(visitor=visitor).first() \
                     for p in projects\
@@ -278,7 +278,7 @@ class ProjectView(generic.View):
         votes = [ \
             ["", ""] if (v is None or v.vote==0) \
             else \
-                ["active-vote", ""] if v.vote>0 else ["", "active-vote"] \
+                ["full-active-vote", "", "has_voted"] if v.vote>0 else ["", "full-active-vote", "has_voted"] \
             for v in
                 [p.cityprojectvote_set.all().filter(visitor=visitor).first() \
                     for p in similar_projects\
@@ -409,7 +409,7 @@ class PropositionView(generic.View):
         votes = [ \
             ["", ""] if (v is None or v.vote==0) \
             else \
-                ["active-vote", ""] if v.vote>0 else ["", "active-vote"] \
+                ["full-active-vote", "", "has_voted"] if v.vote>0 else ["", "full-active-vote", "has_voted"] \
             for v in
                 [p.cityprojectvote_set.all().filter(visitor=visitor).first() \
                     for p in proposed_projects\

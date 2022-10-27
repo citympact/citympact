@@ -78,12 +78,16 @@ $(document).ready(function() {
                 .first().data("project-id");
         }
         let vote = $(this).hasClass("upvote_button") ? 1  : -1;
-        if($(this).hasClass("active-vote")) {
+        if($(this).hasClass("active-vote") || $(this).hasClass("full-active-vote")) {
             vote = 0;
         }
         let clickedElement = $(this);
+        let subTitleElt = clickedElement.parent().find(".thanks_voting");
+        subTitleElt.removeClass("has_voted")
         clickedElement.parent().find("a.upvote_button,a.downvote_button")
-            .removeClass("active-vote");
+            .removeClass("active-vote").removeClass("full-active-vote");
+        let isVoteOnProjectDetailsBox = clickedElement.parent().hasClass("detail_view_voting");
+
         $.post("/project/vote",  {
             project_id: project_id,
             vote: vote,
@@ -91,7 +95,12 @@ $(document).ready(function() {
         },
         function(response){
             if(response.vote!=0) {
-                clickedElement.addClass("active-vote");
+                let classToAdd = "full-active-vote";
+                if(isVoteOnProjectDetailsBox) {
+                    classToAdd = "active-vote";
+                }
+                clickedElement.addClass(classToAdd);
+                subTitleElt.addClass("has_voted");
             }
             if(vote != 0) {
                 prepareModal(response);
