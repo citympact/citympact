@@ -337,7 +337,6 @@ h1.homepage_title.proposition_title {
     margin-top: 5px;
 }
 
-.upvote_button:hover,
 .upvote_button.active-vote {
     background: repeating-linear-gradient(
         45deg,
@@ -347,7 +346,6 @@ h1.homepage_title.proposition_title {
         #d7ff3d 20px
     );
 }
-.downvote_button:hover,
 .downvote_button.active-vote {
     background: repeating-linear-gradient(
         -45deg,
@@ -358,16 +356,28 @@ h1.homepage_title.proposition_title {
     );
 }
 
-@media(hover: none) {
+@media(hover: hover) {
     /*
     Disabling the confusing background hover for touch-based devices
     (as for example smartphones)
     */
     .upvote_button:hover {
-        background-color: #BAEB0D;
+        background: repeating-linear-gradient(
+            45deg,
+            #BAEB0D,
+            #BAEB0D 10px,
+            #d7ff3d 10px,
+            #d7ff3d 20px
+        );
     }
     .downvote_button:hover {
-        background-color: #F42C2C;
+        background: repeating-linear-gradient(
+            -45deg,
+            #F2522F,
+            #F2522F 10px,
+            #ff6f47 10px,
+            #ff6f47 20px
+        );
 
     }
 }
