@@ -358,6 +358,20 @@ h1.homepage_title.proposition_title {
     );
 }
 
+@media(hover: none) {
+    /*
+    Disabling the confusing background hover for touch-based devices
+    (as for example smartphones)
+    */
+    .upvote_button:hover {
+        background-color: #BAEB0D;
+    }
+    .downvote_button:hover {
+        background-color: #F42C2C;
+
+    }
+}
+
 
 .downvote_button.full-active-vote,
 .upvote_button.full-active-vote {
