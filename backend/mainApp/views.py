@@ -553,7 +553,7 @@ class AddVoteComment(generic.View):
         questions = CityProjectQuestion.objects.filter(project=project)
         question_answers_html = "<h4 class=\"popup_title pt-5\">Réponses complémentaires</h4>"
         for question in questions:
-            res = "Pas encore assez de réponse..."
+            res = "Les résultats s'afficheront bientôt ici..."
             if question.type != "TEXTAREA":
                 if question.type == "YES_NO":
                     try:
@@ -758,15 +758,15 @@ class VoteProject(generic.View):
             </div>""" % (question.question_statement, form_fields)
 
         popup_content = """<img src="/static/mainApp/images/%s" alt="merci pour ton vote" class="popup_center_image" />
-        %s
            <form action="%s" class="mt-2">
+           %s
             <div class="textarea_group">
                 <label>%s</label>
                 <textarea name="comment"></textarea>
             </div>
             <input type="hidden" name="project_id" value="%d" />
             <input type="hidden" name="vote" value="%d" />
-            </form>""" % (image_filename, questions_html, reverse('mainApp:addVoteComment', args=()), textarea_precaption, project_id, vote)
+            </form>""" % (image_filename, reverse('mainApp:addVoteComment', args=()), questions_html, textarea_precaption, project_id, vote)
 
         return JsonResponse({
             "result": "OK",
@@ -831,7 +831,7 @@ class SignProposition(generic.View):
 
         return JsonResponse({
             "result": "OK",
-            "popup_title": "Proposition signée",
+            "popup_title": "Proposition soutenue",
             "popup_content": self.getSummaryViewContent(request, proposition),
             "popup_next_button_vals": []
             });
@@ -861,7 +861,7 @@ class SignProposition(generic.View):
             )
             return JsonResponse({
                 "result": "OK",
-                "popup_title": "Proposition déjà signée",
+                "popup_title": "Proposition déjà soutenue",
                 "popup_content": self.getSummaryViewContent(request, proposition)
                 });
         except ObjectDoesNotExist as e:
@@ -885,5 +885,5 @@ class SignProposition(generic.View):
             "result": "OK",
             "popup_title": "Confirmation de signature",
             "popup_content": popup_content,
-            "popup_next_button_vals": ["Signer la proposition"]*2
+            "popup_next_button_vals": ["Soutenir la proposition"]*2
             });

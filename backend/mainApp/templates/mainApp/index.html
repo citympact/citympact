@@ -67,7 +67,7 @@
                             {% if proposition.image %}
                                 <a href="{% url 'mainApp:propositionDetail' proposition.id %}"><img src="{{ proposition.image.url|thumbnailize }}" alt="{{ proposition.title }}" alt="" class="sliderThumbnail"/></a>
                             {% endif %}
-                            <div class="sign_proposition_div"><a href="#"><img src="/static/mainApp/images/sign.png" alt="" height="25"> Signer la proposition</a></div>
+                            <div class="sign_proposition_div"><a href="#"><img src="/static/mainApp/images/sign.png" alt="" height="25"> Soutenir la proposition</a></div>
                             <h2><a href="{% url 'mainApp:propositionDetail' proposition.id %}">{{ proposition.title }}</a>
                             </h2>
                             <p class="">{{ proposition.summary }}</p>
