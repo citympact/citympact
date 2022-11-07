@@ -66,6 +66,8 @@
                         <div data-proposition-id="{{ proposition.pk }}" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 detail_div">
                             {% if proposition.image %}
                                 <a href="{% url 'mainApp:propositionDetail' proposition.id %}"><img src="{{ proposition.image.url|thumbnailize }}" alt="{{ proposition.title }}" alt="" class="sliderThumbnail"/></a>
+                            {% else %}
+                                <a href="{% url 'mainApp:propositionDetail' proposition.id %}"><img src="/static/mainApp/images/placeholder_image.jpg" alt="{{ proposition.title }}" alt="" class="sliderThumbnail"/></a>
                             {% endif %}
                             <div class="sign_proposition_div"><a href="#"><img src="/static/mainApp/images/sign.png" alt="" height="25"> Soutenir la proposition</a></div>
                             <h2><a href="{% url 'mainApp:propositionDetail' proposition.id %}">{{ proposition.title }}</a>
