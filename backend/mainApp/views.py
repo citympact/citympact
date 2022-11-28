@@ -80,7 +80,8 @@ class IndexView(generic.View):
 
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
 
-        projects = CityProject.objects.all();
+        projects = list(CityProject.objects.all())
+        random.shuffle(projects)
         # Fetching the vote (integers) of the user for each project:
         votes = [ \
             ["", "", ""] if (v is None or v.vote==0) \
@@ -91,7 +92,8 @@ class IndexView(generic.View):
                     for p in projects\
                 ] \
         ]
-        propositions = Proposition.objects.filter(approved=True);
+        propositions = list(Proposition.objects.filter(approved=True))
+        random.shuffle(propositions)
 
         # Retrieving the last message, if any, and resetting since it will be
         # displayed by the HTML template:
@@ -271,7 +273,9 @@ class ProjectView(generic.View):
 
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
 
-        similar_projects = CityProject.objects.filter(~Q(id=kwargs["project_id"]))[:4]
+        similar_projects = list(CityProject.objects.filter(~Q(id=kwargs["project_id"])))
+        random.shuffle(similar_projects)
+        similar_projects = similar_projects[:4]
         # This handy syntax translates to a LIMIT 4 query!
 
         # Fetching the vote (integers) of the user for each project:
@@ -402,7 +406,10 @@ class PropositionView(generic.View):
         context["body_class"] = "body_proposition"
 
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
-        proposed_projects = CityProject.objects.all()[:4]
+        projects = list(CityProject.objects.all())
+        random.shuffle(projects)
+        proposed_projects = projects[:4]
+
         # This handy syntax translates to a LIMIT 4 query!
 
         # Fetching the vote (integers) of the user for each project:
