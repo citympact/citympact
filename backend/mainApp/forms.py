@@ -5,6 +5,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.urls import reverse
 from .models import *
+from datetime import date
 
 
 
@@ -28,6 +29,17 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ["username", "email", "first_name", "last_name"]
 
+class DisableableSelect(forms.Select):
+    def create_option(self, *args,**kwargs):
+        option = super().create_option(*args,**kwargs)
+        if not option.get('value'):
+            option['attrs']['disabled'] = 'disabled'
+
+        if option.get('value') == 2:
+            option['attrs']['disabled'] = 'disabled'
+
+        return option
+
 class RegisteredUserForm(forms.ModelForm):
 
     zip_code = forms.DecimalField(max_digits=10, decimal_places=0)
@@ -36,7 +48,10 @@ class RegisteredUserForm(forms.ModelForm):
     city = forms.CharField(max_length=254)
     city.widget.attrs.update({"class": "form-control"})
 
-    birth_year = forms.DecimalField(max_digits=10, decimal_places=0)
+    CHOICES = list(range(1900, date.today().year))
+    CHOICES = list(zip(CHOICES, CHOICES))
+    CHOICES.insert(0, ("", "Choisis ton année de naissance"))
+    birth_year = forms.CharField(widget=DisableableSelect(choices=CHOICES))
     birth_year.widget.attrs.update({"class": "form-control"})
 
     class Meta:

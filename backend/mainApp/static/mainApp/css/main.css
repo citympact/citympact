@@ -719,6 +719,7 @@ h1.homepage_title.proposition_title {
 
 
 .form_row input,
+.form_row select,
 #add_comment_textarea {
     background: #FFFFFF;
     border: 1px solid #051320;
