@@ -14,6 +14,8 @@ from django.db.models import Q
 from django.db.models import Count
 from .models import *
 from .forms import *
+from django.core.mail import send_mail
+from impact import settings
 
 import urllib.parse
 import random
@@ -311,7 +313,6 @@ class AddNewCommentView(generic.View):
         :
             return HttpResponseRedirect(reverse('mainApp:index', args=()))
 
-        print("request.POST =", request.POST)
         response = {
             "result": "success",
         }
@@ -341,6 +342,11 @@ class AddNewCommentView(generic.View):
                 comment.validated = True
                 validation_text = "Ton commentaire, publié en ton nom, a " \
                     + "été automatiquement validé et est affiché ci-dessous."
+        else:
+            # If a comment is published without authentication, it then requires
+            # a manual validation:
+            pass
+
         comment.save()
 
         # If the comment is validated (i.e. authenticated and non-anonymous)
