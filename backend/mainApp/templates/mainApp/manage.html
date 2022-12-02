@@ -1,0 +1,39 @@
+{% extends "mainApp/base.html" %}
+{% load extras_tags %}
+
+{% block content %}
+
+<input type="hidden" id="vote_csrf_token" value="{{ csrf_token }}" />
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+        <h1>Gestion des interactions</h1>
+        {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} pb-0" role="alert">
+                  <p>{{ message }}</p>
+              </div>
+              {% endfor %}
+          {% endif %}
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+        <h2>Managers</h2>
+        {% for manager in managers %}
+            <p>{{manager.first_name}} {{manager.last_name}}</p>
+        {% endfor %}
+    </div>
+      <div class="col-sm-12">
+          <h2>Projets</h2>
+          {% for project, vote in projects_votes %}
+              <h3>{{ project.title }}</h3>
+              <p>Vote: {{ vote }}</p>
+          {% endfor %}
+      </div>
+  </div>
+</div>
+
+{% endblock %}

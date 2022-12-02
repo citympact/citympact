@@ -34,4 +34,7 @@ urlpatterns = [
         name='activateAccount'),
     path('accounts/profile/', login_required(views.AccountsProfile.as_view()),
         name='accounts_profile'),
+
+    path('manager/', login_required(views.ManageView.as_view()),
+        name='manager'),
 ]

@@ -25,6 +25,11 @@
                   </div>
                   {% endfor %}
             {% endif %}
+            {% if manager_link %}
+                <div class="alert alert-primary">
+                    <strong>Tu es inscrit comme manager, <a href="{{ manager_link }}">tu peux gérer les interactions utilisateurs ici</a></strong>
+                </div>
+            {% endif %}
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form_row">

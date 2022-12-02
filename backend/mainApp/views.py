@@ -164,9 +164,42 @@ class AccountsCreate(generic.View):
                 'new_user_form': new_user_form,
             }
             return render(request, 'mainApp/acccount_create.html', context)
+
+class ManageView(generic.View):
+    def get(self, request, *args, **kwargs):
+
+        if request.user.groups.all().filter(name="Manager").count() < 1:
+            messages.add_message(request, messages.WARNING, "Accès interdit! Tu as été redirigé vers ton compte.")
+            return HttpResponseRedirect(reverse("mainApp:accounts_profile", args=()))
+
+        context = {}
+        context["managers"] = User.objects.all()
+        projects = CityProject.objects.all()
+        votes = list()
+
+        for project in projects:
+            curr_votes = project.cityprojectvote_set.all()
+            up_votes = 0
+            down_votes = 0
+            for vote in curr_votes:
+                if vote.vote > 0:
+                    up_votes += 1
+                else:
+                    down_votes += 1
+            votes.append("%d positifs / %d négatifs" % (up_votes, down_votes))
+
+        context["projects_votes"] = list(zip(projects, votes))
+
+
+        return render(request, 'mainApp/manage.html', context)
+
 class AccountsProfile(generic.View):
     def get(self, request, *args, **kwargs):
         user_form = UserForm(instance=request.user)
+
+        manager_link = None
+        if request.user.groups.all().filter(name="Manager").count() > 0:
+            manager_link =  reverse("mainApp:manager", args=())
 
         # Disabling the edition of the user account fields:
         for name, field in user_form.fields.items():
@@ -179,6 +212,7 @@ class AccountsProfile(generic.View):
             RegisteredUserForm(instance=request.user.registereduser)
 
         context = {
+            'manager_link': manager_link,
             'user_form': user_form,
             'registered_user_form': registered_user_form,
             "page_title": "Mon compte",
