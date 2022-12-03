@@ -176,6 +176,8 @@ class ManageView(generic.View):
         context["managers"] = User.objects.all()
         projects = CityProject.objects.all()
         votes = list()
+        comments = list()
+        answers = list()
 
         for project in projects:
             curr_votes = project.cityprojectvote_set.all()
@@ -188,7 +190,19 @@ class ManageView(generic.View):
                     down_votes += 1
             votes.append("%d positifs / %d négatifs" % (up_votes, down_votes))
 
-        context["projects_votes"] = list(zip(projects, votes))
+            comments.append(project.cityprojectcomment_set.all())
+            answers.append(project.cityprojectcomment_set.all())
+
+        context["projects_data"] = list(zip(projects, votes, comments, answers))
+
+
+        propositions = Proposition.objects.all()
+        signatures = []
+        for proposition in propositions:
+            signatures.append(proposition.propositionsignature_set.all())
+
+        print(propositions)
+        context["propositions_data"] = list(zip(propositions, signatures))
 
 
         return render(request, 'mainApp/manage.html', context)

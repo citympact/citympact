@@ -22,17 +22,34 @@
   <div class="row">
     <div class="col-sm-12">
         <h2>Managers</h2>
-        {% for manager in managers %}
-            <p>{{manager.first_name}} {{manager.last_name}}</p>
+        <ul>
+            {% for manager in managers %}
+                <li>{{manager.first_name}} {{manager.last_name}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-sm-6">
+      <h2>Projets</h2>
+      {% for project, vote, comments, answers in projects_data %}
+          <p><strong>{{ project.title }}</strong>
+          <ul>
+              <li>Vote: {{ vote }} - {{ project.views }} vue(s)</li>
+              <li>{{ comments|length }} commentaire(s) - {{ answers|length }} réponse(s)</li>
+          </ul>
+          </p>
+      {% endfor %}
+    </div>
+    <div class="col-sm-6">
+        <h2>Propositions</h2>
+        {% for proposition, signatures in propositions_data %}
+            <p><strong>{{ proposition.title }} - {% if proposition.approved %} <span class="badge bg-primary">Approuvé</span>{% else %}<span class="badge bg-secondary">Non affiché</span>{% endif %}</strong>
+            <ul>
+                <li>{{ proposition.views }} vue(s)</li>
+                <li>{{ signatures|length }} signature(s)</li>
+            </ul>
+            </p>
         {% endfor %}
     </div>
-      <div class="col-sm-12">
-          <h2>Projets</h2>
-          {% for project, vote in projects_votes %}
-              <h3>{{ project.title }}</h3>
-              <p>Vote: {{ vote }}</p>
-          {% endfor %}
-      </div>
   </div>
 </div>
 
