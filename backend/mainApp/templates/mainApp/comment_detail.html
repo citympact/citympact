@@ -2,8 +2,8 @@
     <div>
         <img src="{{ profile_picture }}" alt="profile" />
         <span class="author_name">{{ author_name }}</span>
-        {% if validated_details %}
-            <span class="comment_pill bg_blue">{{ validated_details }}</span>
+        {% if approved_details %}
+            <span class="comment_pill bg_blue">{{ approved_details }}</span>
         {% else %}
             <span class="comment_pill bg_purple">Utilisateur enregistré</span>
         {% endif %}

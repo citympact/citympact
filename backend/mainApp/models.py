@@ -108,7 +108,7 @@ class CityProjectComment(BaseModel):
     visitor = models.ForeignKey(Visitor, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
         null=True)
-    validated = models.BooleanField()
+    approved = models.BooleanField()
     reviewed = models.BooleanField()
     name_displayed = models.BooleanField()
     comment = models.TextField()
@@ -116,7 +116,7 @@ class CityProjectComment(BaseModel):
     def __str__(self):
         return "Commentaire de %s (%s/%s) - %s" % (
             self.user,
-            "validé" if self.validated else "non validé",
+            "validé" if self.approved else "non validé",
             "nom affiché" if self.name_displayed else "anonyme",
             (self.comment[:25] + '...') if len(self.comment) > 25 else self.comment,
         )
@@ -216,7 +216,7 @@ class PropositionComment(BaseModel):
     visitor = models.ForeignKey(Visitor, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
         null=True)
-    validated = models.BooleanField()
+    approved = models.BooleanField()
     reviewed = models.BooleanField()
     name_displayed = models.BooleanField()
     comment = models.TextField()
@@ -224,7 +224,7 @@ class PropositionComment(BaseModel):
     def __str__(self):
         return "Commentaire de %s (%s/%s) - %s" % (
             self.user,
-            "validé" if self.validated else "non validé",
+            "validé" if self.approved else "non validé",
             "nom affiché" if self.name_displayed else "anonyme",
             (self.comment[:25] + '...') if len(self.comment) > 25 else self.comment,
         )

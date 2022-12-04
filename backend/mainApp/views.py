@@ -36,17 +36,17 @@ MESSAGE_SEVERITIES = ["primary", "secondary", "success", "danger", "warning",
 
 
 def render_comment(comment):
-    if not comment.validated:
+    if not comment.approved:
         raise AttributeError(
-            "The comment should be validated to be displayed."
+            "The comment should be approved to be displayed."
         )
     author = "Anne Ho-Nihm";
     if comment.user is not None and comment.name_displayed:
         author = "%s %s" % (comment.user.first_name, comment.user.last_name)
 
-    validated_details = None
+    approved_details = None
     if not comment.name_displayed:
-            validated_details = "Commentaire anonyme validé"
+            approved_details = "Commentaire anonyme validé"
 
     image_ids = [22, 325, 628, 1, 455, 786, 602]
     r = random.randint(0,len(image_ids)-1)
@@ -55,7 +55,7 @@ def render_comment(comment):
         "author_name": author,
         "comment": comment.comment,
         "create_date": comment.create_datetime,
-        "validated_details": validated_details,
+        "approved_details": approved_details,
     }
 
     return render_to_string("mainApp/comment_detail.html",  context)
@@ -132,7 +132,7 @@ def _contextifyDetail(databaseObject):
 class AccountsCreate(generic.View):
     def get(self, request, *args, **kwargs):
 
-        # Let's see if the account needs to validated:
+        # Let's see if the account needs to approved:
         if "uid" in kwargs and "token" in kwargs:
             user = User.objects.get(pk=int(kwargs["uid"]))
             if UserTokenGenerator().check_token(user, kwargs["token"]):
@@ -206,8 +206,8 @@ class ManagerView(generic.View):
         context["propositions_data"] = list(zip(propositions, signatures, comments))
 
 
-        projectComments = CityProjectComment.objects.all().filter(reviewed=False, validated=False)
-        propositionComments = PropositionComment.objects.all().filter(reviewed=False, validated=False)
+        projectComments = CityProjectComment.objects.all().filter(reviewed=False, approved=False)
+        propositionComments = PropositionComment.objects.all().filter(reviewed=False, approved=False)
         context["comments_under_review"] = list(projectComments) + list(propositionComments)
 
         propositions = Proposition.objects.all().filter(reviewed=False, approved=False)
@@ -244,17 +244,17 @@ class ManagerView(generic.View):
             return JsonResponse(response);
 
         if request.POST["action"] == "approve":
-            objectToApprove.validated = True
+            objectToApprove.approved = True
         else:
-            objectToApprove.validated = False
+            objectToApprove.approved = False
         objectToApprove.reviewed = True
-        loggedApproval.review_decision = objectToApprove.validated
+        loggedApproval.review_decision = objectToApprove.approved
 
         loggedApproval.save()
         objectToApprove.save()
 
         response["status"] = "ok"
-        response["text"] = "Commentaire approuvé !" if objectToApprove.validated else "Commentaire refusé !"
+        response["text"] = "Commentaire approuvé !" if objectToApprove.approved else "Commentaire refusé !"
         return JsonResponse(response);
 
 class AccountsProfile(generic.View):
@@ -326,7 +326,7 @@ class ProjectView(generic.View):
         ranking = "%d / %d" % (rank, len(orderedProjects))
 
 
-        validated_comments = CityProjectComment.objects.filter(project=project, validated=True).order_by("-create_datetime")
+        approved_comments = CityProjectComment.objects.filter(project=project, approved=True).order_by("-create_datetime")
 
         up_votes = len(
             [v.vote for v in project.cityprojectvote_set.all().filter(vote=1)])
@@ -337,7 +337,7 @@ class ProjectView(generic.View):
 
         rendered_authenticated_comments = []
         rendered_anynymous_comments = []
-        for comment in validated_comments:
+        for comment in approved_comments:
             if comment.name_displayed:
                 rendered_authenticated_comments.append(render_comment(comment))
             else:
@@ -424,7 +424,7 @@ class AddNewCommentView(generic.View):
 
         comment.visitor = visitor
         comment.comment = request.POST["comment"]
-        comment.validated = False
+        comment.approved = False
         comment.reviewed = False
         comment.name_displayed = False
         validation_text = "Ton commentaire va être validé aussitôt que " \
@@ -438,7 +438,7 @@ class AddNewCommentView(generic.View):
                 and request.POST["publish_name"]=="true" \
             :
                 comment.name_displayed = True
-                comment.validated = True
+                comment.approved = True
                 validation_text = "Ton commentaire, publié en ton nom, a " \
                     + "été automatiquement validé et est affiché ci-dessous."
         else:
@@ -448,9 +448,9 @@ class AddNewCommentView(generic.View):
 
         comment.save()
 
-        # If the comment is validated (i.e. authenticated and non-anonymous)
+        # If the comment is approved (i.e. authenticated and non-anonymous)
         # then the BE should respond it to the FE:
-        if comment.validated:
+        if comment.approved:
             response["comment"] = render_comment(comment);
 
         response["message"] = "Merci pour ton commentaire !<br>" \
@@ -473,7 +473,7 @@ class PropositionView(generic.View):
                 rank = i+1
         ranking = "%d / %d" % (rank, len(orderedPropositions))
 
-        validated_comments = PropositionComment.objects.filter(proposition=proposition, validated=True).order_by("-create_datetime")
+        approved_comments = PropositionComment.objects.filter(proposition=proposition, approved=True).order_by("-create_datetime")
 
         signatures = len(proposition.propositionsignature_set.all())
 
@@ -483,7 +483,7 @@ class PropositionView(generic.View):
 
         rendered_authenticated_comments = []
         rendered_anynymous_comments = []
-        for comment in validated_comments:
+        for comment in approved_comments:
             if comment.name_displayed:
                 rendered_authenticated_comments.append(render_comment(comment))
             else:
