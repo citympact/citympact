@@ -109,6 +109,7 @@ class CityProjectComment(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
         null=True)
     validated = models.BooleanField()
+    reviewed = models.BooleanField()
     name_displayed = models.BooleanField()
     comment = models.TextField()
 
@@ -215,6 +216,7 @@ class PropositionComment(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
         null=True)
     validated = models.BooleanField()
+    reviewed = models.BooleanField()
     name_displayed = models.BooleanField()
     comment = models.TextField()
 

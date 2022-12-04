@@ -4,7 +4,7 @@
 {% block content %}
 
 <input type="hidden" id="vote_csrf_token" value="{{ csrf_token }}" />
-<div class="container">
+<div class="container pb-5">
   <div class="row">
     <div class="col-sm-12">
         <h1>Gestion des interactions</h1>
@@ -16,11 +16,19 @@
               {% endfor %}
           {% endif %}
     </div>
+    <div class="col-sm-6">
+        <h3>Nouveaux commentaires</h3>
+        <p>Aucun commentaire à valider</p>
+    </div>
+    <div class="col-sm-6">
+        <h3>Nouvelles propositions</h3>
+        <p>Aucune proposition à valider</p>
+        </div>
   </div>
 </div>
 <div class="container">
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-12 pb-5">
         <h2>Managers</h2>
         <ul>
             {% for manager in managers %}
