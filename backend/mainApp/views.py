@@ -197,11 +197,13 @@ class ManagerView(generic.View):
 
 
         propositions = Proposition.objects.all()
+        comments = []
         signatures = []
         for proposition in propositions:
             signatures.append(proposition.propositionsignature_set.all())
+            comments.append(proposition.propositioncomment_set.all())
 
-        context["propositions_data"] = list(zip(propositions, signatures))
+        context["propositions_data"] = list(zip(propositions, signatures, comments))
 
 
         projectComments = CityProjectComment.objects.all().filter(reviewed=False, validated=False)

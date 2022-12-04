@@ -54,8 +54,10 @@
           <div class="manage_group_div">
               <p><strong>{{ project.title }}</strong>
               <ul>
-                  <li>Vote: {{ vote }} - {{ project.views }} vue(s)</li>
-                  <li>{{ comments|length }} commentaire(s) - {{ answers|length }} réponse(s)</li>
+                  <li>{{ proposition.views }} vue(s)</li>
+                  <li>{{ comments|length }} commentaire(s)</li>
+                  <li>Vote: {{ vote }}</li>
+                  <li>{{ answers|length }} réponse(s)</li>
               </ul>
               </p>
           </div>
@@ -63,11 +65,12 @@
     </div>
     <div class="col-sm-6">
         <h2>Propositions</h2>
-        {% for proposition, signatures in propositions_data %}
+        {% for proposition, signatures, comments in propositions_data %}
             <div class="manage_group_div">
                 <p><strong>{{ proposition.title }} - {% if proposition.approved %} <span class="badge bg-primary">Approuvé</span>{% else %}<span class="badge bg-secondary">Non affiché</span>{% endif %}</strong>
                 <ul>
                     <li>{{ proposition.views }} vue(s)</li>
+                    <li>{{ comments|length }} commentaire(s)</li>
                     <li>{{ signatures|length }} signature(s)</li>
                 </ul>
                 </p>
