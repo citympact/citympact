@@ -188,7 +188,7 @@ class ManagerView(generic.View):
                     up_votes += 1
                 else:
                     down_votes += 1
-            votes.append("%d positifs / %d négatifs" % (up_votes, down_votes))
+            votes.append("Votes: %d positifs / %d négatifs" % (up_votes, down_votes))
 
             comments.append(project.cityprojectcomment_set.all())
             answers.append(project.cityprojectcomment_set.all())
