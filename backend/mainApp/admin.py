@@ -24,5 +24,5 @@ admin.site.register(PropositionComment)
 admin.site.register(RegisteredUser)
 
 
-admin.site.register(PropositionCommentApproval)
-admin.site.register(CityProjectCommentApproval)
+admin.site.register(PropositionCommentReview)
+admin.site.register(CityProjectCommentReview)

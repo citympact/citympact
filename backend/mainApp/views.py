@@ -226,10 +226,10 @@ class ManagerView(generic.View):
         comment = None
         if request.POST["type"] == "PropositionComment":
             comment = PropositionComment.objects.get(pk=comment_id)
-            loggedApproval = PropositionCommentApproval(manager=user, comment=comment)
+            loggedApproval = PropositionCommentReview(manager=user, comment=comment)
         elif request.POST["type"] == "CityProjectComment":
             comment = CityProjectComment.objects.get(pk=comment_id)
-            loggedApproval = CityProjectCommentApproval(manager=user, comment=comment)
+            loggedApproval = CityProjectCommentReview(manager=user, comment=comment)
         else:
             response["status"] = "nok"
             return JsonResponse(response);
