@@ -26,3 +26,4 @@ admin.site.register(RegisteredUser)
 
 admin.site.register(PropositionCommentReview)
 admin.site.register(CityProjectCommentReview)
+admin.site.register(PropositionReview)
