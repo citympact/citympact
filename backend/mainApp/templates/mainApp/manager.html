@@ -20,7 +20,6 @@
         <h3>Nouveaux commentaires</h3>
         {% if comments_under_review %}
             {% for comment in comments_under_review %}
-
                 <div class="manage_group_div">
                     <p><strong>Commentaire {% if comment.user %} anonymisé (de  {{comment.user}}){% else %} anonyme {% endif %}
                     </strong><br> {{comment.create_datetime}}</p>
@@ -34,8 +33,20 @@
     </div>
     <div class="col-sm-6">
         <h3>Nouvelles propositions</h3>
-        <p>Aucune proposition à valider</p>
-        </div>
+        {% if propositions_under_review %}
+            {% for proposition in propositions_under_review %}
+                <div class="manage_group_div">
+                    <p><strong>{{ proposition.title }}</strong><br>
+                    Proposé par {% if proposition.author %} {{proposition.author}}{% else %} un visiteur anonyme {% endif %}
+                    <br> {{proposition.create_datetime}}</p>
+                    <p>{{proposition.description}}</p>
+                    <p><a class="manage_proposition btn btn-outline-primary btn-sm" href="#" role="button" data-proposition-id="{{comment.id}}" data-action="approve">Approver</a> <a class="manage_proposition btn btn-outline-secondary btn-sm" href="#" role="button" data-proposition-id="{{comment.id}}" data-action="refuse">Refuser</a> </p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucune proposition à valider</p>
+        {% endif %}
+    </div>
   </div>
 </div>
 <div class="container">

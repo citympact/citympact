@@ -210,44 +210,51 @@ class ManagerView(generic.View):
         propositionComments = PropositionComment.objects.all().filter(reviewed=False, validated=False)
         context["comments_under_review"] = list(projectComments) + list(propositionComments)
 
+        propositions = Proposition.objects.all().filter(reviewed=False, approved=False)
+        context["propositions_under_review"] = list(propositions)
+
         return render(request, 'mainApp/manager.html', context)
     def post(self, request, *args, **kwargs):
         response = {}
         response["status"] = "nok"
-        if not "comment_id" in request.POST or \
+        if not "item_id" in request.POST or \
         not "type" in request.POST or \
         not "action" in request.POST:
             return JsonResponse(response);
 
         user = User.objects.get(pk=int(request.user.id))
-        comment_id = request.POST["comment_id"]
+        item_id = request.POST["item_id"]
 
         loggedApproval = None
-        comment = None
+        objectToApprove = None
         if request.POST["type"] == "PropositionComment":
-            comment = PropositionComment.objects.get(pk=comment_id)
-            loggedApproval = PropositionCommentReview(manager=user, comment=comment)
+            objectToApprove = PropositionComment.objects.get(pk=item_id)
+            loggedApproval = PropositionCommentReview(manager=user, comment=objectToApprove)
         elif request.POST["type"] == "CityProjectComment":
-            comment = CityProjectComment.objects.get(pk=comment_id)
-            loggedApproval = CityProjectCommentReview(manager=user, comment=comment)
+            objectToApprove = CityProjectComment.objects.get(pk=item_id)
+            loggedApproval = CityProjectCommentReview(manager=user, comment=objectToApprove)
+        elif request.POST["type"] == "Proposition":
+            objectToApprove = Proposition.objects.get(pk=item_id)
+            loggedApproval = PropositionReview(manager=user, proposition=objectToApprove)
         else:
             response["status"] = "nok"
             return JsonResponse(response);
 
-        if comment == None:
+        if objectToApprove == None:
             return JsonResponse(response);
 
         if request.POST["action"] == "approve":
-            comment.validated = True
+            objectToApprove.validated = True
         else:
-            comment.validated = False
-        comment.reviewed = True
-        loggedApproval.comment_validated = comment.validated
+            objectToApprove.validated = False
+        objectToApprove.reviewed = True
+        loggedApproval.review_decision = objectToApprove.validated
+
         loggedApproval.save()
-        comment.save()
+        objectToApprove.save()
 
         response["status"] = "ok"
-        response["text"] = "Commentaire approuvé !" if comment.validated else "Commentaire refusé !"
+        response["text"] = "Commentaire approuvé !" if objectToApprove.validated else "Commentaire refusé !"
         return JsonResponse(response);
 
 class AccountsProfile(generic.View):

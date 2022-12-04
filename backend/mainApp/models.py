@@ -185,6 +185,7 @@ class Proposition(BaseModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     views = models.IntegerField(default=0)
     approved = models.BooleanField(default=False)
+    reviewed = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s (%s)" % (self.title,
@@ -233,15 +234,15 @@ class PropositionCommentReview(BaseModel):
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
         null=True)
     comment = models.ForeignKey(PropositionComment, on_delete=models.CASCADE)
-    comment_validated = models.BooleanField() # local copy of the value for log purposes
+    review_decision = models.BooleanField() # local copy of the value for log purposes
 
 class CityProjectCommentReview(BaseModel):
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
         null=True)
     comment = models.ForeignKey(CityProjectComment, on_delete=models.CASCADE)
-    comment_validated = models.BooleanField() # local copy of the value for log purposes
+    review_decision = models.BooleanField() # local copy of the value for log purposes
 class PropositionReview(BaseModel):
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
         null=True)
     proposition = models.ForeignKey(Proposition, on_delete=models.CASCADE)
-    proposition_validated = models.BooleanField() # local copy of the value for log purposes
+    review_decision = models.BooleanField() # local copy of the value for log purposes
