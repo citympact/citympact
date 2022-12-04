@@ -165,14 +165,14 @@ class AccountsCreate(generic.View):
             }
             return render(request, 'mainApp/acccount_create.html', context)
 
-class ManageView(generic.View):
+class ManagerView(generic.View):
     def get(self, request, *args, **kwargs):
-
         if request.user.groups.all().filter(name="Manager").count() < 1:
             messages.add_message(request, messages.WARNING, "Accès interdit! Tu as été redirigé vers ton compte.")
             return HttpResponseRedirect(reverse("mainApp:accounts_profile", args=()))
 
         context = {}
+        context["include_manager_js"] = True
         context["managers"] = User.objects.all()
         projects = CityProject.objects.all()
         votes = list()
@@ -209,6 +209,44 @@ class ManageView(generic.View):
         context["comments_under_review"] = list(projectComments) + list(propositionComments)
 
         return render(request, 'mainApp/manage.html', context)
+    def post(self, request, *args, **kwargs):
+        response = {}
+        response["status"] = "nok"
+        if not "comment_id" in request.POST or \
+        not "type" in request.POST or \
+        not "action" in request.POST:
+            return JsonResponse(response);
+
+        user = User.objects.get(pk=int(request.user.id))
+
+        comment_id = request.POST["comment_id"]
+        loggedApproval = None
+        if request.POST["type"] == "PropositionComment":
+            comment = PropositionComment.objects.get(pk=comment_id)
+            loggedApproval = PropositionCommentApproval(manager=user, comment=comment)
+
+
+        elif request.POST["type"] == "CityProjectComment":
+            comment = CityProjectComment.objects.get(pk=comment_id)
+            loggedApproval = CityProjectCommentApproval(manager=user, comment=comment)
+        else:
+            response["status"] = "nok"
+            return JsonResponse(response);
+
+        if comment == None:
+            return JsonResponse(response);
+
+        if request.POST["action"] == "approve":
+            comment.validated = True
+        else:
+            comment.validated = False
+        comment.reviewed = True
+        loggedApproval.save()
+        comment.save()
+
+        response["status"] = "ok"
+        response["text"] = "Commentaire approuvé !"
+        return JsonResponse(response);
 
 class AccountsProfile(generic.View):
     def get(self, request, *args, **kwargs):

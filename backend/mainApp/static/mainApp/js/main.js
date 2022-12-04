@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     let modal = new bootstrap.Modal(document.getElementById("popup"));
     var prepareModal = function(response) {

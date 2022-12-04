@@ -22,3 +22,7 @@ admin.site.register(PropositionSignature)
 admin.site.register(PropositionComment)
 
 admin.site.register(RegisteredUser)
+
+
+admin.site.register(PropositionCommentApproval)
+admin.site.register(CityProjectCommentApproval)

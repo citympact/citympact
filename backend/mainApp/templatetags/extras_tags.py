@@ -15,3 +15,7 @@ def thumbnailize(value):
         # In a such case, we just ignore (and so return the input value).
         pass
     return value
+
+@register.filter
+def to_class_name(value):
+    return value.__class__.__name__

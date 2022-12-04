@@ -90,5 +90,8 @@
     <script src="{% static 'mainApp/js/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'mainApp/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'mainApp/js/main.js' %}"></script>
+    {% if include_manager_js %}
+    <script src="{% static 'mainApp/js/manager.js' %}"></script>
+    {% endif %}
 </body>
 </html>
