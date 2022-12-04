@@ -230,12 +230,15 @@ class ManagerView(generic.View):
         if request.POST["type"] == "PropositionComment":
             objectToApprove = PropositionComment.objects.get(pk=item_id)
             loggedApproval = PropositionCommentReview(manager=user, comment=objectToApprove)
+            responseText = "Commentaire approuvé !" if request.POST["action"] == "approve" else "Commentaire refusé !"
         elif request.POST["type"] == "CityProjectComment":
             objectToApprove = CityProjectComment.objects.get(pk=item_id)
             loggedApproval = CityProjectCommentReview(manager=user, comment=objectToApprove)
+            responseText = "Commentaire approuvé !" if request.POST["action"] == "approve" else "Commentaire refusé !"
         elif request.POST["type"] == "Proposition":
             objectToApprove = Proposition.objects.get(pk=item_id)
             loggedApproval = PropositionReview(manager=user, proposition=objectToApprove)
+            responseText = "Proposition approuvée !" if request.POST["action"] == "approve" else "Proposition refusée !"
         else:
             response["status"] = "nok"
             return JsonResponse(response);
@@ -254,7 +257,7 @@ class ManagerView(generic.View):
         objectToApprove.save()
 
         response["status"] = "ok"
-        response["text"] = "Commentaire approuvé !" if objectToApprove.approved else "Commentaire refusé !"
+        response["text"] = responseText
         return JsonResponse(response);
 
 class AccountsProfile(generic.View):
