@@ -1,4 +1,5 @@
 {% load static %}
+{% load extras_tags %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -64,7 +65,7 @@
                 <div class="" id="">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'mainApp:accounts_profile' %}">{% if user.is_authenticated %}Mon compte ({{ user.first_name }}){% else %}S'identifier{% endif %}</a>
+                            <a class="nav-link" href="{% url 'mainApp:accounts_profile' %}">{% if user.is_authenticated %}{%if user|is_manager %}<span class="badge bg-primary">Manager</span>{% endif %} {%if user|is_superuser %}<span class="badge bg-success">Admin</span>{% endif %} Mon compte ({{ user.first_name }}){% else %}S'identifier{% endif %}</a>
                         </li>
                     </ul>
                 </div>

@@ -19,3 +19,12 @@ def thumbnailize(value):
 @register.filter
 def to_class_name(value):
     return value.__class__.__name__
+
+
+@register.filter
+def is_manager(user):
+    return user.groups.all().filter(name="Manager").count() > 0
+
+@register.filter
+def is_superuser(user):
+    return user.is_superuser
