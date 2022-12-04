@@ -18,7 +18,19 @@
     </div>
     <div class="col-sm-6">
         <h3>Nouveaux commentaires</h3>
-        <p>Aucun commentaire à valider</p>
+        {% if comments_under_review %}
+            {% for comment in comments_under_review %}
+
+                <div class="manage_group_div">
+                    <p><strong>Commentaire {% if comment.user %} de {{comment.user}} (nom masqué){% else %} anonyme {% endif %}
+                    </strong><br> {{comment.create_datetime}}</p>
+                    <p>{{comment.comment}}</p>
+                    <p><a class="btn btn-outline-primary btn-sm" href="#" role="button">Approver</a> <a class="btn btn-outline-secondary btn-sm" href="#" role="button">Refuser</a> </p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucun commentaire à valider</p>
+        {% endif %}
     </div>
     <div class="col-sm-6">
         <h3>Nouvelles propositions</h3>
@@ -39,23 +51,27 @@
     <div class="col-sm-6">
       <h2>Projets</h2>
       {% for project, vote, comments, answers in projects_data %}
-          <p><strong>{{ project.title }}</strong>
-          <ul>
-              <li>Vote: {{ vote }} - {{ project.views }} vue(s)</li>
-              <li>{{ comments|length }} commentaire(s) - {{ answers|length }} réponse(s)</li>
-          </ul>
-          </p>
+          <div class="manage_group_div">
+              <p><strong>{{ project.title }}</strong>
+              <ul>
+                  <li>Vote: {{ vote }} - {{ project.views }} vue(s)</li>
+                  <li>{{ comments|length }} commentaire(s) - {{ answers|length }} réponse(s)</li>
+              </ul>
+              </p>
+          </div>
       {% endfor %}
     </div>
     <div class="col-sm-6">
         <h2>Propositions</h2>
         {% for proposition, signatures in propositions_data %}
-            <p><strong>{{ proposition.title }} - {% if proposition.approved %} <span class="badge bg-primary">Approuvé</span>{% else %}<span class="badge bg-secondary">Non affiché</span>{% endif %}</strong>
-            <ul>
-                <li>{{ proposition.views }} vue(s)</li>
-                <li>{{ signatures|length }} signature(s)</li>
-            </ul>
-            </p>
+            <div class="manage_group_div">
+                <p><strong>{{ proposition.title }} - {% if proposition.approved %} <span class="badge bg-primary">Approuvé</span>{% else %}<span class="badge bg-secondary">Non affiché</span>{% endif %}</strong>
+                <ul>
+                    <li>{{ proposition.views }} vue(s)</li>
+                    <li>{{ signatures|length }} signature(s)</li>
+                </ul>
+                </p>
+            </div>
         {% endfor %}
     </div>
   </div>

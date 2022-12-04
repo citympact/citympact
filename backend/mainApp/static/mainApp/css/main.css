@@ -1118,3 +1118,10 @@ background-color: #f9d72b;
     text-align: left;
     margin-bottom: 30px;
 }
+
+.manage_group_div {
+    border: 1px dotted black;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 5px;
+}

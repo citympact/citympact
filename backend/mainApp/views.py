@@ -201,9 +201,12 @@ class ManageView(generic.View):
         for proposition in propositions:
             signatures.append(proposition.propositionsignature_set.all())
 
-        print(propositions)
         context["propositions_data"] = list(zip(propositions, signatures))
 
+
+        projectComments = CityProjectComment.objects.all().filter(reviewed=False, validated=False)
+        propositionComments = PropositionComment.objects.all().filter(reviewed=False, validated=False)
+        context["comments_under_review"] = list(projectComments) + list(propositionComments)
 
         return render(request, 'mainApp/manage.html', context)
 
@@ -375,6 +378,7 @@ class AddNewCommentView(generic.View):
         comment.visitor = visitor
         comment.comment = request.POST["comment"]
         comment.validated = False
+        comment.reviewed = False
         comment.name_displayed = False
         validation_text = "Ton commentaire va être validé aussitôt que " \
             + "possible."

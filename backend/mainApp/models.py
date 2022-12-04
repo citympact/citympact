@@ -227,3 +227,14 @@ class PropositionComment(BaseModel):
             "nom affiché" if self.name_displayed else "anonyme",
             (self.comment[:25] + '...') if len(self.comment) > 25 else self.comment,
         )
+
+# Logging the approvals:
+class PropositionCommentApproval(BaseModel):
+    manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
+        null=True)
+    comment = models.ForeignKey(PropositionComment, on_delete=models.CASCADE)
+
+class CityProjectCommentApproval(BaseModel):
+    manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True,
+        null=True)
+    comment = models.ForeignKey(CityProjectComment, on_delete=models.CASCADE)
