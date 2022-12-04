@@ -208,7 +208,7 @@ class ManagerView(generic.View):
         propositionComments = PropositionComment.objects.all().filter(reviewed=False, validated=False)
         context["comments_under_review"] = list(projectComments) + list(propositionComments)
 
-        return render(request, 'mainApp/manage.html', context)
+        return render(request, 'mainApp/manager.html', context)
     def post(self, request, *args, **kwargs):
         response = {}
         response["status"] = "nok"
