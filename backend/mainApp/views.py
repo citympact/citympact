@@ -218,14 +218,13 @@ class ManagerView(generic.View):
             return JsonResponse(response);
 
         user = User.objects.get(pk=int(request.user.id))
-
         comment_id = request.POST["comment_id"]
+
         loggedApproval = None
+        comment = None
         if request.POST["type"] == "PropositionComment":
             comment = PropositionComment.objects.get(pk=comment_id)
             loggedApproval = PropositionCommentApproval(manager=user, comment=comment)
-
-
         elif request.POST["type"] == "CityProjectComment":
             comment = CityProjectComment.objects.get(pk=comment_id)
             loggedApproval = CityProjectCommentApproval(manager=user, comment=comment)
@@ -241,11 +240,12 @@ class ManagerView(generic.View):
         else:
             comment.validated = False
         comment.reviewed = True
+        loggedApproval.comment_validated = comment.validated
         loggedApproval.save()
         comment.save()
 
         response["status"] = "ok"
-        response["text"] = "Commentaire approuvé !"
+        response["text"] = "Commentaire approuvé !" if comment.validated else "Commentaire refusé !"
         return JsonResponse(response);
 
 class AccountsProfile(generic.View):
