@@ -20,6 +20,11 @@ from impact import settings
 import urllib.parse
 import random
 import statistics
+import re
+from datetime import datetime
+
+from django.template.loader import get_template
+from django.template import Context
 
 """
 from sumy.parsers.plaintext import PlaintextParser
@@ -444,10 +449,6 @@ class AddNewCommentView(generic.View):
                 comment.approved = True
                 validation_text = "Ton commentaire, publié en ton nom, a " \
                     + "été automatiquement validé et est affiché ci-dessous."
-        else:
-            # If a comment is published without authentication, it then requires
-            # a manual validation:
-            pass
 
         comment.save()
 
@@ -455,6 +456,37 @@ class AddNewCommentView(generic.View):
         # then the BE should respond it to the FE:
         if comment.approved:
             response["comment"] = render_comment(comment);
+        else:
+            # Sending an email for unvalidated comments:
+            comment_author = "Visiteur anonyme %s" % comment.visitor
+            if comment.user != None:
+                comment_author = "%s (nom masqué)" % comment.user
+
+            url = "http" + ("s" if request.is_secure() else "") + "://" + \
+                request.get_host() + "/manager"
+
+            template = get_template("mainApp/interaction-email.html")
+            context = {
+                "event": "Un nouveau commentaire anonyme a été posté",
+                "city_name": settings.CITY_NAME,
+                "item": "Commentaire anonyme",
+                "create_datetime": comment.create_datetime,
+                "author": comment_author,
+                "description": comment.comment,
+                "url": url,
+                "manage_item": "Gérer le commentaire"
+            }
+            mail_html_body = template.render(context)
+
+            print(mail_html_body)
+            send_mail(
+                "[Citympact - %s] Commentaire en attente de validation" % settings.CITY_NAME,
+                re.sub('<[^<]+?>', '', mail_html_body),
+                settings.EMAIL_HOST_USER,
+                ["g.coppex@gmail.com"],
+                fail_silently=False,
+                html_message=mail_html_body
+            )
 
         response["message"] = "Merci pour ton commentaire !<br>" \
             + validation_text
