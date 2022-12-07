@@ -178,7 +178,13 @@ class ManagerView(generic.View):
 
         context = {}
         context["include_manager_js"] = True
-        context["managers"] = User.objects.all()
+
+        managers = []
+        for user in User.objects.all():
+            if user.groups.all().filter(name="Manager").count() >0:
+                managers.append(user)
+
+        context["managers"] = managers
         projects = CityProject.objects.all()
         votes = list()
         comments = list()
