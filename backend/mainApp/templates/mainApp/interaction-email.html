@@ -4,6 +4,8 @@
 <div style="padding-left: 25px; border: 1px dotted black;">
     <h2>{{ item }}</h2>
     <p>Date et heure: {{ create_datetime }}<br>Auteur: {{ author }}</p>
+    {% if title %}<h5>{{ title }}</h5>{% endif %}
     <p>{{ description }}</p>
-    <p><a href="{{ url }}">{{ manage_item }}</a></p>
+    {% if image_url %}<p><img src="{{ image_url }}" alt=""></p>{% endif %}
+    <p><a href="{{ link_url }}">{{ manage_item }}</a></p>
 </div>"

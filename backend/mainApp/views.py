@@ -462,7 +462,7 @@ class AddNewCommentView(generic.View):
             if comment.user != None:
                 comment_author = "%s (nom masqué)" % comment.user
 
-            url = "http" + ("s" if request.is_secure() else "") + "://" + \
+            link_url = "http" + ("s" if request.is_secure() else "") + "://" + \
                 request.get_host() + "/manager"
 
             template = get_template("mainApp/interaction-email.html")
@@ -473,17 +473,20 @@ class AddNewCommentView(generic.View):
                 "create_datetime": comment.create_datetime,
                 "author": comment_author,
                 "description": comment.comment,
-                "url": url,
+                "link_url": link_url,
                 "manage_item": "Gérer le commentaire"
             }
             mail_html_body = template.render(context)
 
-            print(mail_html_body)
+            managers = []
+            for user in User.objects.all():
+                if user.groups.all().filter(name="Manager").count() >0:
+                    managers.append(user)
             send_mail(
                 "[Citympact - %s] Commentaire en attente de validation" % settings.CITY_NAME,
                 re.sub('<[^<]+?>', '', mail_html_body),
                 settings.EMAIL_HOST_USER,
-                ["g.coppex@gmail.com"],
+                [user.email for user in managers],
                 fail_silently=False,
                 html_message=mail_html_body
             )
@@ -605,6 +608,46 @@ class AddNewProposition(generic.View):
             proposition.save()
             request.session["message"] = "Nouvelle proposition ajoutée."
             messages.add_message(request, messages.INFO, "Nouvelle proposition ajoutée. Elle sera validée ausi publiée dès que possible.")
+
+
+            # Sending an email for the validation of the proposition:
+            base_url = "http" + ("s" if request.is_secure() else "") + "://" + \
+                request.get_host()
+
+            image_url = None
+            if proposition.image:
+                image_url = base_url + "/" + proposition.image.url
+
+            link_url = base_url + "/manager"
+
+            template = get_template("mainApp/interaction-email.html")
+            context = {
+                "event": "Une nouvelle proposition a été soumise",
+                "city_name": settings.CITY_NAME,
+                "item": "Nouvelle proposition",
+                "create_datetime": proposition.create_datetime,
+                "author": proposition.author,
+                "description": proposition.summary,
+                "title": proposition.title,
+                "image_url": image_url,
+                "link_url": link_url,
+                "manage_item": "Gérer la proposition"
+            }
+            mail_html_body = template.render(context)
+            managers = []
+            for user in User.objects.all():
+                if user.groups.all().filter(name="Manager").count() >0:
+                    managers.append(user)
+
+            send_mail(
+                "[Citympact - %s] Proposition en attente de validation" % settings.CITY_NAME,
+                re.sub('<[^<]+?>', '', mail_html_body),
+                settings.EMAIL_HOST_USER,
+                [user.email for user in managers],
+                fail_silently=False,
+                html_message=mail_html_body
+            )
+
         else:
             messages.add_message(request, messages.ERROR, "Impossible d'enregistrer ta proposition. Merci de remplir tous les champs.")
 
