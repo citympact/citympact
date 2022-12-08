@@ -22,7 +22,7 @@
             {% for comment in comments_under_review %}
                 <div class="manage_group_div">
                     <p><strong>Commentaire {% if comment.user %} anonymisé (de  {{comment.user}}){% else %} anonyme {% endif %}
-                    </strong><br> {{comment.create_datetime}}</p>
+                    </strong><br>{{comment.create_datetime}}<br><strong>{% if comment.project %}Projet: {{ comment.project }}{% elif comment.proposition %}Proposition: {{ comment.proposition}}{% endif %}</strong></p>
                     <p>{{comment.comment}}</p>
                     <p><a class="manage_comment btn btn-outline-primary btn-sm" href="#" role="button" data-comment-id="{{comment.id}}" data-type="{{comment|to_class_name}}" data-action="approve">Approver</a> <a class="manage_comment btn btn-outline-secondary btn-sm" href="#" role="button" data-comment-id="{{comment.id}}" data-type="{{comment|to_class_name}}" data-action="refuse">Refuser</a> </p>
                 </div>
