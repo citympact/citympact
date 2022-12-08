@@ -188,23 +188,63 @@ class ManagerView(generic.View):
         projects = CityProject.objects.all()
         votes = list()
         comments = list()
-        answers = list()
+        project_questions_answers = []
+        answers_qty = []
 
         for project in projects:
             curr_votes = project.cityprojectvote_set.all()
+            general_comments = []
             up_votes = 0
             down_votes = 0
+            curr_answers_qty = 0
             for vote in curr_votes:
                 if vote.vote > 0:
                     up_votes += 1
                 else:
                     down_votes += 1
+                if len(vote.comment)>0:
+                    general_comments.append(vote.comment)
+                    curr_answers_qty += 1
             votes.append("Votes: %d positifs / %d négatifs" % (up_votes, down_votes))
 
             comments.append(project.cityprojectcomment_set.all())
-            answers.append(project.cityprojectcomment_set.all())
+            curr_questions = project.cityprojectquestion_set.all()
+            questions_answers = {}
+            # Adding the general question of the project into the list of
+            # questions, as if it was coming from the linked table:
+            questions_answers["Commentaires généraux:"] =  general_comments
 
-        context["projects_data"] = list(zip(projects, votes, comments, answers))
+            for question in curr_questions:
+                curr_answers = question.cityprojectanswer_set.all()
+                curr_answers_qty += len(curr_answers)
+                aggregated_answers = []
+                if question.type == "YES_NO":
+                    if len(curr_answers) > 0:
+                        res = statistics.mean([x.numeric_answer for x in curr_answers])
+                        aggregated_answers = ["{:.0f}".format((1-res)*100) + "% de oui" + " - %d réponse(s)" % len(curr_answers)]
+                elif question.type == "RATING_STARS":
+                    try:
+                        res = statistics.mean([x.numeric_answer for x in curr_answers])
+                        aggregated_answers = ["{:.2f}".format(res) +"/5 étoile(s) - %d réponse(s)" % len(curr_answers)]
+                    except:
+                        pass
+                elif question.type == "RATING_10_5_0":
+                    try:
+                        aggregated_answers = []
+                        total = len(curr_answers)
+                        for i, desc in enumerate(CityProjectQuestion.ratings_10_5_0_values):
+                            qty = len(curr_answers.filter(
+                                numeric_answer=i)
+                            )
+                            aggregated_answers.append("{:.2f}".format(qty/total*100) + "% " + desc + " - %d réponse(s)" % qty)
+                    except:
+                        pass
+                else:
+                    aggregated_answers = [x.text_answer for x in curr_answers]
+                questions_answers[question.question_statement] = aggregated_answers
+            project_questions_answers.append(questions_answers)
+            answers_qty.append(curr_answers_qty)
+        context["projects_data"] = list(zip(projects, votes, comments, project_questions_answers, answers_qty))
 
 
         propositions = Proposition.objects.all()

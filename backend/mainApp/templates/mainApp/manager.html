@@ -61,14 +61,26 @@
     </div>
     <div class="col-sm-6">
       <h2>Projets</h2>
-      {% for project, vote, comments, answers in projects_data %}
+      {% for project, vote, comments, questions_answers, answers_qty in projects_data %}
           <div class="manage_group_div">
               <p><strong>{{ project.title }}</strong>
               <ul>
                   <li>{{ proposition.views }} vue(s)</li>
                   <li>{{ comments|length }} commentaire(s)</li>
                   <li>{{ vote }}</li>
-                  <li>{{ answers|length }} réponse(s)</li>
+                  <li>{{questions_answers|length}} question(s) - {{ answers_qty }} réponse(s)</li>
+                  {% if questions_answers %}
+                  <ul>
+                      {% for question, aggregated_answers in questions_answers.items %}
+                      <li>{{ question }}</li>
+                      <ul>
+                          {% for aggregated_answer in aggregated_answers %}
+                            <li>{{ aggregated_answer }}</li>
+                          {% endfor %}
+                      </ul>
+                      {% endfor %}
+                  </ul>
+                  {% endif %}
               </ul>
               </p>
           </div>
