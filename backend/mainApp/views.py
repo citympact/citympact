@@ -471,9 +471,11 @@ class AddNewCommentView(generic.View):
         visitor = Visitor.objects.get(pk=request.session["visitor_id"])
         if request.POST["model_name"] == "proposition":
             proposition = Proposition.objects.get(pk=request.POST["id"])
+            title = "Proposition: %s" % proposition.title
             comment = PropositionComment(proposition=proposition)
         elif request.POST["model_name"] == "project":
             project = CityProject.objects.get(pk=request.POST["id"])
+            title = "Projet: %s" % project.title
             comment = CityProjectComment(project=project)
 
         comment.visitor = visitor
@@ -516,6 +518,7 @@ class AddNewCommentView(generic.View):
                 "event": "Un nouveau commentaire anonyme a été posté",
                 "city_name": settings.CITY_NAME,
                 "item": "Commentaire anonyme",
+                "title": title,
                 "create_datetime": comment.create_datetime,
                 "author": comment_author,
                 "description": comment.comment,
