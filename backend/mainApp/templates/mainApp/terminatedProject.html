@@ -1,0 +1,22 @@
+{% extends "mainApp/base.html" %}
+{% load extras_tags %}
+
+{% block content %}
+
+<input type="hidden" id="vote_csrf_token" value="{{ csrf_token }}" />
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+        <div class="header">
+            <h1 class="header_h1">Projet terminé !</h1>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <h1>Le sondage de {{ city_name }} </h1>
+        <p>Le sondage s'est terminé à la fin décembre 2022.<br>Merci pour ta participation 🙏 </p>
+        <p>⌛ Résultats accessibles ici prochainement ...</p>
+    </div>
+</div>
+</div>
+
+{% endblock %}

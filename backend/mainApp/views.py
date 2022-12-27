@@ -16,6 +16,8 @@ from .models import *
 from .forms import *
 from django.core.mail import send_mail
 from impact import settings
+from django.utils.decorators import classonlymethod
+
 
 import urllib.parse
 import random
@@ -81,6 +83,18 @@ class ContactView(generic.View):
         "page_title": "Contact",
         }
         return render(request, 'mainApp/contact.html', context)
+
+def terminatedProjectIndex(request):
+    return render(request, "mainApp/terminatedProject.html", {
+        'disableLogin': True,
+        "city_name": settings.CITY_NAME,
+    })
+
+def loginDisabledAbout(request):
+    return render(request, "mainApp/about.html", {'disableLogin': True})
+
+def loginDisabledContact(request):
+    return render(request, "mainApp/contact.html", {'disableLogin': True})
 
 class IndexView(generic.View):
     def get(self, request, *args, **kwargs):

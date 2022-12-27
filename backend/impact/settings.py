@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'mainApp.middleware.UserMiddleware',
+    'mainApp.middleware.RedirectFallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'impact.urls'
@@ -193,6 +194,7 @@ try:
 
     SECRET_KEY = os.environ["SECRET_KEY"]
     CITY_NAME = os.environ["CITY_NAME"]
+    PROJECT_STATUS = os.environ["PROJECT_STATUS"]
 
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")
