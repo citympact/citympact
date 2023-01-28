@@ -1,16 +1,16 @@
 [
-   {
-      "model":"mainApp.registereduser",
-      "pk":2,
-      "fields":{
-         "create_datetime":"2023-01-27T19:47:00.411Z",
-         "update_datetime":"2023-01-27T19:47:00.907Z",
-         "user":2,
-         "registration_provider":"MANUALLY_CREATED",
-         "zip_code":null,
-         "city":null,
-         "birth_year":null
-      }
+    {
+       "model":"mainApp.registereduser",
+       "pk":1,
+       "fields":{
+          "create_datetime":"2023-01-27T19:47:00.411Z",
+          "update_datetime":"2023-01-27T19:47:00.907Z",
+          "user":1,
+          "registration_provider":"MANUALLY_CREATED",
+          "zip_code":null,
+          "city":null,
+          "birth_year":null
+       }
    },
    {
       "model":"mainApp.cityproject",
@@ -312,18 +312,5 @@
 
          ]
       }
-  },
-  {
-     "model":"mainApp.registereduser",
-     "pk":1,
-     "fields":{
-        "create_datetime":"2023-01-27T19:47:00.411Z",
-        "update_datetime":"2023-01-27T19:47:00.907Z",
-        "user":1,
-        "registration_provider":"MANUALLY_CREATED",
-        "zip_code":null,
-        "city":null,
-        "birth_year":null
-     }
   },
 ]
