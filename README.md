@@ -39,7 +39,7 @@ cd backend
 python3 manage.py loaddata demoData.json
 ```
 Then you should see the first entries. Note that the images are on purpose not
-version controlled. Please use the admin-site to upload some dummy images.
+version controlled. Please use the admin-site to upload some dummy images. Don't forget to create a super user and update the created user's password for security reasons.
 
 To dump the existing data:
 ```
