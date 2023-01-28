@@ -293,7 +293,7 @@
    },
    {
       "model":"auth.user",
-      "pk":2,
+      "pk":1,
       "fields":{
          "password":"pbkdf2_sha256$260000$BRE58il9g59wv2G3ENlxgW$4AlMLG1o7r+Ai3uuXmg1G5xr1mo3ocnYw9R9tlHh06M=",
          "last_login":"2023-01-27T19:47:18.248Z",
@@ -312,5 +312,18 @@
 
          ]
       }
-   },
+  },
+  {
+     "model":"mainApp.registereduser",
+     "pk":1,
+     "fields":{
+        "create_datetime":"2023-01-27T19:47:00.411Z",
+        "update_datetime":"2023-01-27T19:47:00.907Z",
+        "user":1,
+        "registration_provider":"MANUALLY_CREATED",
+        "zip_code":null,
+        "city":null,
+        "birth_year":null
+     }
+  },
 ]
