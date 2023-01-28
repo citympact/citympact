@@ -1,5 +1,13 @@
 [
     {
+      "model":"mainApp.visitor",
+      "pk":1,
+      "fields":{
+         "create_datetime":"2023-01-27T18:37:39.765Z",
+         "update_datetime":"2023-01-27T18:37:39.765Z"
+      }
+    },
+    {
        "model":"auth.user",
        "pk":1,
        "fields":{
@@ -90,48 +98,12 @@
       "model":"mainApp.cityprojectvote",
       "pk":1,
       "fields":{
-         "create_datetime":"2023-01-27T19:45:49.492Z",
-         "update_datetime":"2023-01-27T19:46:03.572Z",
-         "project":3,
-         "vote":1,
-         "comment":"",
-         "visitor":3
-      }
-   },
-   {
-      "model":"mainApp.cityprojectvote",
-      "pk":2,
-      "fields":{
-         "create_datetime":"2023-01-27T19:45:54.181Z",
-         "update_datetime":"2023-01-27T21:56:08.071Z",
-         "project":4,
-         "vote":1,
-         "comment":"",
-         "visitor":3
-      }
-   },
-   {
-      "model":"mainApp.cityprojectvote",
-      "pk":3,
-      "fields":{
          "create_datetime":"2023-01-27T19:45:56.175Z",
          "update_datetime":"2023-01-27T19:45:56.189Z",
          "project":1,
          "vote":1,
          "comment":"",
-         "visitor":3
-      }
-   },
-   {
-      "model":"mainApp.cityprojectvote",
-      "pk":4,
-      "fields":{
-         "create_datetime":"2023-01-27T19:45:58.048Z",
-         "update_datetime":"2023-01-27T19:45:58.054Z",
-         "project":2,
-         "vote":-1,
-         "comment":"",
-         "visitor":3
+         "visitor":1
       }
    },
    {
@@ -140,8 +112,8 @@
       "fields":{
          "create_datetime":"2023-01-27T19:46:14.002Z",
          "update_datetime":"2023-01-27T19:46:25.603Z",
-         "project":3,
-         "visitor":3,
+         "project":1,
+         "visitor":1,
          "user":null,
          "approved":true,
          "reviewed":true,
@@ -291,7 +263,7 @@
          "summary":"Voici une proposition citoyenne : organisons des journées de nettoyage communautaire dans notre quartier pour améliorer l'esthétique de notre environnement et sensibiliser les gens à l'importance de prendre soin de notre communauté. Nous pourrions or",
          "description":"Voici une proposition citoyenne : organisons des journées de nettoyage communautaire dans notre quartier pour améliorer l'esthétique de notre environnement et sensibiliser les gens à l'importance de prendre soin de notre communauté. Nous pourrions organiser ces événements régulièrement, avec des groupes de travail formés par les résidents locaux, et les rendre amusants en organisant des barbecues ou des pique-niques à la fin de la journée de nettoyage.",
          "image":"rope.jpg",
-         "author":2,
+         "author":1,
          "views":0,
          "approved":true,
          "reviewed":true
@@ -299,7 +271,7 @@
    },
    {
       "model":"mainApp.proposition",
-      "pk":2,
+      "pk":1,
       "fields":{
          "create_datetime":"2023-01-27T21:52:05.409Z",
          "update_datetime":"2023-01-27T21:52:24.902Z",
@@ -307,7 +279,7 @@
          "summary":"Un projet de travail communautaire est un effort organisé et coordonné pour améliorer les conditions de vie dans une communauté donnée. Il peut impliquer des activités telles que la construction de logements abordables, la création de programmes éduc",
          "description":"Un projet de travail communautaire est un effort organisé et coordonné pour améliorer les conditions de vie dans une communauté donnée. Il peut impliquer des activités telles que la construction de logements abordables, la création de programmes éducatifs pour les enfants, la mise en place de jardins communautaires, la revitalisation de quartiers défavorisés, etc. Les projets de travail communautaire sont souvent menés par des organisations à but non lucratif, des groupes de bénévoles ou des agences gouvernementales, et ils sont souvent financés par des dons et des subventions. L'objectif principal est de résoudre les problèmes communautaires et d'améliorer la qualité de vie des personnes qui y vivent.",
          "image":"work.jpg",
-         "author":2,
+         "author":1,
          "views":0,
          "approved":true,
          "reviewed":true
