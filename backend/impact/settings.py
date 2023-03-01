@@ -195,6 +195,7 @@ try:
     SECRET_KEY = os.environ["SECRET_KEY"]
     CITY_NAME = os.environ["CITY_NAME"]
     PROJECT_STATUS = os.environ["PROJECT_STATUS"]
+    PROJECT_PDF_SUMMARY_FILEPATH = os.environ["PROJECT_PDF_SUMMARY_FILEPATH"]
 
 except KeyError as e:
     print("Unable to find the necessary API key in the environment variables.")

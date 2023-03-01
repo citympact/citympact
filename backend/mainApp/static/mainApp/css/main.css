@@ -4,6 +4,11 @@
 body {
     font-family: Poppins;
 }
+
+.a_no_underline {
+    text-decoration: none;
+}
+
 #searchInput {
     width: 100%;
 }

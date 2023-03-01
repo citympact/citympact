@@ -85,9 +85,11 @@ class ContactView(generic.View):
         return render(request, 'mainApp/contact.html', context)
 
 def terminatedProjectIndex(request):
+    print("settings.PROJECT_PDF_SUMMARY_FILEPATH = " + settings.PROJECT_PDF_SUMMARY_FILEPATH)
     return render(request, "mainApp/terminatedProject.html", {
         'disableLogin': True,
         "city_name": settings.CITY_NAME,
+        "report_pdf_path": settings.PROJECT_PDF_SUMMARY_FILEPATH,
     })
 
 def loginDisabledAbout(request):

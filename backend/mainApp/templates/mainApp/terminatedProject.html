@@ -14,7 +14,11 @@
     <div class="col-sm-12">
         <h1>Le sondage de {{ city_name }} est terminé !</h1>
         <p>Le sondage s'est terminé à la fin décembre 2022.<br>Merci pour ta participation 🙏 </p>
-        <p>⌛ Résultats accessibles ici prochainement ...</p>
+        {% if report_pdf_path %}
+            <p><a href="{{ report_pdf_path }}" class="fs-2 a_no_underline">📝</a> <a href="{{ report_pdf_path }}">Consulter les résultats (PDF)</a></p>
+        {% else %}
+            <p>⌛ Résultats accessibles ici prochainement ...</p>
+        {% endif %}
     </div>
 </div>
 </div>
